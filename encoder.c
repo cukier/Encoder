@@ -6,7 +6,7 @@
 #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=0,  BAUD=2000000, BITS=16, DATA_HOLD=1)
 
 #define SLAVE_SELECT PIN_A5
-#include "as4050.h"
+#include "as5040.h"
 
 long leitura;
 int ctrl;

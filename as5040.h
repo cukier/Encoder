@@ -1,12 +1,12 @@
 /*
- * as4050.h
+ * as5040.h
  *
  *  Created on: 30/03/2012
  *      Author: cuki
  */
 
-#ifndef AS4050_H_
-#define AS4050_H_
+#ifndef AS5040_H_
+#define AS5040_H_
 
 #define clockwise 0x0000
 #define couter_clockwise 0x8000
@@ -100,4 +100,4 @@ void setup_encoder(long new_setup, int zero_mark) {
 	write_encoder(setup);
 }
 
-#endif /* AS4050_H_ */
+#endif /* AS5040_H_ */
