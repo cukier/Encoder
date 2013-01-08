@@ -1,168 +1,227 @@
-CCS PCH C Compiler, Version 4.124, 63923               10-fev-12 13:47
+CCS PCH C Compiler, Version 4.124, 5967               08-jan-13 17:49
 
-               Filename: D:\Projetos\Encoder\encoder.lst
+               Filename: C:\Users\cuki\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used: 282 bytes (1%)
-                         Largest free fragment is 32482
-               RAM used: 26 (2%) at main() level
-                         26 (2%) worst case
-               Stack:    1 worst case (0 in main + 1 for interrupts)
+               ROM used: 1836 bytes (6%)
+                         Largest free fragment is 30932
+               RAM used: 12 (1%) at main() level
+                         38 (2%) worst case
+               Stack:    2 locations
 
 *
-0000:  GOTO   00FA
-*
-0008:  MOVWF  04
-000A:  MOVFF  FD8,05
-000E:  MOVFF  FE0,06
-0012:  MOVLB  0
-0014:  MOVFF  FE9,0C
-0018:  MOVFF  FEA,07
-001C:  MOVFF  FE1,08
-0020:  MOVFF  FE2,09
-0024:  MOVFF  FD9,0A
-0028:  MOVFF  FDA,0B
-002C:  MOVFF  FF3,12
-0030:  MOVFF  FF4,13
-0034:  MOVFF  FFA,14
-0038:  MOVFF  FF5,15
-003C:  MOVFF  FF6,16
-0040:  MOVFF  FF7,17
-0044:  MOVFF  00,0E
-0048:  MOVFF  01,0F
-004C:  MOVFF  02,10
-0050:  MOVFF  03,11
-0054:  BTFSS  FF2.4
-0056:  GOTO   0060
-005A:  BTFSC  FF2.1
-005C:  GOTO   00BA
-0060:  BTFSS  FF0.3
-0062:  GOTO   006C
-0066:  BTFSC  FF0.0
-0068:  GOTO   00DA
-006C:  MOVFF  0E,00
-0070:  MOVFF  0F,01
-0074:  MOVFF  10,02
-0078:  MOVFF  11,03
-007C:  MOVFF  0C,FE9
-0080:  MOVFF  07,FEA
-0084:  BSF    07.7
-0086:  MOVFF  08,FE1
-008A:  MOVFF  09,FE2
-008E:  MOVFF  0A,FD9
-0092:  MOVFF  0B,FDA
-0096:  MOVFF  12,FF3
-009A:  MOVFF  13,FF4
-009E:  MOVFF  14,FFA
-00A2:  MOVFF  15,FF5
-00A6:  MOVFF  16,FF6
-00AA:  MOVFF  17,FF7
-00AE:  MOVF   04,W
-00B0:  MOVFF  06,FE0
-00B4:  MOVFF  05,FD8
-00B8:  RETFIE 0
+0000:  GOTO   05EE
 .................... #include <18F452.h> 
 .................... //////// Standard Header file for the PIC18F452 device //////////////// 
 .................... #device PIC18F452 
 .................... #list 
 ....................  
-.................... #device adc=16 
-.................... #fuses HS 
-.................... //#use delay(clock=4Mhz) 
 ....................  
-.................... //#include "lcd_8b.c" 
+.................... #fuses	H4,NOOSCSEN,NOPUT,NOBROWNOUT,NOWDT,NOSTVREN,NOLVP 
+.................... #fuses	NODEBUG,NOPROTECT,NOCPB,NOCPD,NOWRT,NOWRTC,NOWRTB 
+.................... #fuses	NOWRTD,NOEBTR,NOEBTRB 
 ....................  
-.................... int chave = 0; 
+.................... #use delay(clock=32MHz, crystal=8MHz) 
+*
+0004:  CLRF   FEA
+0006:  MOVLW  09
+0008:  MOVWF  FE9
+000A:  MOVF   FEF,W
+000C:  BZ    0028
+000E:  MOVLW  0A
+0010:  MOVWF  01
+0012:  CLRF   00
+0014:  DECFSZ 00,F
+0016:  BRA    0014
+0018:  DECFSZ 01,F
+001A:  BRA    0012
+001C:  MOVLW  5F
+001E:  MOVWF  00
+0020:  DECFSZ 00,F
+0022:  BRA    0020
+0024:  DECFSZ FEF,F
+0026:  BRA    000E
+0028:  GOTO   0628 (RETURN)
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
+.................... #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=3,  BAUD=2000000, BITS=12, DATA_HOLD=1) 
+002C:  MOVF   0A,W
+002E:  SUBLW  10
+0030:  BZ    003C
+0032:  MOVWF  0B
+0034:  RLCF   08,F
+0036:  RLCF   09,F
+0038:  DECFSZ 0B,F
+003A:  BRA    0034
+003C:  CLRF   00
+003E:  BSF    F94.4
+0040:  BCF    F94.5
+0042:  BCF    F94.3
+0044:  BSF    F8B.3
+0046:  MOVFF  0A,0B
+004A:  BCF    F8B.3
+004C:  BTFSS  09.7
+004E:  BCF    F8B.5
+0050:  BTFSC  09.7
+0052:  BSF    F8B.5
+0054:  RLCF   08,F
+0056:  RLCF   09,F
+0058:  MOVLW  03
+005A:  MOVWF  0C
+005C:  DECFSZ 0C,F
+005E:  BRA    005C
+0060:  BSF    F8B.3
+0062:  RLCF   01,F
+0064:  RLCF   02,F
+0066:  BTFSS  F82.4
+0068:  BCF    01.0
+006A:  BTFSC  F82.4
+006C:  BSF    01.0
+006E:  DECFSZ 0B,F
+0070:  BRA    004A
+0072:  GOTO   0636 (RETURN)
 ....................  
-.................... #INT_EXT 
-.................... void isr_INT_EXT() { 
-.................... 	if (!input(pin_b1) && chave != 2) { 
-00BA:  BSF    F93.1
-00BC:  BTFSC  F81.1
-00BE:  BRA    00D0
-00C0:  MOVF   19,W
-00C2:  SUBLW  02
-00C4:  BZ    00D0
-.................... 		//		if (chave != 2) 
-.................... 		output_c(1); 
-00C6:  CLRF   F94
-00C8:  MOVLW  01
-00CA:  MOVWF  F8B
-.................... 		chave = 1; 
-00CC:  MOVWF  19
-.................... 	} else { 
-00CE:  BRA    00D4
-.................... 		output_c(0); 
-00D0:  CLRF   F94
-00D2:  CLRF   F8B
-.................... 	} 
-.................... } 
-00D4:  BCF    FF2.1
-00D6:  GOTO   006C
-.................... #INT_EXT1 
-.................... void isr_INT_EXT1() { 
-.................... 	if (!input(pin_b0) && chave != 1) { 
-00DA:  BSF    F93.0
-00DC:  BTFSC  F81.0
-00DE:  BRA    00F0
-00E0:  DECFSZ 19,W
-00E2:  BRA    00E6
-00E4:  BRA    00F0
-.................... //	if (!input(pin_b0)) { 
-.................... //		if (chave != 1) 
-.................... 			output_c(2); 
-00E6:  CLRF   F94
-00E8:  MOVLW  02
-00EA:  MOVWF  F8B
-.................... 		chave = 2; 
-00EC:  MOVWF  19
-.................... 	} else { 
-00EE:  BRA    00F4
-.................... 		output_c(0); 
-00F0:  CLRF   F94
-00F2:  CLRF   F8B
-.................... 	} 
-.................... } 
+.................... static long aux, resol; 
 ....................  
-00F4:  BCF    FF0.0
-00F6:  GOTO   006C
-.................... void main(void) { 
-00FA:  CLRF   FF8
-00FC:  BCF    FD0.7
-00FE:  BSF    07.7
-0100:  CLRF   FEA
-0102:  CLRF   FE9
-0104:  CLRF   19
-0106:  BSF    FC1.0
-0108:  BSF    FC1.1
-010A:  BSF    FC1.2
-010C:  BCF    FC1.3
+.................... int main(void) { 
+*
+05EE:  CLRF   FF8
+05F0:  BCF    FD0.7
+05F2:  CLRF   FEA
+05F4:  CLRF   FE9
+05F6:  MOVLW  33
+05F8:  MOVWF  FAF
+05FA:  MOVLW  A2
+05FC:  MOVWF  FAC
+05FE:  MOVLW  90
+0600:  MOVWF  FAB
+0602:  BSF    F94.4
+0604:  BCF    F94.5
+0606:  BCF    F94.3
+0608:  BSF    F8B.3
+060A:  BSF    FC1.0
+060C:  BSF    FC1.1
+060E:  BSF    FC1.2
+0610:  BCF    FC1.3
+0612:  CLRF   04
+0614:  CLRF   05
+0616:  CLRF   06
+0618:  CLRF   07
 ....................  
-.................... 	output_c(0); 
-010E:  CLRF   F94
-0110:  CLRF   F8B
-....................  
-.................... //	clear_interrupt(int_ext); 
-.................... //	clear_interrupt(int_ext1); 
-.................... 	enable_interrupts(INT_EXT); 
-0112:  BSF    FF2.4
-.................... 	enable_interrupts(INT_EXT1); 
-0114:  BSF    FF0.3
-.................... 	enable_interrupts(global); 
-0116:  MOVLW  C0
-0118:  IORWF  FF2,F
+.................... 	setup_timer_0(T0_DIV_1); 
+061A:  MOVLW  88
+061C:  MOVWF  FD5
 ....................  
 .................... 	while (true) { 
-....................  
-.................... 	} //Infinite Loop 
-011A:  BRA    011A
-.................... } //Main 
-011C:  SLEEP 
+.................... 		delay_ms(500); 
+061E:  MOVLW  02
+0620:  MOVWF  08
+0622:  MOVLW  FA
+0624:  MOVWF  09
+0626:  BRA    0004
+0628:  DECFSZ 08,F
+062A:  BRA    0622
+.................... 		aux = spi_xfer(0); 
+062C:  CLRF   09
+062E:  CLRF   08
+0630:  MOVLW  0C
+0632:  MOVWF  0A
+0634:  BRA    002C
+0636:  MOVF   01,W
+0638:  MOVFF  02,05
+063C:  MOVFF  01,04
+.................... 		if (aux >= resol) 
+0640:  MOVF   07,W
+0642:  SUBWF  05,W
+0644:  BNC   065A
+0646:  BNZ   064E
+0648:  MOVF   06,W
+064A:  SUBWF  04,W
+064C:  BNC   065A
+.................... 			resol = aux + 1; 
+064E:  MOVLW  01
+0650:  ADDWF  04,W
+0652:  MOVWF  06
+0654:  MOVLW  00
+0656:  ADDWFC 05,W
+0658:  MOVWF  07
+.................... 		printf("%Lu %Lu\n%.5f", aux, resol, (float) aux * 360 / resol); 
+065A:  MOVFF  05,0D
+065E:  MOVFF  04,0C
+0662:  RCALL  0076
+0664:  MOVFF  00,08
+0668:  MOVFF  01,09
+066C:  MOVFF  02,0A
+0670:  MOVFF  03,0B
+0674:  MOVFF  03,1C
+0678:  MOVFF  02,1B
+067C:  MOVFF  01,1A
+0680:  MOVFF  00,19
+0684:  CLRF   20
+0686:  CLRF   1F
+0688:  MOVLW  34
+068A:  MOVWF  1E
+068C:  MOVLW  87
+068E:  MOVWF  1D
+0690:  RCALL  00AC
+0692:  MOVFF  00,08
+0696:  MOVFF  01,09
+069A:  MOVFF  02,0A
+069E:  MOVFF  03,0B
+06A2:  MOVFF  07,0D
+06A6:  MOVFF  06,0C
+06AA:  RCALL  0076
+06AC:  MOVFF  0B,0F
+06B0:  MOVFF  0A,0E
+06B4:  MOVFF  09,0D
+06B8:  MOVFF  08,0C
+06BC:  MOVFF  03,13
+06C0:  MOVFF  02,12
+06C4:  MOVFF  01,11
+06C8:  MOVFF  00,10
+06CC:  BRA    019E
+06CE:  MOVFF  00,08
+06D2:  MOVFF  01,09
+06D6:  MOVFF  02,0A
+06DA:  MOVFF  03,0B
+06DE:  MOVLW  10
+06E0:  MOVWF  FE9
+06E2:  MOVFF  05,0D
+06E6:  MOVFF  04,0C
+06EA:  RCALL  02FA
+06EC:  MOVLW  20
+06EE:  BTFSS  F9E.4
+06F0:  BRA    06EE
+06F2:  MOVWF  FAD
+06F4:  MOVLW  10
+06F6:  MOVWF  FE9
+06F8:  MOVFF  07,0D
+06FC:  MOVFF  06,0C
+0700:  RCALL  02FA
+0702:  MOVLW  0A
+0704:  BTFSS  F9E.4
+0706:  BRA    0704
+0708:  MOVWF  FAD
+070A:  MOVLW  89
+070C:  MOVWF  FE9
+070E:  MOVFF  0B,0F
+0712:  MOVFF  0A,0E
+0716:  MOVFF  09,0D
+071A:  MOVFF  08,0C
+071E:  MOVLW  05
+0720:  MOVWF  10
+0722:  BRA    046C
+.................... 	} 
+0724:  BRA    061E
+.................... 	return 0; 
+0726:  MOVLW  00
+0728:  MOVWF  01
+.................... } 
+072A:  SLEEP 
 
 Configuration Fuses:
-   Word  1: 2200   HS NOOSCSEN
-   Word  2: 0E0E   PUT BROWNOUT BORV20 NOWDT WDT128
+   Word  1: 2600   H4 NOOSCSEN
+   Word  2: 0E0D   NOPUT NOBROWNOUT BORV20 NOWDT WDT128
    Word  3: 0100   CCP2C1
-   Word  4: 0081   STVREN NOLVP NODEBUG
+   Word  4: 0080   NOSTVREN NOLVP NODEBUG
    Word  5: C00F   NOPROTECT NOCPB NOCPD
    Word  6: E00F   NOWRT NOWRTC NOWRTB NOWRTD
    Word  7: 400F   NOEBTR NOEBTRB
