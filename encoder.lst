@@ -1,221 +1,76 @@
-CCS PCH C Compiler, Version 4.124, 5967               08-jan-13 17:49
+CCS PCH C Compiler, Version 4.124, 5967               10-jan-13 16:51
 
                Filename: C:\Users\cuki\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used: 1836 bytes (6%)
-                         Largest free fragment is 30932
-               RAM used: 12 (1%) at main() level
-                         38 (2%) worst case
-               Stack:    2 locations
+               ROM used: 74 bytes (0%)
+                         Largest free fragment is 32694
+               RAM used: 8 (1%) at main() level
+                         13 (1%) worst case
+               Stack:    0 locations
 
 *
-0000:  GOTO   05EE
+0000:  GOTO   0004
 .................... #include <18F452.h> 
 .................... //////// Standard Header file for the PIC18F452 device //////////////// 
 .................... #device PIC18F452 
 .................... #list 
 ....................  
 ....................  
-.................... #fuses	H4,NOOSCSEN,NOPUT,NOBROWNOUT,NOWDT,NOSTVREN,NOLVP 
+.................... #fuses	HS,NOOSCSEN,NOPUT,NOBROWNOUT,NOWDT,NOSTVREN,NOLVP 
 .................... #fuses	NODEBUG,NOPROTECT,NOCPB,NOCPD,NOWRT,NOWRTC,NOWRTB 
 .................... #fuses	NOWRTD,NOEBTR,NOEBTRB 
 ....................  
 .................... #use delay(clock=32MHz, crystal=8MHz) 
-*
-0004:  CLRF   FEA
-0006:  MOVLW  09
-0008:  MOVWF  FE9
-000A:  MOVF   FEF,W
-000C:  BZ    0028
-000E:  MOVLW  0A
-0010:  MOVWF  01
-0012:  CLRF   00
-0014:  DECFSZ 00,F
-0016:  BRA    0014
-0018:  DECFSZ 01,F
-001A:  BRA    0012
-001C:  MOVLW  5F
-001E:  MOVWF  00
-0020:  DECFSZ 00,F
-0022:  BRA    0020
-0024:  DECFSZ FEF,F
-0026:  BRA    000E
-0028:  GOTO   0628 (RETURN)
 .................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
 .................... #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=3,  BAUD=2000000, BITS=12, DATA_HOLD=1) 
-002C:  MOVF   0A,W
-002E:  SUBLW  10
-0030:  BZ    003C
-0032:  MOVWF  0B
-0034:  RLCF   08,F
-0036:  RLCF   09,F
-0038:  DECFSZ 0B,F
-003A:  BRA    0034
-003C:  CLRF   00
-003E:  BSF    F94.4
-0040:  BCF    F94.5
-0042:  BCF    F94.3
-0044:  BSF    F8B.3
-0046:  MOVFF  0A,0B
-004A:  BCF    F8B.3
-004C:  BTFSS  09.7
-004E:  BCF    F8B.5
-0050:  BTFSC  09.7
-0052:  BSF    F8B.5
-0054:  RLCF   08,F
-0056:  RLCF   09,F
-0058:  MOVLW  03
-005A:  MOVWF  0C
-005C:  DECFSZ 0C,F
-005E:  BRA    005C
-0060:  BSF    F8B.3
-0062:  RLCF   01,F
-0064:  RLCF   02,F
-0066:  BTFSS  F82.4
-0068:  BCF    01.0
-006A:  BTFSC  F82.4
-006C:  BSF    01.0
-006E:  DECFSZ 0B,F
-0070:  BRA    004A
-0072:  GOTO   0636 (RETURN)
 ....................  
 .................... static long aux, resol; 
 ....................  
 .................... int main(void) { 
-*
-05EE:  CLRF   FF8
-05F0:  BCF    FD0.7
-05F2:  CLRF   FEA
-05F4:  CLRF   FE9
-05F6:  MOVLW  33
-05F8:  MOVWF  FAF
-05FA:  MOVLW  A2
-05FC:  MOVWF  FAC
-05FE:  MOVLW  90
-0600:  MOVWF  FAB
-0602:  BSF    F94.4
-0604:  BCF    F94.5
-0606:  BCF    F94.3
-0608:  BSF    F8B.3
-060A:  BSF    FC1.0
-060C:  BSF    FC1.1
-060E:  BSF    FC1.2
-0610:  BCF    FC1.3
-0612:  CLRF   04
-0614:  CLRF   05
-0616:  CLRF   06
-0618:  CLRF   07
+0004:  CLRF   FF8
+0006:  BCF    FD0.7
+0008:  CLRF   FEA
+000A:  CLRF   FE9
+000C:  MOVLW  33
+000E:  MOVWF  FAF
+0010:  MOVLW  A2
+0012:  MOVWF  FAC
+0014:  MOVLW  90
+0016:  MOVWF  FAB
+0018:  BSF    F94.4
+001A:  BCF    F94.5
+001C:  BCF    F94.3
+001E:  BSF    F8B.3
+0020:  BSF    FC1.0
+0022:  BSF    FC1.1
+0024:  BSF    FC1.2
+0026:  BCF    FC1.3
+0028:  CLRF   04
+002A:  CLRF   05
+002C:  CLRF   06
+002E:  CLRF   07
 ....................  
-.................... 	setup_timer_0(T0_DIV_1); 
-061A:  MOVLW  88
-061C:  MOVWF  FD5
+.................... 	setup_timer_0(T0_DIV_256 | T0_INTERNAL); 
+0030:  MOVLW  87
+0032:  MOVWF  FD5
 ....................  
 .................... 	while (true) { 
-.................... 		delay_ms(500); 
-061E:  MOVLW  02
-0620:  MOVWF  08
-0622:  MOVLW  FA
-0624:  MOVWF  09
-0626:  BRA    0004
-0628:  DECFSZ 08,F
-062A:  BRA    0622
-.................... 		aux = spi_xfer(0); 
-062C:  CLRF   09
-062E:  CLRF   08
-0630:  MOVLW  0C
-0632:  MOVWF  0A
-0634:  BRA    002C
-0636:  MOVF   01,W
-0638:  MOVFF  02,05
-063C:  MOVFF  01,04
-.................... 		if (aux >= resol) 
-0640:  MOVF   07,W
-0642:  SUBWF  05,W
-0644:  BNC   065A
-0646:  BNZ   064E
-0648:  MOVF   06,W
-064A:  SUBWF  04,W
-064C:  BNC   065A
-.................... 			resol = aux + 1; 
-064E:  MOVLW  01
-0650:  ADDWF  04,W
-0652:  MOVWF  06
-0654:  MOVLW  00
-0656:  ADDWFC 05,W
-0658:  MOVWF  07
-.................... 		printf("%Lu %Lu\n%.5f", aux, resol, (float) aux * 360 / resol); 
-065A:  MOVFF  05,0D
-065E:  MOVFF  04,0C
-0662:  RCALL  0076
-0664:  MOVFF  00,08
-0668:  MOVFF  01,09
-066C:  MOVFF  02,0A
-0670:  MOVFF  03,0B
-0674:  MOVFF  03,1C
-0678:  MOVFF  02,1B
-067C:  MOVFF  01,1A
-0680:  MOVFF  00,19
-0684:  CLRF   20
-0686:  CLRF   1F
-0688:  MOVLW  34
-068A:  MOVWF  1E
-068C:  MOVLW  87
-068E:  MOVWF  1D
-0690:  RCALL  00AC
-0692:  MOVFF  00,08
-0696:  MOVFF  01,09
-069A:  MOVFF  02,0A
-069E:  MOVFF  03,0B
-06A2:  MOVFF  07,0D
-06A6:  MOVFF  06,0C
-06AA:  RCALL  0076
-06AC:  MOVFF  0B,0F
-06B0:  MOVFF  0A,0E
-06B4:  MOVFF  09,0D
-06B8:  MOVFF  08,0C
-06BC:  MOVFF  03,13
-06C0:  MOVFF  02,12
-06C4:  MOVFF  01,11
-06C8:  MOVFF  00,10
-06CC:  BRA    019E
-06CE:  MOVFF  00,08
-06D2:  MOVFF  01,09
-06D6:  MOVFF  02,0A
-06DA:  MOVFF  03,0B
-06DE:  MOVLW  10
-06E0:  MOVWF  FE9
-06E2:  MOVFF  05,0D
-06E6:  MOVFF  04,0C
-06EA:  RCALL  02FA
-06EC:  MOVLW  20
-06EE:  BTFSS  F9E.4
-06F0:  BRA    06EE
-06F2:  MOVWF  FAD
-06F4:  MOVLW  10
-06F6:  MOVWF  FE9
-06F8:  MOVFF  07,0D
-06FC:  MOVFF  06,0C
-0700:  RCALL  02FA
-0702:  MOVLW  0A
-0704:  BTFSS  F9E.4
-0706:  BRA    0704
-0708:  MOVWF  FAD
-070A:  MOVLW  89
-070C:  MOVWF  FE9
-070E:  MOVFF  0B,0F
-0712:  MOVFF  0A,0E
-0716:  MOVFF  09,0D
-071A:  MOVFF  08,0C
-071E:  MOVLW  05
-0720:  MOVWF  10
-0722:  BRA    046C
+.................... 		while (get_timer0()) 
+.................... 			; 
+0034:  MOVF   FD6,W
+0036:  MOVFF  FD7,03
+003A:  IORWF  FD7,W
+003C:  BNZ   0034
+.................... 		output_toggle(pin_b5); 
+003E:  BCF    F93.5
+0040:  BTG    F8A.5
 .................... 	} 
-0724:  BRA    061E
+0042:  BRA    0034
 .................... 	return 0; 
-0726:  MOVLW  00
-0728:  MOVWF  01
+0044:  MOVLW  00
+0046:  MOVWF  01
 .................... } 
-072A:  SLEEP 
+0048:  SLEEP 
 
 Configuration Fuses:
    Word  1: 2600   H4 NOOSCSEN

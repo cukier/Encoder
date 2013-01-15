@@ -1,6 +1,6 @@
 #include <18F452.h>
 
-#fuses	H4,NOOSCSEN,NOPUT,NOBROWNOUT,NOWDT,NOSTVREN,NOLVP
+#fuses	HS,NOOSCSEN,NOPUT,NOBROWNOUT,NOWDT,NOSTVREN,NOLVP
 #fuses	NODEBUG,NOPROTECT,NOCPB,NOCPD,NOWRT,NOWRTC,NOWRTB
 #fuses	NOWRTD,NOEBTR,NOEBTRB
 
@@ -12,14 +12,12 @@ static long aux, resol;
 
 int main(void) {
 
-	setup_timer_0(T0_DIV_1);
+	setup_timer_0(T0_DIV_256 | T0_INTERNAL);
 
 	while (true) {
-		delay_ms(500);
-		aux = spi_xfer(0);
-		if (aux >= resol)
-			resol = aux + 1;
-		printf("%Lu %Lu\n%.5f", aux, resol, (float) aux * 360 / resol);
+		while (get_timer0())
+			;
+		output_toggle(pin_b5);
 	}
 	return 0;
 }
