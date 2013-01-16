@@ -1,2 +1,3 @@
-      Memory usage:   ROM=6%      RAM=1% - 2%
-      0 Errors,  0 Warnings.
+>>> Warning 225 "encoder.c" Line 18(1,1): Interrupt level changed  EXT: NORMAL=>HIGH
+      Memory usage:   ROM=7%      RAM=4% - 5%
+      0 Errors,  1 Warnings.

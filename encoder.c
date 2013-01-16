@@ -1,4 +1,5 @@
 #include <18F452.h>
+#device high_ints = true
 
 #fuses	H4,NOOSCSEN,NOPUT,NOBROWNOUT,NOWDT,NOSTVREN,NOLVP
 #fuses	NODEBUG,NOPROTECT,NOCPB,NOCPD,NOWRT,NOWRTC,NOWRTB
@@ -8,18 +9,39 @@
 #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)
 #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=3,  BAUD=2000000, BITS=12, DATA_HOLD=1)
 
-static long aux, resol;
+#define canal_b pin_b1
+
+static signed long pulsos, resol, pulsosAux;
+static short print = 1;
+static float angulo;
+
+#INT_EXT
+void ext_isr() {
+	!input_state(canal_b) ? pulsos++ : pulsos--;
+	print = 1;
+}
+
+#INT_EXT2 HIGH
+void ext2_isr() {
+	pulsosAux = pulsos;
+	pulsos = 0;
+}
 
 int main(void) {
 
-	setup_timer_0(T0_DIV_1);
+	enable_interrupts(INT_EXT_L2H);
+	enable_interrupts(INT_EXT2_H2L);
+	enable_interrupts(global);
+
+	resol = 1024;
 
 	while (true) {
-		delay_ms(500);
-		aux = spi_xfer(0);
-		if (aux >= resol)
-			resol = aux + 1;
-		printf("%Lu %Lu\n%.5f", aux, resol, (float) aux * 360 / resol);
+		if (print) {
+			print = 0;
+			printf("%Ld %Ld\n%f", pulsos, pulsosAux,
+					(float) 360 * pulsos / resol);
+		}
 	}
+
 	return 0;
 }
