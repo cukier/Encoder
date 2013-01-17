@@ -7,7 +7,7 @@
 
 #use delay(clock=32MHz, crystal=8MHz)
 #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)
-#use
+#use i2c(master, scl=pin_c3, sda=pin_c4, fast, force_hw)
 
 #define canal_b pin_b1
 
