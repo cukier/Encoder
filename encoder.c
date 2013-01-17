@@ -7,7 +7,7 @@
 
 #use delay(clock=32MHz, crystal=8MHz)
 #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)
-#use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=3,  BAUD=2000000, BITS=12, DATA_HOLD=1)
+#use
 
 #define canal_b pin_b1
 
