@@ -1,3 +1,21 @@
->>> Warning 225 "encoder.c" Line 18(1,1): Interrupt level changed  EXT: NORMAL=>HIGH
-      Memory usage:   ROM=7%      RAM=4% - 5%
-      0 Errors,  1 Warnings.
+*** Error 35 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 20(16,17): Number of bits is out of range
+*** Error 38 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 21(10,11): This type can not be qualified with this qualifier
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 21(12,13): Expecting a declaration
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 21(13,14): Expecting a declaration
+*** Error 36 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 22(17,23): Expecting a ; or ,
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 22(19,20): Expecting a declaration
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 22(20,21): Expecting a declaration
+*** Error 36 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 23(14,17): Expecting a ; or ,
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 23(16,17): Expecting a declaration
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 23(17,18): Expecting a declaration
+*** Error 36 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 24(15,19): Expecting a ; or ,
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 24(17,18): Expecting a declaration
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 24(18,19): Expecting a declaration
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 25(1,2): Expecting a declaration
+*** Error 48 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 25(2,5): Expecting a (
+*** Error 43 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 26(1,2): Expecting a declaration
+*** Error 48 "C:\Users\cuki\Eletronica\Projetos\Encoder\AM4096.h" Line 26(2,7): Expecting a (
+*** Error 12 "encoder.c" Line 21(1,6): Undefined identifier   REG51
+*** Error 12 "encoder.c" Line 22(5,10): Undefined identifier   REG51
+*** Error 51 "encoder.c" Line 24(1,5): A numeric expression must appear here
+      20 Errors,  0 Warnings.
