@@ -22,7 +22,7 @@ stayupoe=0
 [PROJECT]
 Target=encoder.hex
 Development_Mode=
-Processor=0x452F
+Processor=0xE520
 Processor_Text=PIC18F452
 ToolSuite=CCS
 [Target Data]
@@ -30,6 +30,7 @@ BuildTool=C-COMPILER
 OptionString=+FH
 AdditionalOptionString=
 BuildRequired=1
+FileList=Z:\media\bkp\Eletronica\Projetos\Encoder\encoder.c
 [encoder.c]
 Type=4
 Path=
@@ -41,10 +42,9 @@ AdditionalOptionString=
 1=D:\Projetos\Encoder\encoder.c
 [Windows]
 0=0000 %S 0 0 796 451 3 0
-[Units]
-Link=0
-Count=1
-1=encoder
 [Opened Files]
 1=encoder.c
 2=
+[Units]
+Count=1
+1=encoder (main)

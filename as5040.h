@@ -57,7 +57,6 @@ void write_encoder(long data) {
 }
 
 void setup_encoder(long new_setup, int zero_mark) {
-
 	if (new_setup & direction_mask) {
 		setup |= direction_mask;
 	}
@@ -96,8 +95,14 @@ void setup_encoder(long new_setup, int zero_mark) {
 	if (zero_mark && zero_mark < 1024) {
 		setup |= (long) zero_mark << 5;
 	}
-
 	write_encoder(setup);
+}
+
+void clear_bus(void) {
+	output_low(SLAVE_SELECT);
+	output_low(CLK_PIN);
+	output_low(DO_PIN);
+	output_low(DI_PIN);
 }
 
 #endif /* AS5040_H_ */

@@ -1,168 +1,590 @@
-CCS PCH C Compiler, Version 4.124, 63923               10-fev-12 13:47
+CCS PCH C Compiler, Version 4.124, 5967               22-mar-13 09:21
 
-               Filename: D:\Projetos\Encoder\encoder.lst
+               Filename: E:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used: 282 bytes (1%)
-                         Largest free fragment is 32482
-               RAM used: 26 (2%) at main() level
-                         26 (2%) worst case
-               Stack:    1 worst case (0 in main + 1 for interrupts)
+               ROM used: 2638 bytes (8%)
+                         Largest free fragment is 30130
+               RAM used: 19 (1%) at main() level
+                         43 (3%) worst case
+               Stack:    3 locations
 
 *
-0000:  GOTO   00FA
-*
-0008:  MOVWF  04
-000A:  MOVFF  FD8,05
-000E:  MOVFF  FE0,06
-0012:  MOVLB  0
-0014:  MOVFF  FE9,0C
-0018:  MOVFF  FEA,07
-001C:  MOVFF  FE1,08
-0020:  MOVFF  FE2,09
-0024:  MOVFF  FD9,0A
-0028:  MOVFF  FDA,0B
-002C:  MOVFF  FF3,12
-0030:  MOVFF  FF4,13
-0034:  MOVFF  FFA,14
-0038:  MOVFF  FF5,15
-003C:  MOVFF  FF6,16
-0040:  MOVFF  FF7,17
-0044:  MOVFF  00,0E
-0048:  MOVFF  01,0F
-004C:  MOVFF  02,10
-0050:  MOVFF  03,11
-0054:  BTFSS  FF2.4
-0056:  GOTO   0060
-005A:  BTFSC  FF2.1
-005C:  GOTO   00BA
-0060:  BTFSS  FF0.3
-0062:  GOTO   006C
-0066:  BTFSC  FF0.0
-0068:  GOTO   00DA
-006C:  MOVFF  0E,00
-0070:  MOVFF  0F,01
-0074:  MOVFF  10,02
-0078:  MOVFF  11,03
-007C:  MOVFF  0C,FE9
-0080:  MOVFF  07,FEA
-0084:  BSF    07.7
-0086:  MOVFF  08,FE1
-008A:  MOVFF  09,FE2
-008E:  MOVFF  0A,FD9
-0092:  MOVFF  0B,FDA
-0096:  MOVFF  12,FF3
-009A:  MOVFF  13,FF4
-009E:  MOVFF  14,FFA
-00A2:  MOVFF  15,FF5
-00A6:  MOVFF  16,FF6
-00AA:  MOVFF  17,FF7
-00AE:  MOVF   04,W
-00B0:  MOVFF  06,FE0
-00B4:  MOVFF  05,FD8
-00B8:  RETFIE 0
-.................... #include <18F452.h> 
-.................... //////// Standard Header file for the PIC18F452 device //////////////// 
-.................... #device PIC18F452 
+0000:  GOTO   0898
+.................... #include <18F45K20.h> 
+.................... //////// Standard Header file for the PIC18F45K20 device //////////////// 
+.................... #device PIC18F45K20 
 .................... #list 
 ....................  
-.................... #device adc=16 
-.................... #fuses HS 
-.................... //#use delay(clock=4Mhz) 
 ....................  
-.................... //#include "lcd_8b.c" 
+.................... #fuses H4,NOWDT,NOPROTECT,NOLVP 
+.................... #use delay(crystal=15MHz, clock=60MHz) 
+*
+0030:  CLRF   FEA
+0032:  MOVLW  10
+0034:  MOVWF  FE9
+0036:  MOVF   FEF,W
+0038:  BZ    0056
+003A:  MOVLW  13
+003C:  MOVWF  01
+003E:  CLRF   00
+0040:  DECFSZ 00,F
+0042:  BRA    0040
+0044:  DECFSZ 01,F
+0046:  BRA    003E
+0048:  MOVLW  73
+004A:  MOVWF  00
+004C:  DECFSZ 00,F
+004E:  BRA    004C
+0050:  NOP   
+0052:  DECFSZ FEF,F
+0054:  BRA    003A
+0056:  RETURN 0
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
+.................... #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=0,  BAUD=500000, BITS=16, DATA_HOLD=1) 
+0058:  MOVF   18,W
+005A:  SUBLW  10
+005C:  BZ    0068
+005E:  MOVWF  19
+0060:  RLCF   16,F
+0062:  RLCF   17,F
+0064:  DECFSZ 19,F
+0066:  BRA    0060
+0068:  BSF    F94.4
+006A:  BCF    F94.5
+006C:  BCF    F94.3
+006E:  BCF    F8B.3
+0070:  MOVFF  18,19
+0074:  BTFSS  17.7
+0076:  BCF    F8B.5
+0078:  BTFSC  17.7
+007A:  BSF    F8B.5
+007C:  RLCF   16,F
+007E:  RLCF   17,F
+0080:  MOVLW  05
+0082:  MOVWF  1A
+0084:  DECFSZ 1A,F
+0086:  BRA    0084
+0088:  BSF    F8B.3
+008A:  MOVLW  03
+008C:  MOVWF  1A
+008E:  DECFSZ 1A,F
+0090:  BRA    008E
+0092:  RLCF   01,F
+0094:  RLCF   02,F
+0096:  BTFSS  F82.4
+0098:  BCF    01.0
+009A:  BTFSC  F82.4
+009C:  BSF    01.0
+009E:  BCF    F8B.3
+00A0:  MOVLW  02
+00A2:  MOVWF  1A
+00A4:  DECFSZ 1A,F
+00A6:  BRA    00A4
+00A8:  DECFSZ 19,F
+00AA:  BRA    0074
+00AC:  RETURN 0
 ....................  
-.................... int chave = 0; 
+.................... #define SLAVE_SELECT PIN_A5 
+.................... #include "as5040.h" 
+.................... /* 
+....................  * as5040.h 
+....................  * 
+....................  *  Created on: 30/03/2012 
+....................  *      Author: cuki 
+....................  */ 
 ....................  
-.................... #INT_EXT 
-.................... void isr_INT_EXT() { 
-.................... 	if (!input(pin_b1) && chave != 2) { 
-00BA:  BSF    F93.1
-00BC:  BTFSC  F81.1
-00BE:  BRA    00D0
-00C0:  MOVF   19,W
-00C2:  SUBLW  02
-00C4:  BZ    00D0
-.................... 		//		if (chave != 2) 
-.................... 		output_c(1); 
-00C6:  CLRF   F94
-00C8:  MOVLW  01
-00CA:  MOVWF  F8B
-.................... 		chave = 1; 
-00CC:  MOVWF  19
-.................... 	} else { 
-00CE:  BRA    00D4
-.................... 		output_c(0); 
-00D0:  CLRF   F94
-00D2:  CLRF   F8B
+.................... #ifndef AS5040_H_ 
+.................... #define AS5040_H_ 
+....................  
+.................... #define clockwise 0x0000 
+.................... #define couter_clockwise 0x8000 
+.................... #define direction_mask 0x8000 
+.................... #define zero_mask 0x7FE0 
+.................... #define index1 0x0000 
+.................... #define index3 0x0010 
+.................... #define index_mask 0x0010 
+.................... #define quatrature_mode	0x0001 
+.................... #define step_direction_mode 0x0002 
+.................... #define brushless_dc_mode	0x0003 
+.................... #define mode_mask 0x0003 
+.................... #define _10_bit_resolution 0x0000 
+.................... #define _9_bit_resolution 0x0004 
+.................... #define _8_bit_resolution 0x0008 
+.................... #define _7_bit_resolution 0x000C 
+.................... #define resolution_mask	0x000C 
+.................... #define DO_PIN PIN_C5 
+.................... #define DI_PIN PIN_C4 
+.................... #define CLK_PIN PIN_C3 
+.................... #ifndef SLAVE_SELECT 
+.................... #define SLAVE_SELECT PIN_A5 
+.................... #endif 
+....................  
+.................... long setup; 
+....................  
+.................... void write_encoder(long data) { 
+00AE:  CLRF   14
+00B0:  CLRF   15
+....................  
+.................... 	register int aux = 0; 
+.................... 	register int cont = 0; 
+....................  
+.................... 	output_high(DO_PIN); 
+00B2:  BCF    F94.5
+00B4:  BSF    F8B.5
+.................... 	output_low(CLK_PIN); 
+00B6:  BCF    F94.3
+00B8:  BCF    F8B.3
+.................... 	delay_us(10); 
+00BA:  MOVLW  31
+00BC:  MOVWF  00
+00BE:  DECFSZ 00,F
+00C0:  BRA    00BE
+00C2:  BRA    00C4
+.................... 	output_high(SLAVE_SELECT); 
+00C4:  BCF    F92.5
+00C6:  BSF    F89.5
+.................... 	spi_xfer(data); 
+00C8:  MOVFF  13,17
+00CC:  MOVFF  12,16
+00D0:  MOVLW  10
+00D2:  MOVWF  18
+00D4:  RCALL  0058
+.................... 	output_low(CLK_PIN); 
+00D6:  BCF    F94.3
+00D8:  BCF    F8B.3
+.................... 	for (cont = 0; cont < 16; ++cont) { 
+00DA:  CLRF   15
+00DC:  MOVF   15,W
+00DE:  SUBLW  0F
+00E0:  BNC   0114
+.................... 		output_high(DO_PIN); 
+00E2:  BCF    F94.5
+00E4:  BSF    F8B.5
+.................... 		delay_us(2); 
+00E6:  MOVLW  09
+00E8:  MOVWF  00
+00EA:  DECFSZ 00,F
+00EC:  BRA    00EA
+00EE:  BRA    00F0
+.................... 		output_high(CLK_PIN); 
+00F0:  BCF    F94.3
+00F2:  BSF    F8B.3
+.................... 		delay_us(3); 
+00F4:  MOVLW  0E
+00F6:  MOVWF  00
+00F8:  DECFSZ 00,F
+00FA:  BRA    00F8
+00FC:  BRA    00FE
+.................... 		output_low(CLK_PIN); 
+00FE:  BCF    F94.3
+0100:  BCF    F8B.3
+.................... 		delay_us(2); 
+0102:  MOVLW  09
+0104:  MOVWF  00
+0106:  DECFSZ 00,F
+0108:  BRA    0106
+010A:  BRA    010C
+.................... 		output_low(DO_PIN); 
+010C:  BCF    F94.5
+010E:  BCF    F8B.5
 .................... 	} 
+0110:  INCF   15,F
+0112:  BRA    00DC
+.................... 	output_low(SLAVE_SELECT); 
+0114:  BCF    F92.5
+0116:  BCF    F89.5
 .................... } 
-00D4:  BCF    FF2.1
-00D6:  GOTO   006C
-.................... #INT_EXT1 
-.................... void isr_INT_EXT1() { 
-.................... 	if (!input(pin_b0) && chave != 1) { 
-00DA:  BSF    F93.0
-00DC:  BTFSC  F81.0
-00DE:  BRA    00F0
-00E0:  DECFSZ 19,W
-00E2:  BRA    00E6
-00E4:  BRA    00F0
-.................... //	if (!input(pin_b0)) { 
-.................... //		if (chave != 1) 
-.................... 			output_c(2); 
-00E6:  CLRF   F94
-00E8:  MOVLW  02
-00EA:  MOVWF  F8B
-.................... 		chave = 2; 
-00EC:  MOVWF  19
-.................... 	} else { 
-00EE:  BRA    00F4
-.................... 		output_c(0); 
-00F0:  CLRF   F94
-00F2:  CLRF   F8B
-.................... 	} 
-.................... } 
+0118:  GOTO   01FE (RETURN)
 ....................  
-00F4:  BCF    FF0.0
-00F6:  GOTO   006C
+.................... void setup_encoder(long new_setup, int zero_mark) { 
+.................... 	if (new_setup & direction_mask) { 
+011C:  ANDLW  00
+011E:  MOVWF  00
+0120:  MOVF   10,W
+0122:  ANDLW  80
+0124:  MOVWF  03
+0126:  MOVF   00,W
+0128:  IORWF  03,W
+012A:  BZ    012E
+.................... 		setup |= direction_mask; 
+012C:  BSF    05.7
+.................... 	} 
+.................... 	if (new_setup & index_mask) { 
+012E:  MOVF   0F,W
+0130:  ANDLW  10
+0132:  MOVWF  00
+0134:  CLRF   03
+0136:  MOVF   00,W
+0138:  IORWF  03,W
+013A:  BZ    013E
+.................... 		setup |= index_mask; 
+013C:  BSF    04.4
+.................... 	} 
+.................... 	if (new_setup & mode_mask) { 
+013E:  MOVF   0F,W
+0140:  ANDLW  03
+0142:  MOVWF  00
+0144:  CLRF   03
+0146:  MOVF   00,W
+0148:  IORWF  03,W
+014A:  BZ    0184
+.................... 		switch (new_setup & mode_mask) { 
+014C:  MOVF   0F,W
+014E:  ANDLW  03
+0150:  MOVWF  00
+0152:  CLRF   03
+0154:  MOVF   03,W
+0156:  BNZ   015E
+0158:  MOVLW  01
+015A:  SUBWF  00,W
+015C:  BZ    0174
+015E:  MOVF   03,W
+0160:  BNZ   0168
+0162:  MOVLW  02
+0164:  SUBWF  00,W
+0166:  BZ    0178
+0168:  MOVF   03,W
+016A:  BNZ   0172
+016C:  MOVLW  03
+016E:  SUBWF  00,W
+0170:  BZ    017C
+0172:  BRA    0182
+.................... 		case quatrature_mode: 
+.................... 			setup |= quatrature_mode; 
+0174:  BSF    04.0
+.................... 			break; 
+0176:  BRA    0184
+.................... 		case step_direction_mode: 
+.................... 			setup |= step_direction_mode; 
+0178:  BSF    04.1
+.................... 			break; 
+017A:  BRA    0184
+.................... 		case brushless_dc_mode: 
+.................... 			setup |= brushless_dc_mode; 
+017C:  MOVLW  03
+017E:  IORWF  04,F
+.................... 			break; 
+0180:  BRA    0184
+.................... 		default: 
+.................... 			break; 
+0182:  BRA    0184
+.................... 		} 
+.................... 	} 
+.................... 	if (new_setup & resolution_mask) 
+0184:  MOVF   0F,W
+0186:  ANDLW  0C
+0188:  MOVWF  00
+018A:  CLRF   03
+018C:  MOVF   00,W
+018E:  IORWF  03,W
+0190:  BZ    01CA
+.................... 		switch (new_setup & resolution_mask) { 
+0192:  MOVF   0F,W
+0194:  ANDLW  0C
+0196:  MOVWF  00
+0198:  CLRF   03
+019A:  MOVF   03,W
+019C:  BNZ   01A4
+019E:  MOVLW  04
+01A0:  SUBWF  00,W
+01A2:  BZ    01BA
+01A4:  MOVF   03,W
+01A6:  BNZ   01AE
+01A8:  MOVLW  08
+01AA:  SUBWF  00,W
+01AC:  BZ    01BE
+01AE:  MOVF   03,W
+01B0:  BNZ   01B8
+01B2:  MOVLW  0C
+01B4:  SUBWF  00,W
+01B6:  BZ    01C2
+01B8:  BRA    01C8
+.................... 		case _9_bit_resolution: 
+.................... 			setup |= _9_bit_resolution; 
+01BA:  BSF    04.2
+.................... 			break; 
+01BC:  BRA    01CA
+.................... 		case _8_bit_resolution: 
+.................... 			setup |= _8_bit_resolution; 
+01BE:  BSF    04.3
+.................... 			break; 
+01C0:  BRA    01CA
+.................... 		case _7_bit_resolution: 
+.................... 			setup |= _7_bit_resolution; 
+01C2:  MOVLW  0C
+01C4:  IORWF  04,F
+.................... 			break; 
+01C6:  BRA    01CA
+.................... 		default: 
+.................... 			break; 
+01C8:  BRA    01CA
+.................... 		} 
+.................... 	if (zero_mark && zero_mark < 1024) { 
+01CA:  MOVF   11,F
+01CC:  BZ    01F4
+.................... 		setup |= (long) zero_mark << 5; 
+01CE:  CLRF   13
+01D0:  RLCF   11,W
+01D2:  MOVWF  02
+01D4:  RLCF   13,W
+01D6:  MOVWF  03
+01D8:  RLCF   02,F
+01DA:  RLCF   03,F
+01DC:  RLCF   02,F
+01DE:  RLCF   03,F
+01E0:  RLCF   02,F
+01E2:  RLCF   03,F
+01E4:  RLCF   02,F
+01E6:  RLCF   03,F
+01E8:  MOVLW  E0
+01EA:  ANDWF  02,F
+01EC:  MOVF   02,W
+01EE:  IORWF  04,F
+01F0:  MOVF   03,W
+01F2:  IORWF  05,F
+.................... 	} 
+.................... 	write_encoder(setup); 
+01F4:  MOVFF  05,13
+01F8:  MOVFF  04,12
+01FC:  BRA    00AE
+.................... } 
+01FE:  GOTO   0904 (RETURN)
+....................  
+.................... void clear_bus(void) { 
+.................... 	output_low(SLAVE_SELECT); 
+*
+001C:  BCF    F92.5
+001E:  BCF    F89.5
+.................... 	output_low(CLK_PIN); 
+0020:  BCF    F94.3
+0022:  BCF    F8B.3
+.................... 	output_low(DO_PIN); 
+0024:  BCF    F94.5
+0026:  BCF    F8B.5
+.................... 	output_low(DI_PIN); 
+0028:  BCF    F94.4
+002A:  BCF    F8B.4
+.................... } 
+002C:  GOTO   08E6 (RETURN)
+....................  
+.................... #endif /* AS5040_H_ */ 
+....................  
+....................  
+.................... static long leitura; 
+.................... static long anguloBruto; 
+.................... static float angulo; 
+.................... static int cont; 
+....................  
 .................... void main(void) { 
-00FA:  CLRF   FF8
-00FC:  BCF    FD0.7
-00FE:  BSF    07.7
-0100:  CLRF   FEA
-0102:  CLRF   FE9
-0104:  CLRF   19
-0106:  BSF    FC1.0
-0108:  BSF    FC1.1
-010A:  BSF    FC1.2
-010C:  BCF    FC1.3
-....................  
-.................... 	output_c(0); 
-010E:  CLRF   F94
-0110:  CLRF   F8B
-....................  
-.................... //	clear_interrupt(int_ext); 
-.................... //	clear_interrupt(int_ext1); 
-.................... 	enable_interrupts(INT_EXT); 
-0112:  BSF    FF2.4
-.................... 	enable_interrupts(INT_EXT1); 
-0114:  BSF    FF0.3
-.................... 	enable_interrupts(global); 
-0116:  MOVLW  C0
-0118:  IORWF  FF2,F
-....................  
-.................... 	while (true) { 
-....................  
-.................... 	} //Infinite Loop 
-011A:  BRA    011A
-.................... } //Main 
-011C:  SLEEP 
+*
+0898:  CLRF   FF8
+089A:  BCF    FD0.7
+089C:  CLRF   FEA
+089E:  CLRF   FE9
+08A0:  BSF    FB8.3
+08A2:  MOVLW  1A
+08A4:  MOVWF  FAF
+08A6:  MOVLW  06
+08A8:  MOVWF  FB0
+08AA:  MOVLW  A6
+08AC:  MOVWF  FAC
+08AE:  MOVLW  90
+08B0:  MOVWF  FAB
+08B2:  BSF    F94.4
+08B4:  BCF    F94.5
+08B6:  BCF    F94.3
+08B8:  BCF    F8B.3
+08BA:  MOVLW  00
+08BC:  MOVWF  F7E
+08BE:  BCF    FC1.4
+08C0:  BCF    FC1.5
+08C2:  MOVF   F7F,W
+08C4:  ANDLW  E0
+08C6:  MOVWF  F7F
+08C8:  BCF    F79.5
+08CA:  BCF    F79.4
+08CC:  CLRF   F7A
+08CE:  CLRF   F7B
+08D0:  CLRF   06
+08D2:  CLRF   07
+08D4:  CLRF   08
+08D6:  CLRF   09
+08D8:  CLRF   0A
+08DA:  CLRF   0B
+08DC:  CLRF   0C
+08DE:  CLRF   0D
+08E0:  CLRF   0E
+.................... 	clear_bus(); 
+08E2:  GOTO   001C
+.................... 	delay_ms(500); 
+08E6:  MOVLW  02
+08E8:  MOVWF  0F
+08EA:  MOVLW  FA
+08EC:  MOVWF  10
+08EE:  CALL   0030
+08F2:  DECFSZ 0F,F
+08F4:  BRA    08EA
+.................... 	setup_encoder(couter_clockwise | _7_bit_resolution | step_direction_mode, 
+.................... 			64); 
+08F6:  MOVLW  80
+08F8:  MOVWF  10
+08FA:  MOVLW  0E
+08FC:  MOVWF  0F
+08FE:  MOVLW  40
+0900:  MOVWF  11
+0902:  BRA    011C
+.................... //	printf("\n\rReboot"); 
+.................... //	delay_ms(100); 
+.................... 	sleep(); 
+0904:  MOVFF  FD3,00
+0908:  MOVLW  7C
+090A:  ANDWF  FD3,F
+090C:  SLEEP 
+090E:  MOVFF  00,FD3
+.................... 	while (TRUE) { 
+.................... 		output_low(SLAVE_SELECT); 
+0912:  BCF    F92.5
+0914:  BCF    F89.5
+.................... 		leitura = spi_xfer(0); 
+0916:  CLRF   17
+0918:  CLRF   16
+091A:  MOVLW  10
+091C:  MOVWF  18
+091E:  CALL   0058
+0922:  MOVF   01,W
+0924:  MOVFF  02,07
+0928:  MOVFF  01,06
+.................... 		output_high(SLAVE_SELECT); 
+092C:  BCF    F92.5
+092E:  BSF    F89.5
+.................... 		anguloBruto = leitura >> 6; 
+0930:  RRCF   07,W
+0932:  MOVWF  09
+0934:  RRCF   06,W
+0936:  MOVWF  08
+0938:  RRCF   09,F
+093A:  RRCF   08,F
+093C:  RRCF   09,F
+093E:  RRCF   08,F
+0940:  RRCF   09,F
+0942:  RRCF   08,F
+0944:  RRCF   09,F
+0946:  RRCF   08,F
+0948:  RRCF   09,F
+094A:  RRCF   08,F
+094C:  MOVLW  03
+094E:  ANDWF  09,F
+.................... 		angulo = (float) 359 * anguloBruto / 1024; 
+0950:  MOVFF  09,10
+0954:  MOVFF  08,0F
+0958:  BRA    0202
+095A:  CLRF   21
+095C:  MOVLW  80
+095E:  MOVWF  20
+0960:  MOVLW  33
+0962:  MOVWF  1F
+0964:  MOVLW  87
+0966:  MOVWF  1E
+0968:  MOVFF  03,25
+096C:  MOVFF  02,24
+0970:  MOVFF  01,23
+0974:  MOVFF  00,22
+0978:  RCALL  023A
+097A:  MOVFF  00,0F
+097E:  MOVFF  01,10
+0982:  MOVFF  02,11
+0986:  MOVFF  03,12
+098A:  MOVFF  03,16
+098E:  MOVFF  02,15
+0992:  MOVFF  01,14
+0996:  MOVFF  00,13
+099A:  CLRF   1A
+099C:  CLRF   19
+099E:  CLRF   18
+09A0:  MOVLW  89
+09A2:  MOVWF  17
+09A4:  BRA    032C
+09A6:  MOVFF  03,0D
+09AA:  MOVFF  02,0C
+09AE:  MOVFF  01,0B
+09B2:  MOVFF  00,0A
+.................... 		printf("\f%Lu  -  %d \n\r%Lu %.2f", anguloBruto, 
+.................... 				(int) (leitura & 0x0006) >> 1, leitura, angulo); 
+09B6:  MOVF   06,W
+09B8:  ANDLW  06
+09BA:  MOVWF  00
+09BC:  CLRF   03
+09BE:  MOVWF  0F
+09C0:  BCF    FD8.0
+09C2:  RRCF   0F,F
+09C4:  MOVLW  0C
+09C6:  BTFSS  F9E.4
+09C8:  BRA    09C6
+09CA:  MOVWF  FAD
+09CC:  MOVLW  10
+09CE:  MOVWF  FE9
+09D0:  MOVFF  09,12
+09D4:  MOVFF  08,11
+09D8:  RCALL  0488
+09DA:  MOVLW  08
+09DC:  MOVWF  FF6
+09DE:  MOVLW  00
+09E0:  MOVWF  FF7
+09E2:  MOVLW  05
+09E4:  MOVWF  11
+09E6:  BRA    052C
+09E8:  MOVFF  0F,11
+09EC:  MOVLW  1F
+09EE:  MOVWF  12
+09F0:  BRA    0576
+09F2:  MOVLW  20
+09F4:  BTFSS  F9E.4
+09F6:  BRA    09F4
+09F8:  MOVWF  FAD
+09FA:  MOVLW  0A
+09FC:  BTFSS  F9E.4
+09FE:  BRA    09FC
+0A00:  MOVWF  FAD
+0A02:  MOVLW  0D
+0A04:  BTFSS  F9E.4
+0A06:  BRA    0A04
+0A08:  MOVWF  FAD
+0A0A:  MOVLW  10
+0A0C:  MOVWF  FE9
+0A0E:  MOVFF  07,12
+0A12:  MOVFF  06,11
+0A16:  RCALL  0488
+0A18:  MOVLW  20
+0A1A:  BTFSS  F9E.4
+0A1C:  BRA    0A1A
+0A1E:  MOVWF  FAD
+0A20:  MOVLW  89
+0A22:  MOVWF  FE9
+0A24:  MOVFF  0D,14
+0A28:  MOVFF  0C,13
+0A2C:  MOVFF  0B,12
+0A30:  MOVFF  0A,11
+0A34:  MOVLW  02
+0A36:  MOVWF  15
+0A38:  BRA    0716
+.................... 		delay_ms(500); 
+0A3A:  MOVLW  02
+0A3C:  MOVWF  0F
+0A3E:  MOVLW  FA
+0A40:  MOVWF  10
+0A42:  CALL   0030
+0A46:  DECFSZ 0F,F
+0A48:  BRA    0A3E
+.................... 	} 
+0A4A:  BRA    0912
+.................... } 
+0A4C:  SLEEP 
 
 Configuration Fuses:
-   Word  1: 2200   HS NOOSCSEN
-   Word  2: 0E0E   PUT BROWNOUT BORV20 NOWDT WDT128
-   Word  3: 0100   CCP2C1
-   Word  4: 0081   STVREN NOLVP NODEBUG
+   Word  1: C600   H4 FCMEN IESO
+   Word  2: 1E1E   PUT BROWNOUT BORV18 NOWDT WDT32768
+   Word  3: 8F00   CCP2C1 PBADEN LPT1OSC HFOFST MCLR
+   Word  4: 0081   STVREN NOLVP NOXINST NODEBUG
    Word  5: C00F   NOPROTECT NOCPB NOCPD
    Word  6: E00F   NOWRT NOWRTC NOWRTB NOWRTD
    Word  7: 400F   NOEBTR NOEBTRB
