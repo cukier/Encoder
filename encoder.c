@@ -12,12 +12,13 @@ long leitura;
 int ctrl;
 
 void main(void) {
-	clear_bus();
-	setup_encoder(couter_clockwise | _7_bit_resolution | step_direction_mode,
-			64);
-	printf("\n\rReboot");
 	delay_ms(100);
-	sleep();
+	clear_bus();
+//	setup_encoder(couter_clockwise | _7_bit_resolution | step_direction_mode,
+//			64);
+//	printf("\n\rReboot");
+//	delay_ms(100);
+//	sleep();
 
 	while (TRUE) {
 
