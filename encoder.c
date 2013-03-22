@@ -25,7 +25,7 @@ void isr_ext(void){
 #INT_EXT1
 void isr_ext1(void){
 	clear_interrupt(INT_EXT1);
-	zeros++
+	zeros++;
 }
 
 void main(void) {
@@ -35,7 +35,7 @@ void main(void) {
 	enable_iterrupts(INT_EXT1_H2L);
 	enable_interrpts(GLOBAL);
 	while(TRUE){
-		printf()
+		printf();
 		delay_ms(500);
 	}
 }
