@@ -31,7 +31,7 @@
 #define SLAVE_SELECT PIN_A5
 #endif
 
-long setup;
+static long setup;
 
 void write_encoder(long data) {
 
@@ -44,20 +44,21 @@ void write_encoder(long data) {
 	output_high(SLAVE_SELECT);
 	spi_xfer(data);
 	output_low(CLK_PIN);
+	output_low(DO_PIN);
+	delay_us(2);
 	for (cont = 0; cont < 16; ++cont) {
 		output_high(DO_PIN);
-		delay_us(2);
+		delay_us(1);
 		output_high(CLK_PIN);
-		delay_us(3);
-		output_low(CLK_PIN);
 		delay_us(2);
+		output_low(CLK_PIN);
+		delay_us(1);
 		output_low(DO_PIN);
 	}
 	output_low(SLAVE_SELECT);
 }
 
 void setup_encoder(long new_setup, int zero_mark) {
-
 	if (new_setup & direction_mask) {
 		setup |= direction_mask;
 	}
@@ -79,7 +80,7 @@ void setup_encoder(long new_setup, int zero_mark) {
 			break;
 		}
 	}
-	if (new_setup & resolution_mask)
+	if (new_setup & resolution_mask) {
 		switch (new_setup & resolution_mask) {
 		case _9_bit_resolution:
 			setup |= _9_bit_resolution;
@@ -93,11 +94,11 @@ void setup_encoder(long new_setup, int zero_mark) {
 		default:
 			break;
 		}
+	}
 	if (zero_mark && zero_mark < 1024) {
 		setup |= (long) zero_mark << 5;
 	}
-
-	write_encoder(setup);
+	spi_xfer(setup);
 }
 
 void clear_bus(void) {
