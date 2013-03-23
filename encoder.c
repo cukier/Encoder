@@ -12,13 +12,14 @@ static long leitura;
 static int zero;
 
 void main(void) {
-	zero = 64;
+	delay_ms(100);
+	zero = 0;
 	clear_bus();
 	delay_ms(100);
 	setup_encoder(clockwise | _7_bit_resolution | step_direction_mode, zero);
 	clear_bus();
 	printf("\n\rProg: 7 bits zero %d", zero);
-	delay_ms(100);
+	delay_ms(1000);
 	while (TRUE) {
 		output_low(SLAVE_SELECT);
 		leitura = spi_xfer(0);
