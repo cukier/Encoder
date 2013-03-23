@@ -14,19 +14,15 @@ int ctrl;
 void main(void) {
 	clear_bus();
 	delay_ms(100);
-//	setup_encoder(clockwise | _7_bit_resolution | step_direction_mode, 64);
-	spi_xfer(0x5555);
+	setup_encoder(clockwise | _7_bit_resolution | step_direction_mode, 64);
 	clear_bus();
-	printf("\n\rReboot");
+	printf("\n\rProg: 7 bits zero ");
 	delay_ms(100);
-	sleep();
-
-//	while (TRUE) {
-//
-//		output_low(SLAVE_SELECT);
-//		leitura = spi_xfer(0);
-//		output_high(SLAVE_SELECT);
-//		printf("%Lu  -  %d \n\r", leitura >> 6, (int) (leitura & 0x0006) >> 1);
-//		delay_ms(500);
-//	}
+	while (TRUE) {
+		output_low(SLAVE_SELECT);
+		leitura = spi_xfer(0);
+		output_high(SLAVE_SELECT);
+		printf("%Lu  -  %d \n\r", leitura >> 6, (int) (leitura & 0x0006) >> 1);
+		delay_ms(500);
+	}
 }
