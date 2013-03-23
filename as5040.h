@@ -98,6 +98,10 @@ void setup_encoder(long new_setup, int zero_mark) {
 	if (zero_mark && zero_mark < 1024) {
 		setup |= (long) zero_mark << 5;
 	}
+	output_high(DO_PIN);
+	delay_us(2);
+	output_high(SLAVE_SELECT);
+	delay_us(2);
 	spi_xfer(setup);
 }
 
