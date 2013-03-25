@@ -1,61 +1,15 @@
-CCS PCH C Compiler, Version 4.124, 5967               23-mar-13 11:59
+CCS PCH C Compiler, Version 4.124, 5967               25-mar-13 15:30
 
                Filename: E:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used: 1420 bytes (4%)
-                         Largest free fragment is 31344
-               RAM used: 37 (2%) at main() level
-                         46 (3%) worst case
-               Stack:    3 worst case (2 in main + 1 for interrupts)
+               ROM used: 126 bytes (0%)
+                         Largest free fragment is 32642
+               RAM used: 4 (0%) at main() level
+                         9 (1%) worst case
+               Stack:    1 locations
 
 *
-0000:  GOTO   043E
-*
-0008:  MOVWF  04
-000A:  MOVFF  FD8,05
-000E:  MOVFF  FE0,06
-0012:  MOVLB  0
-0014:  MOVFF  FE9,0C
-0018:  MOVFF  FEA,07
-001C:  MOVFF  FE1,08
-0020:  MOVFF  FE2,09
-0024:  MOVFF  FD9,0A
-0028:  MOVFF  FDA,0B
-002C:  MOVFF  FF3,12
-0030:  MOVFF  FF4,13
-0034:  MOVFF  FFA,14
-0038:  MOVFF  FF5,15
-003C:  MOVFF  FF6,16
-0040:  MOVFF  FF7,17
-0044:  MOVFF  00,0E
-0048:  MOVFF  01,0F
-004C:  MOVFF  02,10
-0050:  MOVFF  03,11
-0054:  BTFSS  F9D.2
-0056:  GOTO   0060
-005A:  BTFSC  F9E.2
-005C:  GOTO   00AE
-0060:  MOVFF  0E,00
-0064:  MOVFF  0F,01
-0068:  MOVFF  10,02
-006C:  MOVFF  11,03
-0070:  MOVFF  0C,FE9
-0074:  MOVFF  07,FEA
-0078:  BSF    07.7
-007A:  MOVFF  08,FE1
-007E:  MOVFF  09,FE2
-0082:  MOVFF  0A,FD9
-0086:  MOVFF  0B,FDA
-008A:  MOVFF  12,FF3
-008E:  MOVFF  13,FF4
-0092:  MOVFF  14,FFA
-0096:  MOVFF  15,FF5
-009A:  MOVFF  16,FF6
-009E:  MOVFF  17,FF7
-00A2:  MOVF   04,W
-00A4:  MOVFF  06,FE0
-00A8:  MOVFF  05,FD8
-00AC:  RETFIE 0
+0000:  GOTO   002E
 .................... #include <18F45K20.h> 
 .................... //////// Standard Header file for the PIC18F45K20 device //////////////// 
 .................... #device PIC18F45K20 
@@ -64,532 +18,108 @@ CCS PCH C Compiler, Version 4.124, 5967               23-mar-13 11:59
 ....................  
 .................... #fuses H4,NOWDT,NOPROTECT,NOLVP 
 .................... #use delay(crystal=15MHz, clock=60MHz) 
-*
-00FA:  CLRF   FEA
-00FC:  MOVLW  23
-00FE:  MOVWF  FE9
-0100:  MOVF   FEF,W
-0102:  BZ    0120
-0104:  MOVLW  13
-0106:  MOVWF  01
-0108:  CLRF   00
-010A:  DECFSZ 00,F
-010C:  BRA    010A
-010E:  DECFSZ 01,F
-0110:  BRA    0108
-0112:  MOVLW  73
-0114:  MOVWF  00
-0116:  DECFSZ 00,F
-0118:  BRA    0116
-011A:  NOP   
-011C:  DECFSZ FEF,F
-011E:  BRA    0104
-0120:  RETURN 0
+0004:  CLRF   FEA
+0006:  MOVLW  05
+0008:  MOVWF  FE9
+000A:  MOVF   FEF,W
+000C:  BZ    002A
+000E:  MOVLW  13
+0010:  MOVWF  01
+0012:  CLRF   00
+0014:  DECFSZ 00,F
+0016:  BRA    0014
+0018:  DECFSZ 01,F
+001A:  BRA    0012
+001C:  MOVLW  73
+001E:  MOVWF  00
+0020:  DECFSZ 00,F
+0022:  BRA    0020
+0024:  NOP   
+0026:  DECFSZ FEF,F
+0028:  BRA    000E
+002A:  GOTO   006C (RETURN)
 .................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
 .................... #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=0,  BAUD=1000000, BITS=16, DATA_HOLD=1) 
-*
-0134:  MOVF   27,W
-0136:  SUBLW  10
-0138:  BZ    0144
-013A:  MOVWF  28
-013C:  RLCF   25,F
-013E:  RLCF   26,F
-0140:  DECFSZ 28,F
-0142:  BRA    013C
-0144:  BSF    F94.4
-0146:  BCF    F94.5
-0148:  BCF    F94.3
-014A:  BCF    F8B.3
-014C:  MOVFF  27,28
-0150:  BTFSS  26.7
-0152:  BCF    F8B.5
-0154:  BTFSC  26.7
-0156:  BSF    F8B.5
-0158:  RLCF   25,F
-015A:  RLCF   26,F
-015C:  MOVLW  05
-015E:  MOVWF  29
-0160:  DECFSZ 29,F
-0162:  BRA    0160
-0164:  BSF    F8B.3
-0166:  NOP   
-0168:  RLCF   01,F
-016A:  RLCF   02,F
-016C:  BTFSS  F82.4
-016E:  BCF    01.0
-0170:  BTFSC  F82.4
-0172:  BSF    01.0
-0174:  BCF    F8B.3
-0176:  DECFSZ 28,F
-0178:  BRA    0150
-017A:  RETURN 0
 ....................  
 .................... #define SLAVE_SELECT PIN_A5 
-.................... #include "as5040.h" 
-.................... /* 
-....................  * as5040.h 
-....................  * 
-....................  *  Created on: 30/03/2012 
-....................  *      Author: cuki 
-....................  */ 
+.................... //#include "as5040.h" 
 ....................  
-.................... #ifndef AS5040_H_ 
-.................... #define AS5040_H_ 
+.................... //static long leitura; 
+.................... //static int zero; 
+.................... //static long periodo, aux; 
 ....................  
-.................... #define clockwise 0x0000 
-.................... #define couter_clockwise 0x8000 
-.................... #define direction_mask 0x8000 
-.................... #define zero_mask 0x7FE0 
-.................... #define index1 0x0000 
-.................... #define index3 0x0010 
-.................... #define index_mask 0x0010 
-.................... #define quatrature_mode	0x0001 
-.................... #define step_direction_mode 0x0002 
-.................... #define brushless_dc_mode	0x0003 
-.................... #define mode_mask 0x0003 
-.................... #define _10_bit_resolution 0x0000 
-.................... #define _9_bit_resolution 0x0004 
-.................... #define _8_bit_resolution 0x0008 
-.................... #define _7_bit_resolution 0x000C 
-.................... #define resolution_mask	0x000C 
-.................... #define DO_PIN PIN_C5 
-.................... #define DI_PIN PIN_C4 
-.................... #define CLK_PIN PIN_C3 
-.................... #ifndef SLAVE_SELECT 
-.................... #define SLAVE_SELECT PIN_A5 
-.................... #endif 
+.................... //#INT_CCP1 
+.................... //void isr_ccp1(void) { 
+.................... //	clear_interrupt(INT_CCP1); 
+.................... //	periodo = CCP_1 - aux; 
+.................... //	aux = CCP_1; 
+.................... //	CCP_1 = 0; 
+.................... //} 
 ....................  
-.................... static long setup; 
-....................  
-.................... void write_encoder(long data) { 
-....................  
-.................... 	register int aux = 0; 
-.................... 	register int cont = 0; 
-....................  
-.................... 	output_high(DO_PIN); 
-.................... 	output_low(CLK_PIN); 
-.................... 	delay_us(10); 
-.................... 	output_high(SLAVE_SELECT); 
-.................... 	spi_xfer(data); 
-.................... 	output_low(CLK_PIN); 
-.................... 	output_low(DO_PIN); 
-.................... 	delay_us(2); 
-.................... 	for (cont = 0; cont < 16; ++cont) { 
-.................... 		output_high(DO_PIN); 
-.................... 		delay_us(1); 
-.................... 		output_high(CLK_PIN); 
-.................... 		delay_us(2); 
-.................... 		output_low(CLK_PIN); 
-.................... 		delay_us(1); 
-.................... 		output_low(DO_PIN); 
-.................... 	} 
-.................... 	output_low(SLAVE_SELECT); 
-.................... } 
-....................  
-.................... void setup_encoder(long new_setup, int zero_mark) { 
-.................... 	if (new_setup & direction_mask) { 
-017C:  ANDLW  00
-017E:  MOVWF  00
-0180:  MOVF   23,W
-0182:  ANDLW  80
-0184:  MOVWF  03
-0186:  MOVF   00,W
-0188:  IORWF  03,W
-018A:  BZ    018E
-.................... 		setup |= direction_mask; 
-018C:  BSF    1A.7
-.................... 	} 
-.................... 	if (new_setup & index_mask) { 
-018E:  MOVF   22,W
-0190:  ANDLW  10
-0192:  MOVWF  00
-0194:  CLRF   03
-0196:  MOVF   00,W
-0198:  IORWF  03,W
-019A:  BZ    019E
-.................... 		setup |= index_mask; 
-019C:  BSF    19.4
-.................... 	} 
-.................... 	if (new_setup & mode_mask) { 
-019E:  MOVF   22,W
-01A0:  ANDLW  03
-01A2:  MOVWF  00
-01A4:  CLRF   03
-01A6:  MOVF   00,W
-01A8:  IORWF  03,W
-01AA:  BZ    01E4
-.................... 		switch (new_setup & mode_mask) { 
-01AC:  MOVF   22,W
-01AE:  ANDLW  03
-01B0:  MOVWF  00
-01B2:  CLRF   03
-01B4:  MOVF   03,W
-01B6:  BNZ   01BE
-01B8:  MOVLW  01
-01BA:  SUBWF  00,W
-01BC:  BZ    01D4
-01BE:  MOVF   03,W
-01C0:  BNZ   01C8
-01C2:  MOVLW  02
-01C4:  SUBWF  00,W
-01C6:  BZ    01D8
-01C8:  MOVF   03,W
-01CA:  BNZ   01D2
-01CC:  MOVLW  03
-01CE:  SUBWF  00,W
-01D0:  BZ    01DC
-01D2:  BRA    01E2
-.................... 		case quatrature_mode: 
-.................... 			setup |= quatrature_mode; 
-01D4:  BSF    19.0
-.................... 			break; 
-01D6:  BRA    01E4
-.................... 		case step_direction_mode: 
-.................... 			setup |= step_direction_mode; 
-01D8:  BSF    19.1
-.................... 			break; 
-01DA:  BRA    01E4
-.................... 		case brushless_dc_mode: 
-.................... 			setup |= brushless_dc_mode; 
-01DC:  MOVLW  03
-01DE:  IORWF  19,F
-.................... 			break; 
-01E0:  BRA    01E4
-.................... 		default: 
-.................... 			break; 
-01E2:  BRA    01E4
-.................... 		} 
-.................... 	} 
-.................... 	if (new_setup & resolution_mask) { 
-01E4:  MOVF   22,W
-01E6:  ANDLW  0C
-01E8:  MOVWF  00
-01EA:  CLRF   03
-01EC:  MOVF   00,W
-01EE:  IORWF  03,W
-01F0:  BZ    022A
-.................... 		switch (new_setup & resolution_mask) { 
-01F2:  MOVF   22,W
-01F4:  ANDLW  0C
-01F6:  MOVWF  00
-01F8:  CLRF   03
-01FA:  MOVF   03,W
-01FC:  BNZ   0204
-01FE:  MOVLW  04
-0200:  SUBWF  00,W
-0202:  BZ    021A
-0204:  MOVF   03,W
-0206:  BNZ   020E
-0208:  MOVLW  08
-020A:  SUBWF  00,W
-020C:  BZ    021E
-020E:  MOVF   03,W
-0210:  BNZ   0218
-0212:  MOVLW  0C
-0214:  SUBWF  00,W
-0216:  BZ    0222
-0218:  BRA    0228
-.................... 		case _9_bit_resolution: 
-.................... 			setup |= _9_bit_resolution; 
-021A:  BSF    19.2
-.................... 			break; 
-021C:  BRA    022A
-.................... 		case _8_bit_resolution: 
-.................... 			setup |= _8_bit_resolution; 
-021E:  BSF    19.3
-.................... 			break; 
-0220:  BRA    022A
-.................... 		case _7_bit_resolution: 
-.................... 			setup |= _7_bit_resolution; 
-0222:  MOVLW  0C
-0224:  IORWF  19,F
-.................... 			break; 
-0226:  BRA    022A
-.................... 		default: 
-.................... 			break; 
-0228:  BRA    022A
-.................... 		} 
-.................... 	} 
-.................... 	if (zero_mark && zero_mark < 1024) { 
-022A:  MOVF   24,F
-022C:  BZ    0254
-.................... 		setup |= (long) zero_mark << 5; 
-022E:  CLRF   26
-0230:  RLCF   24,W
-0232:  MOVWF  02
-0234:  RLCF   26,W
-0236:  MOVWF  03
-0238:  RLCF   02,F
-023A:  RLCF   03,F
-023C:  RLCF   02,F
-023E:  RLCF   03,F
-0240:  RLCF   02,F
-0242:  RLCF   03,F
-0244:  RLCF   02,F
-0246:  RLCF   03,F
-0248:  MOVLW  E0
-024A:  ANDWF  02,F
-024C:  MOVF   02,W
-024E:  IORWF  19,F
-0250:  MOVF   03,W
-0252:  IORWF  1A,F
-.................... 	} 
-.................... 	output_high(DO_PIN); 
-0254:  BCF    F94.5
-0256:  BSF    F8B.5
-.................... 	delay_us(2); 
-0258:  MOVLW  09
-025A:  MOVWF  00
-025C:  DECFSZ 00,F
-025E:  BRA    025C
-0260:  BRA    0262
-.................... 	output_high(SLAVE_SELECT); 
-0262:  BCF    F92.5
-0264:  BSF    F89.5
-.................... 	delay_us(2); 
-0266:  MOVLW  09
-0268:  MOVWF  00
-026A:  DECFSZ 00,F
-026C:  BRA    026A
-026E:  BRA    0270
-.................... 	spi_xfer(setup); 
-0270:  MOVFF  1A,26
-0274:  MOVFF  19,25
-0278:  MOVLW  10
-027A:  MOVWF  27
-027C:  RCALL  0134
-.................... } 
-027E:  GOTO   04C0 (RETURN)
-....................  
-.................... void clear_bus(void) { 
-.................... 	output_low(SLAVE_SELECT); 
-*
-0122:  BCF    F92.5
-0124:  BCF    F89.5
-.................... 	output_low(CLK_PIN); 
-0126:  BCF    F94.3
-0128:  BCF    F8B.3
-.................... 	output_low(DO_PIN); 
-012A:  BCF    F94.5
-012C:  BCF    F8B.5
-.................... 	output_low(DI_PIN); 
-012E:  BCF    F94.4
-0130:  BCF    F8B.4
-.................... } 
-0132:  RETURN 0
-....................  
-.................... #endif /* AS5040_H_ */ 
-....................  
-....................  
-.................... static long leitura; 
-.................... static int zero; 
-.................... static long periodo, aux; 
-....................  
-.................... #INT_CCP1 
-.................... void isr_ccp1(void) { 
-.................... 	clear_interrupt(INT_CCP1); 
-*
-00AE:  BCF    F9E.2
-.................... 	periodo = CCP_1 - aux; 
-00B0:  MOVF   20,W
-00B2:  SUBWF  FBE,W
-00B4:  MOVWF  1E
-00B6:  MOVF   21,W
-00B8:  SUBWFB FBF,W
-00BA:  MOVWF  1F
-.................... 	aux = CCP_1; 
-00BC:  MOVFF  FBF,21
-00C0:  MOVFF  FBE,20
-.................... 	CCP_1 = 0; 
-00C4:  CLRF   FBF
-00C6:  CLRF   FBE
-.................... } 
-....................  
-00C8:  BCF    F9E.2
-00CA:  GOTO   0060
 .................... void main(void) { 
-*
-043E:  CLRF   FF8
-0440:  BCF    FD0.7
-0442:  BSF    07.7
-0444:  CLRF   FEA
-0446:  CLRF   FE9
-0448:  BSF    FB8.3
-044A:  MOVLW  1A
-044C:  MOVWF  FAF
-044E:  MOVLW  06
-0450:  MOVWF  FB0
-0452:  MOVLW  A6
-0454:  MOVWF  FAC
-0456:  MOVLW  90
-0458:  MOVWF  FAB
-045A:  BSF    F94.4
-045C:  BCF    F94.5
-045E:  BCF    F94.3
-0460:  BCF    F8B.3
-0462:  MOVLW  00
-0464:  MOVWF  F7E
-0466:  BCF    FC1.4
-0468:  BCF    FC1.5
-046A:  MOVF   F7F,W
-046C:  ANDLW  E0
-046E:  MOVWF  F7F
-0470:  BCF    F79.5
-0472:  BCF    F79.4
-0474:  CLRF   F7A
-0476:  CLRF   F7B
-0478:  CLRF   19
-047A:  CLRF   1A
-047C:  CLRF   1B
-047E:  CLRF   1C
-0480:  CLRF   1D
-0482:  CLRF   1E
-0484:  CLRF   1F
-0486:  CLRF   20
-0488:  CLRF   21
+002E:  CLRF   FF8
+0030:  BCF    FD0.7
+0032:  CLRF   FEA
+0034:  CLRF   FE9
+0036:  BSF    FB8.3
+0038:  MOVLW  1A
+003A:  MOVWF  FAF
+003C:  MOVLW  06
+003E:  MOVWF  FB0
+0040:  MOVLW  A6
+0042:  MOVWF  FAC
+0044:  MOVLW  90
+0046:  MOVWF  FAB
+0048:  BSF    F94.4
+004A:  BCF    F94.5
+004C:  BCF    F94.3
+004E:  BCF    F8B.3
+0050:  MOVLW  00
+0052:  MOVWF  F7E
+0054:  BCF    FC1.4
+0056:  BCF    FC1.5
+0058:  MOVF   F7F,W
+005A:  ANDLW  E0
+005C:  MOVWF  F7F
+005E:  BCF    F79.5
+0060:  BCF    F79.4
+0062:  CLRF   F7A
+0064:  CLRF   F7B
 .................... 	delay_ms(100); 
-048A:  MOVLW  64
-048C:  MOVWF  23
-048E:  RCALL  00FA
-.................... 	setup_ccp1(CCP_CAPTURE_RE); 
-0490:  BSF    F94.2
-0492:  CLRF   FBD
-0494:  MOVLW  05
-0496:  MOVWF  FBD
-0498:  CLRF   FB7
-049A:  CLRF   FB6
-049C:  MOVLW  01
-049E:  MOVWF  FB9
-.................... 	setup_timer_1(T1_INTERNAL | T1_DIV_BY_8); 
-04A0:  MOVLW  B5
-04A2:  MOVWF  FCD
-.................... 	enable_interrupts(INT_CCP1); 
-04A4:  BSF    F9D.2
-.................... 	enable_interrupts(GLOBAL); 
-04A6:  MOVLW  C0
-04A8:  IORWF  FF2,F
-.................... 	zero = 0; 
-04AA:  CLRF   1D
-.................... 	clear_bus(); 
-04AC:  RCALL  0122
-.................... 	delay_ms(100); 
-04AE:  MOVLW  64
-04B0:  MOVWF  23
-04B2:  RCALL  00FA
-.................... 	setup_encoder(clockwise | _7_bit_resolution | step_direction_mode, zero); 
-04B4:  CLRF   23
-04B6:  MOVLW  0E
-04B8:  MOVWF  22
-04BA:  MOVFF  1D,24
-04BE:  BRA    017C
-.................... 	clear_bus(); 
-04C0:  RCALL  0122
-.................... 	printf("\fProg: 7 bits zero %d", zero); 
-04C2:  MOVLW  CE
-04C4:  MOVWF  FF6
-04C6:  MOVLW  00
-04C8:  MOVWF  FF7
-04CA:  MOVLW  13
-04CC:  MOVWF  25
-04CE:  RCALL  0282
-04D0:  MOVFF  1D,25
-04D4:  MOVLW  1F
-04D6:  MOVWF  26
-04D8:  RCALL  02CA
-.................... 	delay_ms(1000); 
-04DA:  MOVLW  04
-04DC:  MOVWF  22
-04DE:  MOVLW  FA
-04E0:  MOVWF  23
-04E2:  RCALL  00FA
-04E4:  DECFSZ 22,F
-04E6:  BRA    04DE
+0066:  MOVLW  64
+0068:  MOVWF  05
+006A:  BRA    0004
+.................... //	setup_ccp1(CCP_CAPTURE_RE); 
+.................... //	setup_timer_1(T1_INTERNAL | T1_DIV_BY_8); 
+.................... //	enable_interrupts(INT_CCP1); 
+.................... //	enable_interrupts(GLOBAL); 
+.................... //	zero = 0; 
+.................... //	clear_bus(); 
+.................... //	delay_ms(100); 
+.................... //	setup_encoder(clockwise | _7_bit_resolution | step_direction_mode, zero); 
+.................... //	clear_bus(); 
+.................... //	printf("\fProg: 7 bits zero %d", zero); 
+.................... //	delay_ms(1000); 
 .................... 	while (TRUE) { 
-.................... 		output_low(SLAVE_SELECT); 
-04E8:  BCF    F92.5
-04EA:  BCF    F89.5
-.................... 		leitura = spi_xfer(0); 
-04EC:  CLRF   26
-04EE:  CLRF   25
-04F0:  MOVLW  10
-04F2:  MOVWF  27
-04F4:  RCALL  0134
-04F6:  MOVF   01,W
-04F8:  MOVFF  02,1C
-04FC:  MOVFF  01,1B
-.................... 		output_high(SLAVE_SELECT); 
-0500:  BCF    F92.5
-0502:  BSF    F89.5
-.................... 		printf("\f%Lu  -  %d", leitura >> 6, (int) (leitura & 0x0006) >> 1); 
-0504:  RRCF   1C,W
-0506:  MOVWF  23
-0508:  RRCF   1B,W
-050A:  MOVWF  22
-050C:  RRCF   23,F
-050E:  RRCF   22,F
-0510:  RRCF   23,F
-0512:  RRCF   22,F
-0514:  RRCF   23,F
-0516:  RRCF   22,F
-0518:  RRCF   23,F
-051A:  RRCF   22,F
-051C:  RRCF   23,F
-051E:  RRCF   22,F
-0520:  MOVLW  03
-0522:  ANDWF  23,F
-0524:  MOVF   1B,W
-0526:  ANDLW  06
-0528:  MOVWF  00
-052A:  CLRF   03
-052C:  MOVF   00,W
-052E:  BCF    FD8.0
-0530:  RRCF   00,W
-0532:  MOVWF  24
-0534:  MOVLW  0C
-0536:  BTFSS  F9E.4
-0538:  BRA    0536
-053A:  MOVWF  FAD
-053C:  MOVLW  10
-053E:  MOVWF  FE9
-0540:  MOVFF  23,26
-0544:  MOVFF  22,25
-0548:  RCALL  039A
-054A:  MOVLW  E8
-054C:  MOVWF  FF6
-054E:  MOVLW  00
-0550:  MOVWF  FF7
-0552:  MOVLW  05
-0554:  MOVWF  25
-0556:  RCALL  0282
-0558:  MOVFF  24,25
-055C:  MOVLW  1F
-055E:  MOVWF  26
-0560:  RCALL  02CA
-.................... 		printf("\nPer: %Lu", periodo); 
-0562:  MOVLW  F0
-0564:  MOVWF  FF6
-0566:  MOVLW  00
-0568:  MOVWF  FF7
-056A:  MOVLW  06
-056C:  MOVWF  25
-056E:  RCALL  0282
-0570:  MOVLW  10
-0572:  MOVWF  FE9
-0574:  MOVFF  1F,26
-0578:  MOVFF  1E,25
-057C:  RCALL  039A
-.................... 		delay_ms(500); 
-057E:  MOVLW  02
-0580:  MOVWF  22
-0582:  MOVLW  FA
-0584:  MOVWF  23
-0586:  RCALL  00FA
-0588:  DECFSZ 22,F
-058A:  BRA    0582
+.................... //		output_low(SLAVE_SELECT); 
+.................... //		leitura = spi_xfer(0); 
+.................... //		output_high(SLAVE_SELECT); 
+.................... //		printf("\f%Lu  -  %d", leitura >> 6, (int) (leitura & 0x0006) >> 1); 
+.................... //		printf("\nPer: %Lu", periodo); 
+.................... 		delay_us(2); 
+006C:  MOVLW  09
+006E:  MOVWF  00
+0070:  DECFSZ 00,F
+0072:  BRA    0070
+0074:  BRA    0076
+.................... //		delay_cycles(8); 
+.................... 		output_toggle(PIN_C7); 
+0076:  BCF    F94.7
+0078:  BTG    F8B.7
 .................... 	} 
-058C:  BRA    04E8
+007A:  BRA    006C
 .................... } 
-058E:  SLEEP 
+007C:  SLEEP 
 
 Configuration Fuses:
    Word  1: C600   H4 FCMEN IESO
