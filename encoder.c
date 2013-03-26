@@ -17,13 +17,13 @@ static long pulsos;
 static int zeros;
 
 #INT_EXT
-void isr_ext(void){
+void isr_ext(void) {
 	clear_interrupt(INT_EXT);
 	pulsos++;
 }
 
 #INT_EXT1
-void isr_ext1(void){
+void isr_ext1(void) {
 	clear_interrupt(INT_EXT1);
 	zeros++;
 }
@@ -34,7 +34,7 @@ void main(void) {
 	enable_iterrupts(INT_EXT_H2L);
 	enable_iterrupts(INT_EXT1_H2L);
 	enable_interrpts(GLOBAL);
-	while(TRUE){
+	while (TRUE) {
 		printf();
 		delay_ms(500);
 	}
