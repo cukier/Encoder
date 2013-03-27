@@ -1,16 +1,17 @@
-CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 09:26
+CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 12:04
 
                Filename: E:\Eletronica\Projetos\Encoder\encoderSim.lst
 
-               ROM used: 15 words (3%)
-                         Largest free fragment is 497
-               RAM used: 3 (12%) at main() level
-                         3 (12%) worst case
-               Stack:    0 locations
+               ROM used: 123 words (24%)
+                         Largest free fragment is 389
+               RAM used: 10 (40%) at main() level
+                         14 (56%) worst case
+               Stack:    1 locations
 
 *
 0000:  MOVWF  05
-0001:  GOTO   002
+0001:  GOTO   028
+0002:  GOTO   003
 .................... /* 
 ....................  * encoderSim.c 
 ....................  * 
@@ -26,29 +27,129 @@ CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 09:26
 .................... #fuses NOWDT, NOPROTECT, INTRC, NOMCLR 
 .................... #use delay(clock=4MHz) 
 ....................  
+.................... /////////////////////////////////////////saidas 
+.................... #define canalA		PIN_B0 
+.................... #define canalB		PIN_B1 
+.................... #define canalZ		PIN_B2 
+.................... /////////////////////////////////////////entradas 
+.................... #define avanco		PIN_B3 
+.................... #define reversao	PIN_B4 
+.................... /////////////////////////////////////////tempos 
+.................... #define voltas_nylon	11.5 
+.................... #define tempo_elevacao	60 
+....................  
+.................... static long pulsos; 
+*
+002E:  CLRF   0B
+002F:  CLRF   0C
+.................... static long tm0_config = 159; // resol. enc = 1024, 11.5 voltas nylon, 60 segundos operacao 
+....................  
 .................... int main(void) { 
-0002:  CLRF   04
-0003:  MOVLW  FF
-0004:  MOVWF  09
-.................... 	while(TRUE){ 
-.................... 		if(!input(PIN_B3)) { 
-0005:  BSF    09.3
-0006:  MOVF   09,W
-0007:  TRIS   6
-0008:  BTFSC  06.3
-0009:  GOTO   00F
-.................... 			output_toggle(PIN_B0); 
-000A:  BCF    09.0
-000B:  MOVF   09,W
-000C:  TRIS   6
-000D:  MOVLW  01
-000E:  XORWF  06,F
+*
+0028:  CLRF   04
+0029:  CLRF   0E
+002A:  MOVLW  9F
+002B:  MOVWF  0D
+002C:  MOVLW  FF
+002D:  MOVWF  0F
+.................... 	output_low(PIN_B0); 
+*
+0030:  BCF    0F.0
+0031:  MOVF   0F,W
+0032:  TRIS   6
+0033:  BCF    06.0
+.................... 	SETUP_TIMER_0(T0_INTERNAL | T0_DIV_8); 
+0034:  MOVLW  02
+0035:  OPTION
+.................... 	while (TRUE) { 
+.................... 		if (!input(avanco) || !input(reversao)) { 
+0036:  BSF    0F.3
+0037:  MOVF   0F,W
+0038:  TRIS   6
+0039:  BTFSS  06.3
+003A:  GOTO   040
+003B:  BSF    0F.4
+003C:  MOVF   0F,W
+003D:  TRIS   6
+003E:  BTFSC  06.4
+003F:  GOTO   07C
+.................... 			set_timer0(0); 
+0040:  CLRF   01
+.................... 			while (get_timer0() < tm0_config) 
+.................... 				; 
+0041:  MOVF   01,W
+0042:  MOVF   0E,F
+0043:  BTFSS  03.2
+0044:  GOTO   041
+0045:  SUBWF  0D,W
+0046:  BTFSC  03.2
+0047:  GOTO   04A
+0048:  BTFSC  03.0
+0049:  GOTO   041
+.................... 			pulsos++; 
+004A:  INCF   0B,F
+004B:  BTFSC  03.2
+004C:  INCF   0C,F
+.................... 			if (!(pulsos % 4)) 
+004D:  MOVF   0B,W
+004E:  ANDLW  03
+004F:  MOVWF  07
+0050:  CLRF   0A
+0051:  MOVF   07,W
+0052:  IORWF  0A,W
+0053:  BTFSS  03.2
+0054:  GOTO   05A
+.................... 				output_high(canalA); 
+0055:  BCF    0F.0
+0056:  MOVF   0F,W
+0057:  TRIS   6
+0058:  BSF    06.0
+.................... 			else if (!(pulsos % 2)) 
+0059:  GOTO   07C
+005A:  MOVF   0B,W
+005B:  ANDLW  01
+005C:  MOVWF  07
+005D:  CLRF   0A
+005E:  MOVF   07,W
+005F:  IORWF  0A,W
+0060:  BTFSS  03.2
+0061:  GOTO   067
+.................... 				output_high(canalB); 
+0062:  BCF    0F.1
+0063:  MOVF   0F,W
+0064:  TRIS   6
+0065:  BSF    06.1
+.................... 			else if (!(pulsos % 3)) 
+0066:  GOTO   07C
+0067:  MOVF   0C,W
+0068:  MOVWF  11
+0069:  MOVF   0B,W
+006A:  MOVWF  10
+006B:  CLRF   13
+006C:  MOVLW  03
+006D:  MOVWF  12
+006E:  GOTO   002
+006F:  MOVF   07,W
+0070:  IORWF  0A,W
+0071:  BTFSS  03.2
+0072:  GOTO   078
+.................... 				output_low(canalB); 
+0073:  BCF    0F.1
+0074:  MOVF   0F,W
+0075:  TRIS   6
+0076:  BCF    06.1
+.................... 			else 
+0077:  GOTO   07C
+.................... 				output_low(canalA); 
+0078:  BCF    0F.0
+0079:  MOVF   0F,W
+007A:  TRIS   6
+007B:  BCF    06.0
 .................... 		} 
 .................... 	} 
-000F:  GOTO   005
+007C:  GOTO   036
 .................... } 
-....................  
-0010:  SLEEP
+007D:  SLEEP
 
 Configuration Fuses:
    Word  1: 0FEA   INTRC NOWDT NOPROTECT NOMCLR
