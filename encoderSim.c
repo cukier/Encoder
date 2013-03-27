@@ -12,7 +12,7 @@
 /////////////////////////////////////////saidas
 #define canalA		PIN_B0
 #define canalB		PIN_B1
-#define canalZ		PIN_B2
+#define canalZ		PIN_B5
 /////////////////////////////////////////entradas
 #define avanco		PIN_B3
 #define reversao	PIN_B4
@@ -67,9 +67,10 @@ int main(void) {
 				break;
 			}
 		}
+		if (!input_state(canalA) && !input_state(canalB)
+				&& !input_state(canalZ) && pulsos == 1024)
+			output_high(canalZ);
+		else if (input_state(canalZ))
+			output_low(canalZ);
 	}
-	if (!input_state(canalA) && !input_state(canalB) && !input_state(canalZ))
-		output_high(canalZ);
-	else if (input_state(canalZ))
-		output_low(canalZ);
 }

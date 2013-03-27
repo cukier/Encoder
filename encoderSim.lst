@@ -1,9 +1,9 @@
-CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:27
+CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:47
 
                Filename: E:\Eletronica\Projetos\Encoder\encoderSim.lst
 
-               ROM used: 179 words (35%)
-                         Largest free fragment is 333
+               ROM used: 186 words (36%)
+                         Largest free fragment is 326
                RAM used: 11 (44%) at main() level
                          11 (44%) worst case
                Stack:    0 locations
@@ -29,7 +29,7 @@ CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:27
 .................... /////////////////////////////////////////saidas 
 .................... #define canalA		PIN_B0 
 .................... #define canalB		PIN_B1 
-.................... #define canalZ		PIN_B2 
+.................... #define canalZ		PIN_B5 
 .................... /////////////////////////////////////////entradas 
 .................... #define avanco		PIN_B3 
 .................... #define reversao	PIN_B4 
@@ -247,31 +247,39 @@ CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:27
 00A1:  GOTO   0A2
 .................... 			} 
 .................... 		} 
+.................... 		if (!input_state(canalA) && !input_state(canalB) 
+.................... 				&& !input_state(canalZ) && pulsos == 1024) 
+00A2:  BTFSC  06.0
+00A3:  GOTO   0B4
+00A4:  BTFSC  06.1
+00A5:  GOTO   0B4
+00A6:  BTFSC  06.5
+00A7:  GOTO   0B4
+00A8:  MOVF   0B,F
+00A9:  BTFSS  03.2
+00AA:  GOTO   0B4
+00AB:  MOVLW  04
+00AC:  SUBWF  0C,W
+00AD:  BTFSS  03.2
+00AE:  GOTO   0B4
+.................... 			output_high(canalZ); 
+00AF:  BCF    10.5
+00B0:  MOVF   10,W
+00B1:  TRIS   6
+00B2:  BSF    06.5
+.................... 		else if (input_state(canalZ)) 
+00B3:  GOTO   0BA
+00B4:  BTFSS  06.5
+00B5:  GOTO   0BA
+.................... 			output_low(canalZ); 
+00B6:  BCF    10.5
+00B7:  MOVF   10,W
+00B8:  TRIS   6
+00B9:  BCF    06.5
 .................... 	} 
-00A2:  GOTO   010
-.................... 	if (!input_state(canalA) && !input_state(canalB) && !input_state(canalZ)) 
-00A3:  BTFSC  06.0
-00A4:  GOTO   0AE
-00A5:  BTFSC  06.1
-00A6:  GOTO   0AE
-00A7:  BTFSC  06.2
-00A8:  GOTO   0AE
-.................... 		output_high(canalZ); 
-00A9:  BCF    10.2
-00AA:  MOVF   10,W
-00AB:  TRIS   6
-00AC:  BSF    06.2
-.................... 	else if (input_state(canalZ)) 
-00AD:  GOTO   0B4
-00AE:  BTFSS  06.2
-00AF:  GOTO   0B4
-.................... 		output_low(canalZ); 
-00B0:  BCF    10.2
-00B1:  MOVF   10,W
-00B2:  TRIS   6
-00B3:  BCF    06.2
+00BA:  GOTO   010
 .................... } 
-00B4:  SLEEP
+00BB:  SLEEP
 
 Configuration Fuses:
    Word  1: 0FEA   INTRC NOWDT NOPROTECT NOMCLR
