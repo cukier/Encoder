@@ -1,7 +1,7 @@
 D G "__PCB__" 0 0 ""4.124""
 D G "__DEVICE__" 0 0 ""
 D G "__DATE__" 0 0 ""27-mar-13""
-D G "__TIME__" 0 0 ""12:04:12"" "* encoderSim.c"
+D G "__TIME__" 0 0 ""16:27:01"" "* encoderSim.c"
 C G "" 0 1 1 "*"
 C G "" 0 1 1 "*"
 d G "PIN_B0" 1 17 "48"
@@ -73,8 +73,12 @@ D G "voltas_nylon" 0 20 "11.5"
 D G "tempo_elevacao" 0 21 "60"
 V G "pulsos" 0 23 "int16"
 V G "tm0_config" 0 24 "int16"
-C L "main" 0 12 1 "FUNCTION"
-F G "main" 0 26 "int8()"
+E G "A" 0 26 "0"
+E G "B" 0 26 "1"
+E G "C" 0 26 "2"
+E G "D" 0 27 "3"
+V G "tempo" 0 28 "tick_str"
+F G "main" 0 30 "int8()"
 F B "reset_cpu" 0 0
 F B "abs" 1 0
 F B "sleep" 0 0

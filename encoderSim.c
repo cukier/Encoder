@@ -22,6 +22,10 @@
 
 static long pulsos;
 static long tm0_config = 159; // resol. enc = 1024, 11.5 voltas nylon, 60 segundos operacao
+enum tick_str {
+	A, B, C, D
+};
+enum tick_str tempo;
 
 int main(void) {
 	output_low(PIN_B0);
@@ -31,15 +35,41 @@ int main(void) {
 			set_timer0(0);
 			while (get_timer0() < tm0_config)
 				;
-			pulsos++;
-			if (!(pulsos % 4))
-				output_high(canalA);
-			else if (!(pulsos % 2))
-				output_high(canalB);
-			else if (!(pulsos % 3))
+			switch (tempo++) {
+			case A:
+				if (!input(avanco) && input(reversao)) {
+					output_low(canalA);
+					output_high(canalB);
+					pulsos++;
+					if (pulsos > 1024)
+						pulsos = 0;
+				} else if (!input(reversao) && input(avanco)) {
+					output_high(canalA);
+					output_high(canalB);
+					pulsos--;
+					if (!pulsos)
+						pulsos = 1023;
+				}
+				break;
+			case B:
 				output_low(canalB);
-			else
-				output_low(canalA);
+				break;
+			case C:
+				if (!input(avanco) && input(reversao))
+					output_high(canalA);
+				else if (!input(reversao) && input(avanco))
+					output_low(canalA);
+				break;
+			default:
+			case D:
+				output_high(canalB);
+				tempo = A;
+				break;
+			}
 		}
 	}
+	if (!input_state(canalA) && !input_state(canalB) && !input_state(canalZ))
+		output_high(canalZ);
+	else if (input_state(canalZ))
+		output_low(canalZ);
 }

@@ -13,6 +13,9 @@
 #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)
 #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=0,  BAUD=500000, BITS=16, DATA_HOLD=1)
 
+#define	saida_desce	PIN_B6
+#define	saida_sobe	PIN_B7
+
 static long pulsos, pulsosMax;
 static int zeros;
 
@@ -32,11 +35,16 @@ void isr_ext1(void) {
 }
 
 void main(void) {
+	output_low(saida_sobe);
+	output_low(saida_desce);
+	delay_ms(100);
 	clear_interrupt(INT_EXT);
 	clear_interrupt(INT_EXT1);
 	enable_interrupts(INT_EXT_H2L);
 	enable_interrupts(INT_EXT1_H2L);
 	enable_interrupts(GLOBAL);
+	output_high(saida_desce);
+	output_low(saida_sobe);
 	while (TRUE) {
 		printf("\n\rPulsos: %Lu, Zeros:%d Max:%Lu", pulsos, zeros, pulsosMax);
 		delay_ms(500);

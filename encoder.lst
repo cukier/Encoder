@@ -1,15 +1,15 @@
-CCS PCH C Compiler, Version 4.124, 5967               26-mar-13 16:33
+CCS PCH C Compiler, Version 4.124, 5967               27-mar-13 16:19
 
                Filename: E:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used: 914 bytes (3%)
-                         Largest free fragment is 31850
+               ROM used: 934 bytes (3%)
+                         Largest free fragment is 31830
                RAM used: 31 (2%) at main() level
                          39 (3%) worst case
                Stack:    3 worst case (2 in main + 1 for interrupts)
 
 *
-0000:  GOTO   02F4
+0000:  GOTO   02F2
 *
 0008:  MOVWF  04
 000A:  MOVFF  FD8,05
@@ -76,28 +76,32 @@ CCS PCH C Compiler, Version 4.124, 5967               26-mar-13 16:33
 ....................  
 .................... #fuses H4,NOWDT,NOPROTECT,NOLVP 
 .................... #use delay(crystal=10MHz, clock=40MHz) 
-02CA:  CLRF   FEA
-02CC:  MOVLW  1F
-02CE:  MOVWF  FE9
-02D0:  MOVF   FEF,W
-02D2:  BZ    02F0
-02D4:  MOVLW  0C
-02D6:  MOVWF  01
-02D8:  CLRF   00
-02DA:  DECFSZ 00,F
-02DC:  BRA    02DA
-02DE:  DECFSZ 01,F
-02E0:  BRA    02D8
-02E2:  MOVLW  F7
-02E4:  MOVWF  00
-02E6:  DECFSZ 00,F
-02E8:  BRA    02E6
-02EA:  BRA    02EC
-02EC:  DECFSZ FEF,F
-02EE:  BRA    02D4
-02F0:  GOTO   038E (RETURN)
+*
+010C:  CLRF   FEA
+010E:  MOVLW  1F
+0110:  MOVWF  FE9
+0112:  MOVF   FEF,W
+0114:  BZ    0132
+0116:  MOVLW  0C
+0118:  MOVWF  01
+011A:  CLRF   00
+011C:  DECFSZ 00,F
+011E:  BRA    011C
+0120:  DECFSZ 01,F
+0122:  BRA    011A
+0124:  MOVLW  F7
+0126:  MOVWF  00
+0128:  DECFSZ 00,F
+012A:  BRA    0128
+012C:  BRA    012E
+012E:  DECFSZ FEF,F
+0130:  BRA    0116
+0132:  RETURN 0
 .................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
 .................... #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=0,  BAUD=500000, BITS=16, DATA_HOLD=1) 
+....................  
+.................... #define	saida_desce	PIN_B6 
+.................... #define	saida_sobe	PIN_B7 
 ....................  
 .................... static long pulsos, pulsosMax; 
 .................... static int zeros; 
@@ -141,92 +145,108 @@ CCS PCH C Compiler, Version 4.124, 5967               26-mar-13 16:33
 00E8:  GOTO   006C
 .................... void main(void) { 
 *
-02F4:  CLRF   FF8
-02F6:  BCF    FD0.7
-02F8:  BSF    07.7
-02FA:  CLRF   FEA
-02FC:  CLRF   FE9
-02FE:  MOVLW  40
-0300:  MOVWF  FAF
-0302:  MOVLW  A2
-0304:  MOVWF  FAC
-0306:  MOVLW  90
-0308:  MOVWF  FAB
-030A:  BSF    F94.4
-030C:  BCF    F94.5
-030E:  BCF    F94.3
-0310:  BCF    F8B.3
-0312:  BSF    FC1.0
-0314:  BSF    FC1.1
-0316:  BSF    FC1.2
-0318:  BCF    FC1.3
-031A:  CLRF   19
-031C:  CLRF   1A
-031E:  CLRF   1B
-0320:  CLRF   1C
-0322:  CLRF   1D
+02F2:  CLRF   FF8
+02F4:  BCF    FD0.7
+02F6:  BSF    07.7
+02F8:  CLRF   FEA
+02FA:  CLRF   FE9
+02FC:  MOVLW  40
+02FE:  MOVWF  FAF
+0300:  MOVLW  A2
+0302:  MOVWF  FAC
+0304:  MOVLW  90
+0306:  MOVWF  FAB
+0308:  BSF    F94.4
+030A:  BCF    F94.5
+030C:  BCF    F94.3
+030E:  BCF    F8B.3
+0310:  BSF    FC1.0
+0312:  BSF    FC1.1
+0314:  BSF    FC1.2
+0316:  BCF    FC1.3
+0318:  CLRF   19
+031A:  CLRF   1A
+031C:  CLRF   1B
+031E:  CLRF   1C
+0320:  CLRF   1D
+.................... 	output_low(saida_sobe); 
+0322:  BCF    F93.7
+0324:  BCF    F8A.7
+.................... 	output_low(saida_desce); 
+0326:  BCF    F93.6
+0328:  BCF    F8A.6
+.................... 	delay_ms(100); 
+032A:  MOVLW  64
+032C:  MOVWF  1F
+032E:  RCALL  010C
 .................... 	clear_interrupt(INT_EXT); 
-0324:  BCF    FF2.1
+0330:  BCF    FF2.1
 .................... 	clear_interrupt(INT_EXT1); 
-0326:  BCF    FF0.0
+0332:  BCF    FF0.0
 .................... 	enable_interrupts(INT_EXT_H2L); 
-0328:  BSF    FF2.4
-032A:  BCF    FF1.6
+0334:  BSF    FF2.4
+0336:  BCF    FF1.6
 .................... 	enable_interrupts(INT_EXT1_H2L); 
-032C:  BSF    FF0.3
-032E:  BCF    FF1.5
+0338:  BSF    FF0.3
+033A:  BCF    FF1.5
 .................... 	enable_interrupts(GLOBAL); 
-0330:  MOVLW  C0
-0332:  IORWF  FF2,F
+033C:  MOVLW  C0
+033E:  IORWF  FF2,F
+.................... 	output_high(saida_desce); 
+0340:  BCF    F93.6
+0342:  BSF    F8A.6
+.................... 	output_low(saida_sobe); 
+0344:  BCF    F93.7
+0346:  BCF    F8A.7
 .................... 	while (TRUE) { 
 .................... 		printf("\n\rPulsos: %Lu, Zeros:%d Max:%Lu", pulsos, zeros, pulsosMax); 
-0334:  MOVLW  EC
-0336:  MOVWF  FF6
-0338:  MOVLW  00
-033A:  MOVWF  FF7
-033C:  MOVLW  0A
-033E:  MOVWF  1E
-0340:  RCALL  010C
-0342:  MOVLW  10
-0344:  MOVWF  FE9
-0346:  MOVFF  1A,1F
-034A:  MOVFF  19,1E
-034E:  RCALL  012C
-0350:  MOVLW  F9
-0352:  MOVWF  FF6
-0354:  MOVLW  00
-0356:  MOVWF  FF7
-0358:  MOVLW  08
-035A:  MOVWF  1E
-035C:  RCALL  010C
-035E:  MOVFF  1D,1E
-0362:  MOVLW  1F
-0364:  MOVWF  1F
-0366:  BRA    01F8
-0368:  MOVLW  03
-036A:  MOVWF  FF6
-036C:  MOVLW  01
-036E:  MOVWF  FF7
-0370:  MOVLW  05
-0372:  MOVWF  1E
-0374:  RCALL  010C
-0376:  MOVLW  10
-0378:  MOVWF  FE9
-037A:  MOVFF  1C,1F
-037E:  MOVFF  1B,1E
-0382:  RCALL  012C
-.................... 		delay_ms(500); 
-0384:  MOVLW  02
+0348:  MOVLW  EC
+034A:  MOVWF  FF6
+034C:  MOVLW  00
+034E:  MOVWF  FF7
+0350:  MOVLW  0A
+0352:  MOVWF  1E
+0354:  RCALL  0134
+0356:  MOVLW  10
+0358:  MOVWF  FE9
+035A:  MOVFF  1A,1F
+035E:  MOVFF  19,1E
+0362:  RCALL  0154
+0364:  MOVLW  F9
+0366:  MOVWF  FF6
+0368:  MOVLW  00
+036A:  MOVWF  FF7
+036C:  MOVLW  08
+036E:  MOVWF  1E
+0370:  RCALL  0134
+0372:  MOVFF  1D,1E
+0376:  MOVLW  1F
+0378:  MOVWF  1F
+037A:  BRA    0220
+037C:  MOVLW  03
+037E:  MOVWF  FF6
+0380:  MOVLW  01
+0382:  MOVWF  FF7
+0384:  MOVLW  05
 0386:  MOVWF  1E
-0388:  MOVLW  FA
-038A:  MOVWF  1F
-038C:  BRA    02CA
-038E:  DECFSZ 1E,F
-0390:  BRA    0388
+0388:  RCALL  0134
+038A:  MOVLW  10
+038C:  MOVWF  FE9
+038E:  MOVFF  1C,1F
+0392:  MOVFF  1B,1E
+0396:  RCALL  0154
+.................... 		delay_ms(500); 
+0398:  MOVLW  02
+039A:  MOVWF  1E
+039C:  MOVLW  FA
+039E:  MOVWF  1F
+03A0:  RCALL  010C
+03A2:  DECFSZ 1E,F
+03A4:  BRA    039C
 .................... 	} 
-0392:  BRA    0334
+03A6:  BRA    0348
 .................... } 
-0394:  SLEEP 
+03A8:  SLEEP 
 
 Configuration Fuses:
    Word  1: 2600   H4 NOOSCSEN
