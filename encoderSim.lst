@@ -1,0 +1,54 @@
+CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 09:26
+
+               Filename: E:\Eletronica\Projetos\Encoder\encoderSim.lst
+
+               ROM used: 15 words (3%)
+                         Largest free fragment is 497
+               RAM used: 3 (12%) at main() level
+                         3 (12%) worst case
+               Stack:    0 locations
+
+*
+0000:  MOVWF  05
+0001:  GOTO   002
+.................... /* 
+....................  * encoderSim.c 
+....................  * 
+....................  *  Created on: 26/03/2013 
+....................  *      Author: cuki 
+....................  */ 
+.................... #include<12C508A.h> 
+.................... //////// Standard Header file for the PIC12C508A device //////////////// 
+.................... #device PIC12C508A 
+.................... #list 
+....................  
+....................  
+.................... #fuses NOWDT, NOPROTECT, INTRC, NOMCLR 
+.................... #use delay(clock=4MHz) 
+....................  
+.................... int main(void) { 
+0002:  CLRF   04
+0003:  MOVLW  FF
+0004:  MOVWF  09
+.................... 	while(TRUE){ 
+.................... 		if(!input(PIN_B3)) { 
+0005:  BSF    09.3
+0006:  MOVF   09,W
+0007:  TRIS   6
+0008:  BTFSC  06.3
+0009:  GOTO   00F
+.................... 			output_toggle(PIN_B0); 
+000A:  BCF    09.0
+000B:  MOVF   09,W
+000C:  TRIS   6
+000D:  MOVLW  01
+000E:  XORWF  06,F
+.................... 		} 
+.................... 	} 
+000F:  GOTO   005
+.................... } 
+....................  
+0010:  SLEEP
+
+Configuration Fuses:
+   Word  1: 0FEA   INTRC NOWDT NOPROTECT NOMCLR

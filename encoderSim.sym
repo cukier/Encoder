@@ -1,0 +1,39 @@
+007     @SCRATCH
+008     @SCRATCH
+008     _RETURN_
+009     @TRIS_B
+
+ROM Allocation:
+0001  main
+0001  @cinit
+
+
+Project Directory:
+    E:\Eletronica\Projetos\Encoder\
+
+Project Files:
+    encoderSim.c                                            [27-mar-13 09:01  CRC=B96F2DBD]
+    C:\PICC\devices\12C508A.h                               [27-jul-11 18:02  CRC=32AEC5BB]
+
+Source signature=1ECCB933
+
+Units:
+    E:\Eletronica\Projetos\Encoder\encoderSim (main)
+
+Compiler Settings:
+    Processor:      PIC12C508A
+    Pointer Size:   5
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+
+Output Files:
+    Errors:      encoderSim.err
+    Ext Symbols: encoderSim.esym
+    INHX8:       encoderSim.hex
+    Symbols:     encoderSim.sym
+    List:        encoderSim.lst
+    Debug/COFF:  encoderSim.cof
+    Project:     encoderSim.PJT
+    Call Tree:   encoderSim.tre
+    Statistics:  encoderSim.STA
