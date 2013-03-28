@@ -15,15 +15,28 @@
 
 #define	saida_desce	PIN_B6
 #define	saida_sobe	PIN_B7
+#define canalA		PIN_B0
+#define canalZ		PIN_B1
+#define canalB		PIN_B2
 
 static long pulsos, pulsosMax;
 static int zeros;
 
+#include "funcoes.h"
+#include "lcd_8b.c"
+
 #INT_EXT
 void isr_ext(void) {
 	clear_interrupt(INT_EXT);
-	pulsos++;
-	if(pulsos > pulsosMax)
+	if (input(canalB))
+		pulsos++;
+	else {
+		if (pulsos > 0)
+			pulsos--;
+		else
+			pulsos = 1023;
+	}
+	if (pulsos > pulsosMax)
 		pulsosMax = pulsos;
 }
 
@@ -35,18 +48,18 @@ void isr_ext1(void) {
 }
 
 void main(void) {
-	output_low(saida_sobe);
-	output_low(saida_desce);
+	parar();
+	lcd_init();
+	port_b_pullups(TRUE);
 	delay_ms(100);
 	clear_interrupt(INT_EXT);
 	clear_interrupt(INT_EXT1);
-	enable_interrupts(INT_EXT_H2L);
-	enable_interrupts(INT_EXT1_H2L);
+	enable_interrupts(INT_EXT_L2H);
+	enable_interrupts(INT_EXT1_L2H);
 	enable_interrupts(GLOBAL);
-	output_high(saida_desce);
-	output_low(saida_sobe);
+	subir();
 	while (TRUE) {
-		printf("\n\rPulsos: %Lu, Zeros:%d Max:%Lu", pulsos, zeros, pulsosMax);
+		printf(lcd, "\fPulsos: %Lu\nZeros:%d Max:%Lu", pulsos, zeros, pulsosMax);
 		delay_ms(500);
 	}
 }

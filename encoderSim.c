@@ -19,6 +19,7 @@
 /////////////////////////////////////////tempos
 #define voltas_nylon	11.5
 #define tempo_elevacao	60
+#define resolucao_encoder 1024
 
 static long pulsos;
 static long tm0_config = 159; // resol. enc = 1024, 11.5 voltas nylon, 60 segundos operacao
@@ -41,14 +42,14 @@ int main(void) {
 					output_low(canalA);
 					output_high(canalB);
 					pulsos++;
-					if (pulsos > 1024)
+					if (pulsos > resolucao_encoder - 1)
 						pulsos = 0;
 				} else if (!input(reversao) && input(avanco)) {
 					output_high(canalA);
 					output_high(canalB);
 					pulsos--;
 					if (!pulsos)
-						pulsos = 1023;
+						pulsos = resolucao_encoder - 1;
 				}
 				break;
 			case B:
@@ -68,7 +69,7 @@ int main(void) {
 			}
 		}
 		if (!input_state(canalA) && !input_state(canalB)
-				&& !input_state(canalZ) && pulsos == 1024)
+				&& !input_state(canalZ) && pulsos == resolucao_encoder - 2)
 			output_high(canalZ);
 		else if (input_state(canalZ))
 			output_low(canalZ);

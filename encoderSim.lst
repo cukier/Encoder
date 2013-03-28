@@ -1,9 +1,9 @@
-CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:47
+CCS PCB C Compiler, Version 4.124, 5967               28-mar-13 08:25
 
                Filename: E:\Eletronica\Projetos\Encoder\encoderSim.lst
 
-               ROM used: 186 words (36%)
-                         Largest free fragment is 326
+               ROM used: 178 words (35%)
+                         Largest free fragment is 334
                RAM used: 11 (44%) at main() level
                          11 (44%) worst case
                Stack:    0 locations
@@ -36,6 +36,7 @@ CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:47
 .................... /////////////////////////////////////////tempos 
 .................... #define voltas_nylon	11.5 
 .................... #define tempo_elevacao	60 
+.................... #define resolucao_encoder 1024 
 ....................  
 .................... static long pulsos; 
 *
@@ -75,7 +76,7 @@ CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:47
 0016:  MOVF   10,W
 0017:  TRIS   6
 0018:  BTFSC  06.4
-0019:  GOTO   0A2
+0019:  GOTO   099
 .................... 			set_timer0(0); 
 001A:  CLRF   01
 .................... 			while (get_timer0() < tm0_config) 
@@ -97,26 +98,26 @@ CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:47
 0028:  GOTO   033
 0029:  XORLW  01
 002A:  BTFSC  03.2
-002B:  GOTO   079
+002B:  GOTO   070
 002C:  XORLW  03
 002D:  BTFSC  03.2
-002E:  GOTO   07E
+002E:  GOTO   075
 002F:  XORLW  01
 0030:  BTFSC  03.2
-0031:  GOTO   09C
-0032:  GOTO   09C
+0031:  GOTO   093
+0032:  GOTO   093
 .................... 			case A: 
 .................... 				if (!input(avanco) && input(reversao)) { 
 0033:  BSF    10.3
 0034:  MOVF   10,W
 0035:  TRIS   6
 0036:  BTFSC  06.3
-0037:  GOTO   05A
+0037:  GOTO   051
 0038:  BSF    10.4
 0039:  MOVF   10,W
 003A:  TRIS   6
 003B:  BTFSS  06.4
-003C:  GOTO   05A
+003C:  GOTO   051
 .................... 					output_low(canalA); 
 003D:  BCF    10.0
 003E:  MOVF   10,W
@@ -131,155 +132,147 @@ CCS PCB C Compiler, Version 4.124, 5967               27-mar-13 16:47
 0045:  INCF   0B,F
 0046:  BTFSC  03.2
 0047:  INCF   0C,F
-.................... 					if (pulsos > 1024) 
+.................... 					if (pulsos > resolucao_encoder - 1) 
 0048:  MOVLW  03
 0049:  MOVWF  07
 004A:  MOVF   0C,W
 004B:  SUBWF  07,W
 004C:  BTFSC  03.0
-004D:  GOTO   059
-004E:  XORLW  FF
-004F:  BTFSS  03.2
-0050:  GOTO   057
-0051:  MOVLW  00
-0052:  MOVWF  07
-0053:  MOVF   0B,W
-0054:  SUBWF  07,W
-0055:  BTFSC  03.0
-0056:  GOTO   059
+004D:  GOTO   050
 .................... 						pulsos = 0; 
-0057:  CLRF   0C
-0058:  CLRF   0B
+004E:  CLRF   0C
+004F:  CLRF   0B
 .................... 				} else if (!input(reversao) && input(avanco)) { 
-0059:  GOTO   078
-005A:  BSF    10.4
-005B:  MOVF   10,W
-005C:  TRIS   6
-005D:  BTFSC  06.4
-005E:  GOTO   078
-005F:  BSF    10.3
+0050:  GOTO   06F
+0051:  BSF    10.4
+0052:  MOVF   10,W
+0053:  TRIS   6
+0054:  BTFSC  06.4
+0055:  GOTO   06F
+0056:  BSF    10.3
+0057:  MOVF   10,W
+0058:  TRIS   6
+0059:  BTFSS  06.3
+005A:  GOTO   06F
+.................... 					output_high(canalA); 
+005B:  BCF    10.0
+005C:  MOVF   10,W
+005D:  TRIS   6
+005E:  BSF    06.0
+.................... 					output_high(canalB); 
+005F:  BCF    10.1
 0060:  MOVF   10,W
 0061:  TRIS   6
-0062:  BTFSS  06.3
-0063:  GOTO   078
-.................... 					output_high(canalA); 
-0064:  BCF    10.0
-0065:  MOVF   10,W
-0066:  TRIS   6
-0067:  BSF    06.0
-.................... 					output_high(canalB); 
-0068:  BCF    10.1
-0069:  MOVF   10,W
-006A:  TRIS   6
-006B:  BSF    06.1
+0062:  BSF    06.1
 .................... 					pulsos--; 
-006C:  MOVF   0B,W
-006D:  BTFSC  03.2
-006E:  DECF   0C,F
-006F:  DECF   0B,F
+0063:  MOVF   0B,W
+0064:  BTFSC  03.2
+0065:  DECF   0C,F
+0066:  DECF   0B,F
 .................... 					if (!pulsos) 
-0070:  MOVF   0B,W
-0071:  IORWF  0C,W
-0072:  BTFSS  03.2
-0073:  GOTO   078
-.................... 						pulsos = 1023; 
-0074:  MOVLW  03
-0075:  MOVWF  0C
-0076:  MOVLW  FF
-0077:  MOVWF  0B
+0067:  MOVF   0B,W
+0068:  IORWF  0C,W
+0069:  BTFSS  03.2
+006A:  GOTO   06F
+.................... 						pulsos = resolucao_encoder - 1; 
+006B:  MOVLW  03
+006C:  MOVWF  0C
+006D:  MOVLW  FF
+006E:  MOVWF  0B
 .................... 				} 
 .................... 				break; 
-0078:  GOTO   0A2
+006F:  GOTO   099
 .................... 			case B: 
 .................... 				output_low(canalB); 
-0079:  BCF    10.1
-007A:  MOVF   10,W
-007B:  TRIS   6
-007C:  BCF    06.1
+0070:  BCF    10.1
+0071:  MOVF   10,W
+0072:  TRIS   6
+0073:  BCF    06.1
 .................... 				break; 
-007D:  GOTO   0A2
+0074:  GOTO   099
 .................... 			case C: 
 .................... 				if (!input(avanco) && input(reversao)) 
-007E:  BSF    10.3
-007F:  MOVF   10,W
-0080:  TRIS   6
-0081:  BTFSC  06.3
-0082:  GOTO   08D
-0083:  BSF    10.4
-0084:  MOVF   10,W
-0085:  TRIS   6
-0086:  BTFSS  06.4
-0087:  GOTO   08D
+0075:  BSF    10.3
+0076:  MOVF   10,W
+0077:  TRIS   6
+0078:  BTFSC  06.3
+0079:  GOTO   084
+007A:  BSF    10.4
+007B:  MOVF   10,W
+007C:  TRIS   6
+007D:  BTFSS  06.4
+007E:  GOTO   084
 .................... 					output_high(canalA); 
-0088:  BCF    10.0
-0089:  MOVF   10,W
-008A:  TRIS   6
-008B:  BSF    06.0
+007F:  BCF    10.0
+0080:  MOVF   10,W
+0081:  TRIS   6
+0082:  BSF    06.0
 .................... 				else if (!input(reversao) && input(avanco)) 
-008C:  GOTO   09B
-008D:  BSF    10.4
-008E:  MOVF   10,W
-008F:  TRIS   6
-0090:  BTFSC  06.4
-0091:  GOTO   09B
-0092:  BSF    10.3
-0093:  MOVF   10,W
-0094:  TRIS   6
-0095:  BTFSS  06.3
-0096:  GOTO   09B
+0083:  GOTO   092
+0084:  BSF    10.4
+0085:  MOVF   10,W
+0086:  TRIS   6
+0087:  BTFSC  06.4
+0088:  GOTO   092
+0089:  BSF    10.3
+008A:  MOVF   10,W
+008B:  TRIS   6
+008C:  BTFSS  06.3
+008D:  GOTO   092
 .................... 					output_low(canalA); 
-0097:  BCF    10.0
-0098:  MOVF   10,W
-0099:  TRIS   6
-009A:  BCF    06.0
+008E:  BCF    10.0
+008F:  MOVF   10,W
+0090:  TRIS   6
+0091:  BCF    06.0
 .................... 				break; 
-009B:  GOTO   0A2
+0092:  GOTO   099
 .................... 			default: 
 .................... 			case D: 
 .................... 				output_high(canalB); 
-009C:  BCF    10.1
-009D:  MOVF   10,W
-009E:  TRIS   6
-009F:  BSF    06.1
+0093:  BCF    10.1
+0094:  MOVF   10,W
+0095:  TRIS   6
+0096:  BSF    06.1
 .................... 				tempo = A; 
-00A0:  CLRF   0F
+0097:  CLRF   0F
 .................... 				break; 
-00A1:  GOTO   0A2
+0098:  GOTO   099
 .................... 			} 
 .................... 		} 
 .................... 		if (!input_state(canalA) && !input_state(canalB) 
-.................... 				&& !input_state(canalZ) && pulsos == 1024) 
-00A2:  BTFSC  06.0
-00A3:  GOTO   0B4
-00A4:  BTFSC  06.1
-00A5:  GOTO   0B4
-00A6:  BTFSC  06.5
-00A7:  GOTO   0B4
-00A8:  MOVF   0B,F
-00A9:  BTFSS  03.2
-00AA:  GOTO   0B4
-00AB:  MOVLW  04
-00AC:  SUBWF  0C,W
-00AD:  BTFSS  03.2
-00AE:  GOTO   0B4
+.................... 				&& !input_state(canalZ) && pulsos == resolucao_encoder - 2) 
+0099:  BTFSC  06.0
+009A:  GOTO   0AC
+009B:  BTFSC  06.1
+009C:  GOTO   0AC
+009D:  BTFSC  06.5
+009E:  GOTO   0AC
+009F:  MOVLW  FE
+00A0:  SUBWF  0B,W
+00A1:  BTFSS  03.2
+00A2:  GOTO   0AC
+00A3:  MOVLW  03
+00A4:  SUBWF  0C,W
+00A5:  BTFSS  03.2
+00A6:  GOTO   0AC
 .................... 			output_high(canalZ); 
-00AF:  BCF    10.5
-00B0:  MOVF   10,W
-00B1:  TRIS   6
-00B2:  BSF    06.5
+00A7:  BCF    10.5
+00A8:  MOVF   10,W
+00A9:  TRIS   6
+00AA:  BSF    06.5
 .................... 		else if (input_state(canalZ)) 
-00B3:  GOTO   0BA
-00B4:  BTFSS  06.5
-00B5:  GOTO   0BA
+00AB:  GOTO   0B2
+00AC:  BTFSS  06.5
+00AD:  GOTO   0B2
 .................... 			output_low(canalZ); 
-00B6:  BCF    10.5
-00B7:  MOVF   10,W
-00B8:  TRIS   6
-00B9:  BCF    06.5
+00AE:  BCF    10.5
+00AF:  MOVF   10,W
+00B0:  TRIS   6
+00B1:  BCF    06.5
 .................... 	} 
-00BA:  GOTO   010
+00B2:  GOTO   010
 .................... } 
-00BB:  SLEEP
+00B3:  SLEEP
 
 Configuration Fuses:
    Word  1: 0FEA   INTRC NOWDT NOPROTECT NOMCLR
