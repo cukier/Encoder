@@ -19,7 +19,7 @@
 #define canalZ		PIN_B1
 #define canalB		PIN_B2
 
-static long pulsos, pulsosMax;
+static signed long pulsos, min, max;
 static int zeros;
 
 #include "funcoes.h"
@@ -30,14 +30,12 @@ void isr_ext(void) {
 	clear_interrupt(INT_EXT);
 	if (input(canalB))
 		pulsos++;
-	else {
-		if (pulsos > 0)
-			pulsos--;
-		else
-			pulsos = 1023;
-	}
-	if (pulsos > pulsosMax)
-		pulsosMax = pulsos;
+	else
+		pulsos--;
+	if (pulsos > max)
+		max = pulsos;
+	if (pulsos < min)
+		min = pulsos;
 }
 
 #INT_EXT1
@@ -59,7 +57,8 @@ void main(void) {
 	enable_interrupts(GLOBAL);
 	subir();
 	while (TRUE) {
-		printf(lcd, "\fPulsos: %Lu\nZeros:%d Max:%Lu", pulsos, zeros, pulsosMax);
+		printf(lcd, "\fP%Ld A%.2f", pulsos, (float) pulsos / max * 360);
+		printf(lcd, "\nZ%d m%Ld M%Ld", zeros, min, max);
 		delay_ms(500);
 	}
 }

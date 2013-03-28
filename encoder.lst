@@ -1,15 +1,15 @@
-CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
+CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 12:03
 
                Filename: E:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used: 1272 bytes (4%)
-                         Largest free fragment is 31492
-               RAM used: 31 (2%) at main() level
-                         46 (3%) worst case
+               ROM used: 2748 bytes (8%)
+                         Largest free fragment is 30016
+               RAM used: 36 (2%) at main() level
+                         62 (4%) worst case
                Stack:    6 worst case (5 in main + 1 for interrupts)
 
 *
-0000:  GOTO   044C
+0000:  GOTO   0948
 *
 0008:  MOVWF  04
 000A:  MOVFF  FD8,05
@@ -38,7 +38,7 @@ CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
 0060:  BTFSS  FF0.3
 0062:  GOTO   006C
 0066:  BTFSC  FF0.0
-0068:  GOTO   00FE
+0068:  GOTO   0120
 006C:  MOVFF  0E,00
 0070:  MOVFF  0F,01
 0074:  MOVFF  10,02
@@ -77,42 +77,42 @@ CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
 .................... #fuses H4,NOWDT,NOPROTECT,NOLVP 
 .................... #use delay(crystal=10MHz, clock=40MHz) 
 *
-0136:  CLRF   FEA
-0138:  MOVLW  28
-013A:  MOVWF  FE9
-013C:  MOVF   FEF,W
-013E:  BZ    015C
-0140:  MOVLW  0C
-0142:  MOVWF  01
-0144:  CLRF   00
-0146:  DECFSZ 00,F
-0148:  BRA    0146
-014A:  DECFSZ 01,F
-014C:  BRA    0144
-014E:  MOVLW  F7
-0150:  MOVWF  00
-0152:  DECFSZ 00,F
-0154:  BRA    0152
-0156:  BRA    0158
-0158:  DECFSZ FEF,F
-015A:  BRA    0140
-015C:  RETURN 0
+013A:  CLRF   FEA
+013C:  MOVLW  32
+013E:  MOVWF  FE9
+0140:  MOVF   FEF,W
+0142:  BZ    0160
+0144:  MOVLW  0C
+0146:  MOVWF  01
+0148:  CLRF   00
+014A:  DECFSZ 00,F
+014C:  BRA    014A
+014E:  DECFSZ 01,F
+0150:  BRA    0148
+0152:  MOVLW  F7
+0154:  MOVWF  00
+0156:  DECFSZ 00,F
+0158:  BRA    0156
+015A:  BRA    015C
+015C:  DECFSZ FEF,F
+015E:  BRA    0144
+0160:  RETURN 0
 *
-01DE:  MOVLW  02
-01E0:  SUBWF  2D,F
-01E2:  BNC   01FA
-01E4:  CLRF   FEA
-01E6:  MOVLW  2D
-01E8:  MOVWF  FE9
-01EA:  MOVF   FEF,W
-01EC:  BZ    01FA
-01EE:  MOVLW  02
-01F0:  MOVWF  00
-01F2:  DECFSZ 00,F
-01F4:  BRA    01F2
-01F6:  DECFSZ FEF,F
-01F8:  BRA    01EE
-01FA:  GOTO   0214 (RETURN)
+0478:  MOVLW  02
+047A:  SUBWF  37,F
+047C:  BNC   0494
+047E:  CLRF   FEA
+0480:  MOVLW  37
+0482:  MOVWF  FE9
+0484:  MOVF   FEF,W
+0486:  BZ    0494
+0488:  MOVLW  02
+048A:  MOVWF  00
+048C:  DECFSZ 00,F
+048E:  BRA    048C
+0490:  DECFSZ FEF,F
+0492:  BRA    0488
+0494:  GOTO   04AE (RETURN)
 .................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
 .................... #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=0,  BAUD=500000, BITS=16, DATA_HOLD=1) 
 ....................  
@@ -122,7 +122,7 @@ CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
 .................... #define canalZ		PIN_B1 
 .................... #define canalB		PIN_B2 
 ....................  
-.................... static long pulsos, pulsosMax; 
+.................... static signed long pulsos, min, max; 
 .................... static int zeros; 
 ....................  
 .................... #include "funcoes.h" 
@@ -139,13 +139,13 @@ CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
 .................... void parar(void) { 
 .................... 	output_high(saida_sobe); 
 *
-012A:  BCF    F93.7
-012C:  BSF    F8A.7
+012E:  BCF    F93.7
+0130:  BSF    F8A.7
 .................... 	output_high(saida_desce); 
-012E:  BCF    F93.6
-0130:  BSF    F8A.6
+0132:  BCF    F93.6
+0134:  BSF    F8A.6
 .................... } 
-0132:  GOTO   047E (RETURN)
+0136:  GOTO   0980 (RETURN)
 ....................  
 .................... void descer(void) { 
 .................... 	output_high(saida_sobe); 
@@ -156,17 +156,17 @@ CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
 .................... void subir(void) { 
 .................... 	output_high(saida_desce); 
 *
-01CC:  BCF    F93.6
-01CE:  BSF    F8A.6
+01D0:  BCF    F93.6
+01D2:  BSF    F8A.6
 .................... 	delay_ms(50); 
-01D0:  MOVLW  32
-01D2:  MOVWF  28
-01D4:  RCALL  0136
+01D4:  MOVLW  32
+01D6:  MOVWF  32
+01D8:  RCALL  013A
 .................... 	output_low(saida_sobe); 
-01D6:  BCF    F93.7
-01D8:  BCF    F8A.7
+01DA:  BCF    F93.7
+01DC:  BCF    F8A.7
 .................... } 
-01DA:  GOTO   049A (RETURN)
+01DE:  GOTO   099E (RETURN)
 ....................  
 .................... #endif /* FUNCOES_H_ */ 
 ....................  
@@ -180,146 +180,146 @@ CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
 .................... 	 
 ....................   data (cmd); 
 *
-015E:  CLRF   F95
-0160:  MOVFF  2D,F8C
+0162:  CLRF   F95
+0164:  MOVFF  37,F8C
 .................... 	delay_us (10); 
-0164:  MOVLW  21
-0166:  MOVWF  00
-0168:  DECFSZ 00,F
-016A:  BRA    0168
+0168:  MOVLW  21
+016A:  MOVWF  00
+016C:  DECFSZ 00,F
+016E:  BRA    016C
 .................... 	output_high (en); 
-016C:  BCF    F96.1
-016E:  BSF    F8D.1
+0170:  BCF    F96.1
+0172:  BSF    F8D.1
 .................... 	delay_us (10); 
-0170:  MOVLW  21
-0172:  MOVWF  00
-0174:  DECFSZ 00,F
-0176:  BRA    0174
+0174:  MOVLW  21
+0176:  MOVWF  00
+0178:  DECFSZ 00,F
+017A:  BRA    0178
 .................... 	output_low (en); 
-0178:  BCF    F96.1
-017A:  BCF    F8D.1
+017C:  BCF    F96.1
+017E:  BCF    F8D.1
 ....................  
 .................... } 
-017C:  RETURN 0
+0180:  RETURN 0
 ....................  
 ....................  
 .................... void lcd_envia_byte(boolean nivel,byte dado) { 
 .................... 	 
 ....................   output_low(rs); 
 *
-01FE:  BCF    F96.0
-0200:  BCF    F8D.0
+0498:  BCF    F96.0
+049A:  BCF    F8D.0
 .................... 	output_bit(rs,nivel); 
-0202:  MOVF   2B,F
-0204:  BNZ   020A
-0206:  BCF    F8D.0
-0208:  BRA    020C
-020A:  BSF    F8D.0
-020C:  BCF    F96.0
+049C:  MOVF   35,F
+049E:  BNZ   04A4
+04A0:  BCF    F8D.0
+04A2:  BRA    04A6
+04A4:  BSF    F8D.0
+04A6:  BCF    F96.0
 .................... 	delay_us(100); 
-020E:  MOVLW  64
-0210:  MOVWF  2D
-0212:  BRA    01DE
+04A8:  MOVLW  64
+04AA:  MOVWF  37
+04AC:  BRA    0478
 .................... 	output_low(en); 
-0214:  BCF    F96.1
-0216:  BCF    F8D.1
+04AE:  BCF    F96.1
+04B0:  BCF    F8D.1
 .................... 	lcd_cmd(dado); 
-0218:  MOVFF  2C,2D
-021C:  RCALL  015E
+04B2:  MOVFF  36,37
+04B6:  RCALL  0162
 ....................  
 .................... } 
-021E:  RETURN 0
+04B8:  RETURN 0
 ....................  
 .................... void lcd_pos_xy(byte x, byte y) { 
 .................... 	 
 ....................   byte endereco; 
 .................... 	 
 ....................   if (y!=1) 
-0220:  DECFSZ 29,W
-0222:  BRA    0226
-0224:  BRA    022C
+04BA:  DECFSZ 33,W
+04BC:  BRA    04C0
+04BE:  BRA    04C6
 .................... 		endereco = 0xc0; 
-0226:  MOVLW  C0
-0228:  MOVWF  2A
+04C0:  MOVLW  C0
+04C2:  MOVWF  34
 .................... 	else 
-022A:  BRA    0230
+04C4:  BRA    04CA
 .................... 		endereco = 0x80; 
-022C:  MOVLW  80
-022E:  MOVWF  2A
+04C6:  MOVLW  80
+04C8:  MOVWF  34
 ....................  
 ....................   endereco += x-1; 
-0230:  MOVLW  01
-0232:  SUBWF  28,W
-0234:  ADDWF  2A,F
+04CA:  MOVLW  01
+04CC:  SUBWF  32,W
+04CE:  ADDWF  34,F
 .................... 	lcd_envia_byte(0, endereco); 
-0236:  CLRF   2B
-0238:  MOVFF  2A,2C
-023C:  RCALL  01FE
+04D0:  CLRF   35
+04D2:  MOVFF  34,36
+04D6:  RCALL  0498
 ....................  
 ....................  
 .................... } 
-023E:  GOTO   0288 (RETURN)
+04D8:  GOTO   0522 (RETURN)
 ....................  
 .................... void lcd (char c) { 
 .................... 	 
 ....................   switch(c) { 
-0242:  MOVF   27,W
-0244:  XORLW  0C
-0246:  BZ    0256
-0248:  XORLW  06
-024A:  BZ    0266
-024C:  XORLW  07
-024E:  BZ    0266
-0250:  XORLW  05
-0252:  BZ    0272
-0254:  BRA    027C
+04DC:  MOVF   31,W
+04DE:  XORLW  0C
+04E0:  BZ    04F0
+04E2:  XORLW  06
+04E4:  BZ    0500
+04E6:  XORLW  07
+04E8:  BZ    0500
+04EA:  XORLW  05
+04EC:  BZ    050C
+04EE:  BRA    0516
 .................... 		 
 ....................     case '\f' : 
 .................... 			lcd_envia_byte(0, 1); 
-0256:  CLRF   2B
-0258:  MOVLW  01
-025A:  MOVWF  2C
-025C:  RCALL  01FE
+04F0:  CLRF   35
+04F2:  MOVLW  01
+04F4:  MOVWF  36
+04F6:  RCALL  0498
 .................... 			delay_ms(2); 
-025E:  MOVLW  02
-0260:  MOVWF  28
-0262:  RCALL  0136
+04F8:  MOVLW  02
+04FA:  MOVWF  32
+04FC:  RCALL  013A
 .................... 			break; 
-0264:  BRA    0288
+04FE:  BRA    0522
 .................... 		 
 ....................     case '\n' : 
 .................... 		 
 ....................     case '\r' : 
 .................... 			lcd_pos_xy(1, 2); 
-0266:  MOVLW  01
-0268:  MOVWF  28
-026A:  MOVLW  02
-026C:  MOVWF  29
-026E:  BRA    0220
+0500:  MOVLW  01
+0502:  MOVWF  32
+0504:  MOVLW  02
+0506:  MOVWF  33
+0508:  BRA    04BA
 .................... 			break; 
-0270:  BRA    0288
+050A:  BRA    0522
 .................... 		 
 ....................     case '\b' : 
 .................... 			lcd_envia_byte(0, 0x10); 
-0272:  CLRF   2B
-0274:  MOVLW  10
-0276:  MOVWF  2C
-0278:  RCALL  01FE
+050C:  CLRF   35
+050E:  MOVLW  10
+0510:  MOVWF  36
+0512:  RCALL  0498
 .................... 			break; 
-027A:  BRA    0288
+0514:  BRA    0522
 .................... 		 
 ....................     default : 
 .................... 			lcd_envia_byte(1, c); 
-027C:  MOVLW  01
-027E:  MOVWF  2B
-0280:  MOVFF  27,2C
-0284:  RCALL  01FE
+0516:  MOVLW  01
+0518:  MOVWF  35
+051A:  MOVFF  31,36
+051E:  RCALL  0498
 ....................       break; 
-0286:  BRA    0288
+0520:  BRA    0522
 .................... 	} 
 ....................    
 .................... }   
-0288:  RETURN 0
+0522:  RETURN 0
 ....................  
 .................... void lcd_init() { 
 .................... 	 
@@ -327,62 +327,62 @@ CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
 ....................  
 .................... 	data (0x00); 
 *
-017E:  CLRF   F95
-0180:  CLRF   F8C
+0182:  CLRF   F95
+0184:  CLRF   F8C
 .................... 	output_low (rs); 
-0182:  BCF    F96.0
-0184:  BCF    F8D.0
+0186:  BCF    F96.0
+0188:  BCF    F8D.0
 .................... 	output_low(en); 
-0186:  BCF    F96.1
-0188:  BCF    F8D.1
+018A:  BCF    F96.1
+018C:  BCF    F8D.1
 .................... 	delay_ms(15);  
-018A:  MOVLW  0F
-018C:  MOVWF  28
-018E:  RCALL  0136
+018E:  MOVLW  0F
+0190:  MOVWF  32
+0192:  RCALL  013A
 .................... 	 
 ....................   for (conta = 1; conta <= 3; conta++) { 
-0190:  MOVLW  01
-0192:  MOVWF  1E
-0194:  MOVF   1E,W
-0196:  SUBLW  03
-0198:  BNC   01AA
+0194:  MOVLW  01
+0196:  MOVWF  20
+0198:  MOVF   20,W
+019A:  SUBLW  03
+019C:  BNC   01AE
 .................... 		 
 ....................     lcd_cmd (0x30); 
-019A:  MOVLW  30
-019C:  MOVWF  2D
-019E:  RCALL  015E
+019E:  MOVLW  30
+01A0:  MOVWF  37
+01A2:  RCALL  0162
 .................... 		delay_ms (5); 
-01A0:  MOVLW  05
-01A2:  MOVWF  28
-01A4:  RCALL  0136
+01A4:  MOVLW  05
+01A6:  MOVWF  32
+01A8:  RCALL  013A
 .................... 	 
 ....................   } 
-01A6:  INCF   1E,F
-01A8:  BRA    0194
+01AA:  INCF   20,F
+01AC:  BRA    0198
 .................... 	 
 ....................   lcd_cmd (0x38); 
-01AA:  MOVLW  38
-01AC:  MOVWF  2D
-01AE:  RCALL  015E
+01AE:  MOVLW  38
+01B0:  MOVWF  37
+01B2:  RCALL  0162
 .................... 	lcd_cmd (0x01); 
-01B0:  MOVLW  01
-01B2:  MOVWF  2D
-01B4:  RCALL  015E
+01B4:  MOVLW  01
+01B6:  MOVWF  37
+01B8:  RCALL  0162
 .................... 	delay_ms (1); 
-01B6:  MOVLW  01
-01B8:  MOVWF  28
-01BA:  RCALL  0136
+01BA:  MOVLW  01
+01BC:  MOVWF  32
+01BE:  RCALL  013A
 .................... 	lcd_cmd (0x0c); 
-01BC:  MOVLW  0C
-01BE:  MOVWF  2D
-01C0:  RCALL  015E
+01C0:  MOVLW  0C
+01C2:  MOVWF  37
+01C4:  RCALL  0162
 .................... 	lcd_cmd(0x06); 
-01C2:  MOVLW  06
-01C4:  MOVWF  2D
-01C6:  RCALL  015E
+01C6:  MOVLW  06
+01C8:  MOVWF  37
+01CA:  RCALL  0162
 ....................  
 .................... } 
-01C8:  GOTO   0480 (RETURN)
+01CC:  GOTO   0982 (RETURN)
 ....................  
 ....................  
 .................... #INT_EXT 
@@ -398,153 +398,230 @@ CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 09:12
 00C2:  INCF   19,F
 00C4:  BTFSC  FD8.2
 00C6:  INCF   1A,F
-.................... 	else { 
-00C8:  BRA    00E2
-.................... 		if (pulsos > 0) 
-00CA:  MOVF   19,F
-00CC:  BNZ   00D2
-00CE:  MOVF   1A,F
-00D0:  BZ    00DC
-.................... 			pulsos--; 
-00D2:  MOVF   19,W
-00D4:  BTFSC  FD8.2
-00D6:  DECF   1A,F
-00D8:  DECF   19,F
-.................... 		else 
-00DA:  BRA    00E2
-.................... 			pulsos = 1023; 
-00DC:  MOVLW  03
-00DE:  MOVWF  1A
-00E0:  SETF   19
-.................... 	} 
-.................... 	if (pulsos > pulsosMax) 
-00E2:  MOVF   1C,W
-00E4:  SUBWF  1A,W
-00E6:  BNC   00F8
-00E8:  BNZ   00F0
-00EA:  MOVF   19,W
-00EC:  SUBWF  1B,W
-00EE:  BC    00F8
-.................... 		pulsosMax = pulsos; 
-00F0:  MOVFF  1A,1C
-00F4:  MOVFF  19,1B
+.................... 	else 
+00C8:  BRA    00D2
+.................... 		pulsos--; 
+00CA:  MOVF   19,W
+00CC:  BTFSC  FD8.2
+00CE:  DECF   1A,F
+00D0:  DECF   19,F
+.................... 	if (pulsos > max) 
+00D2:  BTFSS  1E.7
+00D4:  BRA    00DC
+00D6:  BTFSS  1A.7
+00D8:  BRA    00EE
+00DA:  BRA    00E0
+00DC:  BTFSC  1A.7
+00DE:  BRA    00F6
+00E0:  MOVF   1E,W
+00E2:  SUBWF  1A,W
+00E4:  BNC   00F6
+00E6:  BNZ   00EE
+00E8:  MOVF   19,W
+00EA:  SUBWF  1D,W
+00EC:  BC    00F6
+.................... 		max = pulsos; 
+00EE:  MOVFF  1A,1E
+00F2:  MOVFF  19,1D
+.................... 	if (pulsos < min) 
+00F6:  BTFSS  1A.7
+00F8:  BRA    0100
+00FA:  BTFSS  1C.7
+00FC:  BRA    0112
+00FE:  BRA    0104
+0100:  BTFSC  1C.7
+0102:  BRA    011A
+0104:  MOVF   1A,W
+0106:  SUBWF  1C,W
+0108:  BNC   011A
+010A:  BNZ   0112
+010C:  MOVF   1B,W
+010E:  SUBWF  19,W
+0110:  BC    011A
+.................... 		min = pulsos; 
+0112:  MOVFF  1A,1C
+0116:  MOVFF  19,1B
 .................... } 
 ....................  
-00F8:  BCF    FF2.1
-00FA:  GOTO   006C
+011A:  BCF    FF2.1
+011C:  GOTO   006C
 .................... #INT_EXT1 
 .................... void isr_ext1(void) { 
 .................... 	clear_interrupt(INT_EXT1); 
-00FE:  BCF    FF0.0
+0120:  BCF    FF0.0
 .................... 	pulsos = 0; 
-0100:  CLRF   1A
-0102:  CLRF   19
+0122:  CLRF   1A
+0124:  CLRF   19
 .................... 	zeros++; 
-0104:  INCF   1D,F
+0126:  INCF   1F,F
 .................... } 
 ....................  
-0106:  BCF    FF0.0
-0108:  GOTO   006C
+0128:  BCF    FF0.0
+012A:  GOTO   006C
 .................... void main(void) { 
 *
-044C:  CLRF   FF8
-044E:  BCF    FD0.7
-0450:  BSF    07.7
-0452:  CLRF   FEA
-0454:  CLRF   FE9
-0456:  MOVLW  40
-0458:  MOVWF  FAF
-045A:  MOVLW  A2
-045C:  MOVWF  FAC
-045E:  MOVLW  90
-0460:  MOVWF  FAB
-0462:  BSF    F94.4
-0464:  BCF    F94.5
-0466:  BCF    F94.3
-0468:  BCF    F8B.3
-046A:  BSF    FC1.0
-046C:  BSF    FC1.1
-046E:  BSF    FC1.2
-0470:  BCF    FC1.3
-0472:  CLRF   19
-0474:  CLRF   1A
-0476:  CLRF   1B
-0478:  CLRF   1C
-047A:  CLRF   1D
+0948:  CLRF   FF8
+094A:  BCF    FD0.7
+094C:  BSF    07.7
+094E:  CLRF   FEA
+0950:  CLRF   FE9
+0952:  MOVLW  40
+0954:  MOVWF  FAF
+0956:  MOVLW  A2
+0958:  MOVWF  FAC
+095A:  MOVLW  90
+095C:  MOVWF  FAB
+095E:  BSF    F94.4
+0960:  BCF    F94.5
+0962:  BCF    F94.3
+0964:  BCF    F8B.3
+0966:  BSF    FC1.0
+0968:  BSF    FC1.1
+096A:  BSF    FC1.2
+096C:  BCF    FC1.3
+096E:  CLRF   19
+0970:  CLRF   1A
+0972:  CLRF   1B
+0974:  CLRF   1C
+0976:  CLRF   1D
+0978:  CLRF   1E
+097A:  CLRF   1F
 .................... 	parar(); 
-047C:  BRA    012A
+097C:  GOTO   012E
 .................... 	lcd_init(); 
-047E:  BRA    017E
+0980:  BRA    0182
 .................... 	port_b_pullups(TRUE); 
-0480:  BCF    FF1.7
+0982:  BCF    FF1.7
 .................... 	delay_ms(100); 
-0482:  MOVLW  64
-0484:  MOVWF  28
-0486:  RCALL  0136
+0984:  MOVLW  64
+0986:  MOVWF  32
+0988:  CALL   013A
 .................... 	clear_interrupt(INT_EXT); 
-0488:  BCF    FF2.1
+098C:  BCF    FF2.1
 .................... 	clear_interrupt(INT_EXT1); 
-048A:  BCF    FF0.0
+098E:  BCF    FF0.0
 .................... 	enable_interrupts(INT_EXT_L2H); 
-048C:  BSF    FF2.4
-048E:  BSF    FF1.6
+0990:  BSF    FF2.4
+0992:  BSF    FF1.6
 .................... 	enable_interrupts(INT_EXT1_L2H); 
-0490:  BSF    FF0.3
-0492:  BSF    FF1.5
+0994:  BSF    FF0.3
+0996:  BSF    FF1.5
 .................... 	enable_interrupts(GLOBAL); 
-0494:  MOVLW  C0
-0496:  IORWF  FF2,F
+0998:  MOVLW  C0
+099A:  IORWF  FF2,F
 .................... 	subir(); 
-0498:  BRA    01CC
+099C:  BRA    01D0
 .................... 	while (TRUE) { 
-.................... 		printf(lcd, "\fPulsos: %Lu\nZeros:%d Max:%Lu", pulsos, zeros, pulsosMax); 
-049A:  MOVLW  0C
-049C:  MOVWF  FF6
-049E:  MOVLW  01
-04A0:  MOVWF  FF7
-04A2:  MOVLW  09
-04A4:  MOVWF  1E
-04A6:  RCALL  028A
-04A8:  MOVLW  10
-04AA:  MOVWF  FE9
-04AC:  MOVFF  1A,1F
-04B0:  MOVFF  19,1E
-04B4:  RCALL  02A8
-04B6:  MOVLW  18
-04B8:  MOVWF  FF6
-04BA:  MOVLW  01
-04BC:  MOVWF  FF7
-04BE:  MOVLW  07
-04C0:  MOVWF  1E
-04C2:  RCALL  028A
-04C4:  MOVFF  1D,1E
-04C8:  MOVLW  1F
-04CA:  MOVWF  1F
-04CC:  BRA    0382
-04CE:  MOVLW  21
-04D0:  MOVWF  FF6
-04D2:  MOVLW  01
-04D4:  MOVWF  FF7
-04D6:  MOVLW  05
-04D8:  MOVWF  1E
-04DA:  RCALL  028A
-04DC:  MOVLW  10
-04DE:  MOVWF  FE9
-04E0:  MOVFF  1C,1F
-04E4:  MOVFF  1B,1E
-04E8:  RCALL  02A8
+.................... 		printf(lcd, "\fP%Ld A%.2f", pulsos, (float) pulsos / max * 360); 
+099E:  MOVFF  1A,25
+09A2:  MOVFF  19,24
+09A6:  RCALL  01E2
+09A8:  MOVFF  00,20
+09AC:  MOVFF  01,21
+09B0:  MOVFF  02,22
+09B4:  MOVFF  03,23
+09B8:  MOVFF  1E,25
+09BC:  MOVFF  1D,24
+09C0:  RCALL  01E2
+09C2:  MOVFF  23,27
+09C6:  MOVFF  22,26
+09CA:  MOVFF  21,25
+09CE:  MOVFF  20,24
+09D2:  MOVFF  03,2B
+09D6:  MOVFF  02,2A
+09DA:  MOVFF  01,29
+09DE:  MOVFF  00,28
+09E2:  BRA    022A
+09E4:  MOVFF  00,20
+09E8:  MOVFF  01,21
+09EC:  MOVFF  02,22
+09F0:  MOVFF  03,23
+09F4:  MOVFF  03,34
+09F8:  MOVFF  02,33
+09FC:  MOVFF  01,32
+0A00:  MOVFF  00,31
+0A04:  CLRF   38
+0A06:  CLRF   37
+0A08:  MOVLW  34
+0A0A:  MOVWF  36
+0A0C:  MOVLW  87
+0A0E:  MOVWF  35
+0A10:  RCALL  0386
+0A12:  MOVFF  00,20
+0A16:  MOVFF  01,21
+0A1A:  MOVFF  02,22
+0A1E:  MOVFF  03,23
+0A22:  MOVLW  0C
+0A24:  MOVWF  31
+0A26:  RCALL  04DC
+0A28:  MOVLW  50
+0A2A:  MOVWF  31
+0A2C:  RCALL  04DC
+0A2E:  MOVLW  10
+0A30:  MOVWF  FE9
+0A32:  MOVFF  1A,25
+0A36:  MOVFF  19,24
+0A3A:  RCALL  0524
+0A3C:  MOVLW  20
+0A3E:  MOVWF  31
+0A40:  RCALL  04DC
+0A42:  MOVLW  41
+0A44:  MOVWF  31
+0A46:  RCALL  04DC
+0A48:  MOVLW  89
+0A4A:  MOVWF  FE9
+0A4C:  MOVFF  23,27
+0A50:  MOVFF  22,26
+0A54:  MOVFF  21,25
+0A58:  MOVFF  20,24
+0A5C:  MOVLW  02
+0A5E:  MOVWF  28
+0A60:  BRA    06DC
+.................... 		printf(lcd, "\nZ%d m%Ld M%Ld", zeros, min, max); 
+0A62:  MOVLW  0A
+0A64:  MOVWF  31
+0A66:  RCALL  04DC
+0A68:  MOVLW  5A
+0A6A:  MOVWF  31
+0A6C:  RCALL  04DC
+0A6E:  MOVFF  1F,20
+0A72:  MOVLW  1F
+0A74:  MOVWF  21
+0A76:  BRA    087E
+0A78:  MOVLW  20
+0A7A:  MOVWF  31
+0A7C:  RCALL  04DC
+0A7E:  MOVLW  6D
+0A80:  MOVWF  31
+0A82:  RCALL  04DC
+0A84:  MOVLW  10
+0A86:  MOVWF  FE9
+0A88:  MOVFF  1C,25
+0A8C:  MOVFF  1B,24
+0A90:  RCALL  0524
+0A92:  MOVLW  20
+0A94:  MOVWF  31
+0A96:  RCALL  04DC
+0A98:  MOVLW  4D
+0A9A:  MOVWF  31
+0A9C:  RCALL  04DC
+0A9E:  MOVLW  10
+0AA0:  MOVWF  FE9
+0AA2:  MOVFF  1E,25
+0AA6:  MOVFF  1D,24
+0AAA:  RCALL  0524
 .................... 		delay_ms(500); 
-04EA:  MOVLW  02
-04EC:  MOVWF  1E
-04EE:  MOVLW  FA
-04F0:  MOVWF  28
-04F2:  RCALL  0136
-04F4:  DECFSZ 1E,F
-04F6:  BRA    04EE
+0AAC:  MOVLW  02
+0AAE:  MOVWF  20
+0AB0:  MOVLW  FA
+0AB2:  MOVWF  32
+0AB4:  CALL   013A
+0AB8:  DECFSZ 20,F
+0ABA:  BRA    0AB0
 .................... 	} 
-04F8:  BRA    049A
+0ABC:  BRA    099E
 .................... } 
-04FA:  SLEEP 
+0ABE:  SLEEP 
 
 Configuration Fuses:
    Word  1: 2600   H4 NOOSCSEN
