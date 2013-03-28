@@ -1,15 +1,15 @@
-CCS PCH C Compiler, Version 4.124, 5967               25-mar-13 16:10
+CCS PCH C Compiler, Version 4.124, 5967               28-mar-13 10:10
 
                Filename: E:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used: 1066 bytes (3%)
-                         Largest free fragment is 31702
+               ROM used: 1108 bytes (3%)
+                         Largest free fragment is 31660
                RAM used: 12 (1%) at main() level
                          21 (1%) worst case
                Stack:    2 locations
 
 *
-0000:  GOTO   0348
+0000:  GOTO   035A
 .................... #include <18F45K20.h> 
 .................... //////// Standard Header file for the PIC18F45K20 device //////////////// 
 .................... #device PIC18F45K20 
@@ -19,63 +19,63 @@ CCS PCH C Compiler, Version 4.124, 5967               25-mar-13 16:10
 .................... #fuses H4,NOWDT,NOPROTECT,NOLVP 
 .................... #use delay(crystal=15MHz, clock=60MHz) 
 *
-0010:  CLRF   FEA
-0012:  MOVLW  0A
-0014:  MOVWF  FE9
-0016:  MOVF   FEF,W
-0018:  BZ    0036
-001A:  MOVLW  13
-001C:  MOVWF  01
-001E:  CLRF   00
-0020:  DECFSZ 00,F
-0022:  BRA    0020
-0024:  DECFSZ 01,F
-0026:  BRA    001E
-0028:  MOVLW  73
-002A:  MOVWF  00
-002C:  DECFSZ 00,F
-002E:  BRA    002C
-0030:  NOP   
-0032:  DECFSZ FEF,F
-0034:  BRA    001A
-0036:  RETURN 0
+0026:  CLRF   FEA
+0028:  MOVLW  0A
+002A:  MOVWF  FE9
+002C:  MOVF   FEF,W
+002E:  BZ    004C
+0030:  MOVLW  13
+0032:  MOVWF  01
+0034:  CLRF   00
+0036:  DECFSZ 00,F
+0038:  BRA    0036
+003A:  DECFSZ 01,F
+003C:  BRA    0034
+003E:  MOVLW  73
+0040:  MOVWF  00
+0042:  DECFSZ 00,F
+0044:  BRA    0042
+0046:  NOP   
+0048:  DECFSZ FEF,F
+004A:  BRA    0030
+004C:  RETURN 0
 .................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
 .................... #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=0,  BAUD=1000000, BITS=16, DATA_HOLD=1) 
-0038:  MOVF   0E,W
-003A:  SUBLW  10
-003C:  BZ    0048
-003E:  MOVWF  0F
-0040:  RLCF   0C,F
-0042:  RLCF   0D,F
-0044:  DECFSZ 0F,F
-0046:  BRA    0040
-0048:  BSF    F94.4
-004A:  BCF    F94.5
-004C:  BCF    F94.3
-004E:  BCF    F8B.3
-0050:  MOVFF  0E,0F
-0054:  BTFSS  0D.7
-0056:  BCF    F8B.5
-0058:  BTFSC  0D.7
-005A:  BSF    F8B.5
-005C:  RLCF   0C,F
-005E:  RLCF   0D,F
-0060:  MOVLW  05
-0062:  MOVWF  10
-0064:  DECFSZ 10,F
-0066:  BRA    0064
-0068:  BSF    F8B.3
-006A:  NOP   
-006C:  RLCF   01,F
-006E:  RLCF   02,F
-0070:  BTFSS  F82.4
-0072:  BCF    01.0
-0074:  BTFSC  F82.4
-0076:  BSF    01.0
-0078:  BCF    F8B.3
-007A:  DECFSZ 0F,F
-007C:  BRA    0054
-007E:  RETURN 0
+004E:  MOVF   0E,W
+0050:  SUBLW  10
+0052:  BZ    005E
+0054:  MOVWF  0F
+0056:  RLCF   0C,F
+0058:  RLCF   0D,F
+005A:  DECFSZ 0F,F
+005C:  BRA    0056
+005E:  BSF    F94.4
+0060:  BCF    F94.5
+0062:  BCF    F94.3
+0064:  BCF    F8B.3
+0066:  MOVFF  0E,0F
+006A:  BTFSS  0D.7
+006C:  BCF    F8B.5
+006E:  BTFSC  0D.7
+0070:  BSF    F8B.5
+0072:  RLCF   0C,F
+0074:  RLCF   0D,F
+0076:  MOVLW  05
+0078:  MOVWF  10
+007A:  DECFSZ 10,F
+007C:  BRA    007A
+007E:  BSF    F8B.3
+0080:  NOP   
+0082:  RLCF   01,F
+0084:  RLCF   02,F
+0086:  BTFSS  F82.4
+0088:  BCF    01.0
+008A:  BTFSC  F82.4
+008C:  BSF    01.0
+008E:  BCF    F8B.3
+0090:  DECFSZ 0F,F
+0092:  BRA    006A
+0094:  RETURN 0
 ....................  
 .................... #define SLAVE_SELECT PIN_A5 
 .................... #include "as5040.h" 
@@ -141,178 +141,178 @@ CCS PCH C Compiler, Version 4.124, 5967               25-mar-13 16:10
 ....................  
 .................... void setup_encoder(long new_setup, int zero_mark) { 
 .................... 	if (new_setup & direction_mask) { 
-0080:  ANDLW  00
-0082:  MOVWF  00
-0084:  MOVF   0A,W
-0086:  ANDLW  80
-0088:  MOVWF  03
-008A:  MOVF   00,W
-008C:  IORWF  03,W
-008E:  BZ    0092
+0096:  ANDLW  00
+0098:  MOVWF  00
+009A:  MOVF   0A,W
+009C:  ANDLW  80
+009E:  MOVWF  03
+00A0:  MOVF   00,W
+00A2:  IORWF  03,W
+00A4:  BZ    00A8
 .................... 		setup |= direction_mask; 
-0090:  BSF    05.7
+00A6:  BSF    05.7
 .................... 	} 
 .................... 	if (new_setup & index_mask) { 
-0092:  MOVF   09,W
-0094:  ANDLW  10
-0096:  MOVWF  00
-0098:  CLRF   03
-009A:  MOVF   00,W
-009C:  IORWF  03,W
-009E:  BZ    00A2
+00A8:  MOVF   09,W
+00AA:  ANDLW  10
+00AC:  MOVWF  00
+00AE:  CLRF   03
+00B0:  MOVF   00,W
+00B2:  IORWF  03,W
+00B4:  BZ    00B8
 .................... 		setup |= index_mask; 
-00A0:  BSF    04.4
+00B6:  BSF    04.4
 .................... 	} 
 .................... 	if (new_setup & mode_mask) { 
-00A2:  MOVF   09,W
-00A4:  ANDLW  03
-00A6:  MOVWF  00
-00A8:  CLRF   03
-00AA:  MOVF   00,W
-00AC:  IORWF  03,W
-00AE:  BZ    00E8
+00B8:  MOVF   09,W
+00BA:  ANDLW  03
+00BC:  MOVWF  00
+00BE:  CLRF   03
+00C0:  MOVF   00,W
+00C2:  IORWF  03,W
+00C4:  BZ    00FE
 .................... 		switch (new_setup & mode_mask) { 
-00B0:  MOVF   09,W
-00B2:  ANDLW  03
-00B4:  MOVWF  00
-00B6:  CLRF   03
-00B8:  MOVF   03,W
-00BA:  BNZ   00C2
-00BC:  MOVLW  01
-00BE:  SUBWF  00,W
-00C0:  BZ    00D8
-00C2:  MOVF   03,W
-00C4:  BNZ   00CC
-00C6:  MOVLW  02
-00C8:  SUBWF  00,W
-00CA:  BZ    00DC
-00CC:  MOVF   03,W
-00CE:  BNZ   00D6
-00D0:  MOVLW  03
-00D2:  SUBWF  00,W
-00D4:  BZ    00E0
-00D6:  BRA    00E6
+00C6:  MOVF   09,W
+00C8:  ANDLW  03
+00CA:  MOVWF  00
+00CC:  CLRF   03
+00CE:  MOVF   03,W
+00D0:  BNZ   00D8
+00D2:  MOVLW  01
+00D4:  SUBWF  00,W
+00D6:  BZ    00EE
+00D8:  MOVF   03,W
+00DA:  BNZ   00E2
+00DC:  MOVLW  02
+00DE:  SUBWF  00,W
+00E0:  BZ    00F2
+00E2:  MOVF   03,W
+00E4:  BNZ   00EC
+00E6:  MOVLW  03
+00E8:  SUBWF  00,W
+00EA:  BZ    00F6
+00EC:  BRA    00FC
 .................... 		case quatrature_mode: 
 .................... 			setup |= quatrature_mode; 
-00D8:  BSF    04.0
+00EE:  BSF    04.0
 .................... 			break; 
-00DA:  BRA    00E8
+00F0:  BRA    00FE
 .................... 		case step_direction_mode: 
 .................... 			setup |= step_direction_mode; 
-00DC:  BSF    04.1
+00F2:  BSF    04.1
 .................... 			break; 
-00DE:  BRA    00E8
+00F4:  BRA    00FE
 .................... 		case brushless_dc_mode: 
 .................... 			setup |= brushless_dc_mode; 
-00E0:  MOVLW  03
-00E2:  IORWF  04,F
+00F6:  MOVLW  03
+00F8:  IORWF  04,F
 .................... 			break; 
-00E4:  BRA    00E8
+00FA:  BRA    00FE
 .................... 		default: 
 .................... 			break; 
-00E6:  BRA    00E8
+00FC:  BRA    00FE
 .................... 		} 
 .................... 	} 
 .................... 	if (new_setup & resolution_mask) { 
-00E8:  MOVF   09,W
-00EA:  ANDLW  0C
-00EC:  MOVWF  00
-00EE:  CLRF   03
-00F0:  MOVF   00,W
-00F2:  IORWF  03,W
-00F4:  BZ    012E
+00FE:  MOVF   09,W
+0100:  ANDLW  0C
+0102:  MOVWF  00
+0104:  CLRF   03
+0106:  MOVF   00,W
+0108:  IORWF  03,W
+010A:  BZ    0144
 .................... 		switch (new_setup & resolution_mask) { 
-00F6:  MOVF   09,W
-00F8:  ANDLW  0C
-00FA:  MOVWF  00
-00FC:  CLRF   03
-00FE:  MOVF   03,W
-0100:  BNZ   0108
-0102:  MOVLW  04
-0104:  SUBWF  00,W
-0106:  BZ    011E
-0108:  MOVF   03,W
-010A:  BNZ   0112
-010C:  MOVLW  08
-010E:  SUBWF  00,W
-0110:  BZ    0122
-0112:  MOVF   03,W
-0114:  BNZ   011C
-0116:  MOVLW  0C
-0118:  SUBWF  00,W
-011A:  BZ    0126
-011C:  BRA    012C
+010C:  MOVF   09,W
+010E:  ANDLW  0C
+0110:  MOVWF  00
+0112:  CLRF   03
+0114:  MOVF   03,W
+0116:  BNZ   011E
+0118:  MOVLW  04
+011A:  SUBWF  00,W
+011C:  BZ    0134
+011E:  MOVF   03,W
+0120:  BNZ   0128
+0122:  MOVLW  08
+0124:  SUBWF  00,W
+0126:  BZ    0138
+0128:  MOVF   03,W
+012A:  BNZ   0132
+012C:  MOVLW  0C
+012E:  SUBWF  00,W
+0130:  BZ    013C
+0132:  BRA    0142
 .................... 		case _9_bit_resolution: 
 .................... 			setup |= _9_bit_resolution; 
-011E:  BSF    04.2
+0134:  BSF    04.2
 .................... 			break; 
-0120:  BRA    012E
+0136:  BRA    0144
 .................... 		case _8_bit_resolution: 
 .................... 			setup |= _8_bit_resolution; 
-0122:  BSF    04.3
+0138:  BSF    04.3
 .................... 			break; 
-0124:  BRA    012E
+013A:  BRA    0144
 .................... 		case _7_bit_resolution: 
 .................... 			setup |= _7_bit_resolution; 
-0126:  MOVLW  0C
-0128:  IORWF  04,F
+013C:  MOVLW  0C
+013E:  IORWF  04,F
 .................... 			break; 
-012A:  BRA    012E
+0140:  BRA    0144
 .................... 		default: 
 .................... 			break; 
-012C:  BRA    012E
+0142:  BRA    0144
 .................... 		} 
 .................... 	} 
 .................... 	if (zero_mark && zero_mark < 1024) { 
-012E:  MOVF   0B,F
-0130:  BZ    0158
+0144:  MOVF   0B,F
+0146:  BZ    016E
 .................... 		setup |= (long) zero_mark << 5; 
-0132:  CLRF   0D
-0134:  RLCF   0B,W
-0136:  MOVWF  02
-0138:  RLCF   0D,W
-013A:  MOVWF  03
-013C:  RLCF   02,F
-013E:  RLCF   03,F
-0140:  RLCF   02,F
-0142:  RLCF   03,F
-0144:  RLCF   02,F
-0146:  RLCF   03,F
-0148:  RLCF   02,F
-014A:  RLCF   03,F
-014C:  MOVLW  E0
-014E:  ANDWF  02,F
-0150:  MOVF   02,W
-0152:  IORWF  04,F
-0154:  MOVF   03,W
-0156:  IORWF  05,F
+0148:  CLRF   0D
+014A:  RLCF   0B,W
+014C:  MOVWF  02
+014E:  RLCF   0D,W
+0150:  MOVWF  03
+0152:  RLCF   02,F
+0154:  RLCF   03,F
+0156:  RLCF   02,F
+0158:  RLCF   03,F
+015A:  RLCF   02,F
+015C:  RLCF   03,F
+015E:  RLCF   02,F
+0160:  RLCF   03,F
+0162:  MOVLW  E0
+0164:  ANDWF  02,F
+0166:  MOVF   02,W
+0168:  IORWF  04,F
+016A:  MOVF   03,W
+016C:  IORWF  05,F
 .................... 	} 
 .................... 	output_high(DO_PIN); 
-0158:  BCF    F94.5
-015A:  BSF    F8B.5
+016E:  BCF    F94.5
+0170:  BSF    F8B.5
 .................... 	delay_us(2); 
-015C:  MOVLW  09
-015E:  MOVWF  00
-0160:  DECFSZ 00,F
-0162:  BRA    0160
-0164:  BRA    0166
+0172:  MOVLW  09
+0174:  MOVWF  00
+0176:  DECFSZ 00,F
+0178:  BRA    0176
+017A:  BRA    017C
 .................... 	output_high(SLAVE_SELECT); 
-0166:  BCF    F92.5
-0168:  BSF    F89.5
+017C:  BCF    F92.5
+017E:  BSF    F89.5
 .................... 	delay_us(2); 
-016A:  MOVLW  09
-016C:  MOVWF  00
-016E:  DECFSZ 00,F
-0170:  BRA    016E
-0172:  BRA    0174
+0180:  MOVLW  09
+0182:  MOVWF  00
+0184:  DECFSZ 00,F
+0186:  BRA    0184
+0188:  BRA    018A
 .................... 	spi_xfer(setup); 
-0174:  MOVFF  05,0D
-0178:  MOVFF  04,0C
-017C:  MOVLW  10
-017E:  MOVWF  0E
-0180:  RCALL  0038
+018A:  MOVFF  05,0D
+018E:  MOVFF  04,0C
+0192:  MOVLW  10
+0194:  MOVWF  0E
+0196:  RCALL  004E
 .................... } 
-0182:  GOTO   039E (RETURN)
+0198:  GOTO   03B0 (RETURN)
 ....................  
 .................... void clear_bus(void) { 
 .................... 	output_low(SLAVE_SELECT); 
@@ -338,138 +338,149 @@ CCS PCH C Compiler, Version 4.124, 5967               25-mar-13 16:10
 ....................  
 .................... void main(void) { 
 *
-0348:  CLRF   FF8
-034A:  BCF    FD0.7
-034C:  CLRF   FEA
-034E:  CLRF   FE9
-0350:  BSF    FB8.3
-0352:  MOVLW  1A
-0354:  MOVWF  FAF
-0356:  MOVLW  06
-0358:  MOVWF  FB0
-035A:  MOVLW  A6
-035C:  MOVWF  FAC
-035E:  MOVLW  90
-0360:  MOVWF  FAB
-0362:  BSF    F94.4
-0364:  BCF    F94.5
-0366:  BCF    F94.3
-0368:  BCF    F8B.3
-036A:  MOVLW  00
-036C:  MOVWF  F7E
-036E:  BCF    FC1.4
-0370:  BCF    FC1.5
-0372:  MOVF   F7F,W
-0374:  ANDLW  E0
-0376:  MOVWF  F7F
-0378:  BCF    F79.5
-037A:  BCF    F79.4
-037C:  CLRF   F7A
-037E:  CLRF   F7B
-0380:  CLRF   04
-0382:  CLRF   05
-0384:  CLRF   06
-0386:  CLRF   07
-0388:  CLRF   08
+035A:  CLRF   FF8
+035C:  BCF    FD0.7
+035E:  CLRF   FEA
+0360:  CLRF   FE9
+0362:  BSF    FB8.3
+0364:  MOVLW  1A
+0366:  MOVWF  FAF
+0368:  MOVLW  06
+036A:  MOVWF  FB0
+036C:  MOVLW  A6
+036E:  MOVWF  FAC
+0370:  MOVLW  90
+0372:  MOVWF  FAB
+0374:  BSF    F94.4
+0376:  BCF    F94.5
+0378:  BCF    F94.3
+037A:  BCF    F8B.3
+037C:  MOVLW  00
+037E:  MOVWF  F7E
+0380:  BCF    FC1.4
+0382:  BCF    FC1.5
+0384:  MOVF   F7F,W
+0386:  ANDLW  E0
+0388:  MOVWF  F7F
+038A:  BCF    F79.5
+038C:  BCF    F79.4
+038E:  CLRF   F7A
+0390:  CLRF   F7B
+0392:  CLRF   04
+0394:  CLRF   05
+0396:  CLRF   06
+0398:  CLRF   07
+039A:  CLRF   08
 .................... 	delay_ms(100); 
-038A:  MOVLW  64
-038C:  MOVWF  0A
-038E:  RCALL  0010
+039C:  MOVLW  64
+039E:  MOVWF  0A
+03A0:  RCALL  0026
 .................... //	output_low(SLAVE_SELECT); 
 .................... //	setup_ccp1(CCP_CAPTURE_RE); 
 .................... //	setup_timer_1(T1_INTERNAL | T1_DIV_BY_8); 
 .................... //	enable_interrupts(INT_CCP1); 
 .................... //	enable_interrupts(GLOBAL); 
 .................... 	zero = 0; 
-0390:  CLRF   08
+03A2:  CLRF   08
 .................... //	clear_bus(); 
 .................... //	delay_ms(100); 
 .................... 	setup_encoder(clockwise | _7_bit_resolution | step_direction_mode, zero); 
-0392:  CLRF   0A
-0394:  MOVLW  0E
-0396:  MOVWF  09
-0398:  MOVFF  08,0B
-039C:  BRA    0080
+03A4:  CLRF   0A
+03A6:  MOVLW  0E
+03A8:  MOVWF  09
+03AA:  MOVFF  08,0B
+03AE:  BRA    0096
 .................... //	clear_bus(); 
-.................... //	printf("\fProg: 7 bits zero %d", zero); 
+.................... 	printf("\fProg: 7 bits zero %d", zero); 
+03B0:  MOVLW  04
+03B2:  MOVWF  FF6
+03B4:  MOVLW  00
+03B6:  MOVWF  FF7
+03B8:  MOVLW  13
+03BA:  MOVWF  0C
+03BC:  RCALL  019C
+03BE:  MOVFF  08,0C
+03C2:  MOVLW  1F
+03C4:  MOVWF  0D
+03C6:  RCALL  01E4
 .................... //	delay_ms(1000); 
 .................... 	while (TRUE) { 
 .................... 		output_low(SLAVE_SELECT); 
-039E:  BCF    F92.5
-03A0:  BCF    F89.5
+03C8:  BCF    F92.5
+03CA:  BCF    F89.5
 .................... 		leitura = spi_xfer(0); 
-03A2:  CLRF   0D
-03A4:  CLRF   0C
-03A6:  MOVLW  10
-03A8:  MOVWF  0E
-03AA:  RCALL  0038
-03AC:  MOVF   01,W
-03AE:  MOVFF  02,07
-03B2:  MOVFF  01,06
+03CC:  CLRF   0D
+03CE:  CLRF   0C
+03D0:  MOVLW  10
+03D2:  MOVWF  0E
+03D4:  RCALL  004E
+03D6:  MOVF   01,W
+03D8:  MOVFF  02,07
+03DC:  MOVFF  01,06
 .................... 		output_high(SLAVE_SELECT); 
-03B6:  BCF    F92.5
-03B8:  BSF    F89.5
+03E0:  BCF    F92.5
+03E2:  BSF    F89.5
 .................... 		printf("\f%Lu  -  %d", leitura >> 6, (int) (leitura & 0x0006) >> 1); 
-03BA:  RRCF   07,W
-03BC:  MOVWF  0A
-03BE:  RRCF   06,W
-03C0:  MOVWF  09
-03C2:  RRCF   0A,F
-03C4:  RRCF   09,F
-03C6:  RRCF   0A,F
-03C8:  RRCF   09,F
-03CA:  RRCF   0A,F
-03CC:  RRCF   09,F
-03CE:  RRCF   0A,F
-03D0:  RRCF   09,F
-03D2:  RRCF   0A,F
-03D4:  RRCF   09,F
-03D6:  MOVLW  03
-03D8:  ANDWF  0A,F
-03DA:  MOVF   06,W
-03DC:  ANDLW  06
-03DE:  MOVWF  00
-03E0:  CLRF   03
-03E2:  MOVF   00,W
-03E4:  BCF    FD8.0
-03E6:  RRCF   00,W
-03E8:  MOVWF  0B
-03EA:  MOVLW  0C
-03EC:  BTFSS  F9E.4
-03EE:  BRA    03EC
-03F0:  MOVWF  FAD
-03F2:  MOVLW  10
-03F4:  MOVWF  FE9
-03F6:  MOVFF  0A,0D
-03FA:  MOVFF  09,0C
-03FE:  BRA    0186
-0400:  MOVLW  08
-0402:  MOVWF  FF6
-0404:  MOVLW  00
-0406:  MOVWF  FF7
-0408:  MOVLW  05
-040A:  MOVWF  0C
-040C:  BRA    022C
-040E:  MOVFF  0B,0C
-0412:  MOVLW  1F
-0414:  MOVWF  0D
-0416:  BRA    0276
+03E4:  RRCF   07,W
+03E6:  MOVWF  0A
+03E8:  RRCF   06,W
+03EA:  MOVWF  09
+03EC:  RRCF   0A,F
+03EE:  RRCF   09,F
+03F0:  RRCF   0A,F
+03F2:  RRCF   09,F
+03F4:  RRCF   0A,F
+03F6:  RRCF   09,F
+03F8:  RRCF   0A,F
+03FA:  RRCF   09,F
+03FC:  RRCF   0A,F
+03FE:  RRCF   09,F
+0400:  MOVLW  03
+0402:  ANDWF  0A,F
+0404:  MOVF   06,W
+0406:  ANDLW  06
+0408:  MOVWF  00
+040A:  CLRF   03
+040C:  MOVF   00,W
+040E:  BCF    FD8.0
+0410:  RRCF   00,W
+0412:  MOVWF  0B
+0414:  MOVLW  0C
+0416:  BTFSS  F9E.4
+0418:  BRA    0416
+041A:  MOVWF  FAD
+041C:  MOVLW  10
+041E:  MOVWF  FE9
+0420:  MOVFF  0A,0D
+0424:  MOVFF  09,0C
+0428:  BRA    02B4
+042A:  MOVLW  1E
+042C:  MOVWF  FF6
+042E:  MOVLW  00
+0430:  MOVWF  FF7
+0432:  MOVLW  05
+0434:  MOVWF  0C
+0436:  RCALL  019C
+0438:  MOVFF  0B,0C
+043C:  MOVLW  1F
+043E:  MOVWF  0D
+0440:  RCALL  01E4
 .................... //		printf("\nPer: %Lu", periodo); 
 .................... 		delay_ms(500); 
-0418:  MOVLW  02
-041A:  MOVWF  09
-041C:  MOVLW  FA
-041E:  MOVWF  0A
-0420:  RCALL  0010
-0422:  DECFSZ 09,F
-0424:  BRA    041C
+0442:  MOVLW  02
+0444:  MOVWF  09
+0446:  MOVLW  FA
+0448:  MOVWF  0A
+044A:  RCALL  0026
+044C:  DECFSZ 09,F
+044E:  BRA    0446
 .................... //		delay_us(2); 
 .................... //		delay_cycles(8); 
 .................... //		output_toggle(PIN_C7); 
 .................... 	} 
-0426:  BRA    039E
+0450:  BRA    03C8
 .................... } 
-0428:  SLEEP 
+0452:  SLEEP 
 
 Configuration Fuses:
    Word  1: C600   H4 FCMEN IESO

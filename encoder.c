@@ -32,7 +32,7 @@ void main(void) {
 //	delay_ms(100);
 	setup_encoder(clockwise | _7_bit_resolution | step_direction_mode, zero);
 //	clear_bus();
-//	printf("\fProg: 7 bits zero %d", zero);
+	printf("\fProg: 7 bits zero %d", zero);
 //	delay_ms(1000);
 	while (TRUE) {
 		output_low(SLAVE_SELECT);
