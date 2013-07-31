@@ -8,27 +8,27 @@
 #ifndef AS5040_H_
 #define AS5040_H_
 
-#define clockwise 0x0000
-#define couter_clockwise 0x8000
-#define direction_mask 0x8000
-#define zero_mask 0x7FE0
-#define index1 0x0000
-#define index3 0x0010
-#define index_mask 0x0010
-#define quatrature_mode	0x0001
-#define step_direction_mode 0x0002
+#define clockwise			0x0000
+#define couter_clockwise	0x8000
+#define direction_mask		0x8000
+#define zero_mask			0x7FE0
+#define index1				0x0000
+#define index3				0x0010
+#define index_mask			0x0010
+#define quatrature_mode		0x0001
+#define step_direction_mode	0x0002
 #define brushless_dc_mode	0x0003
-#define mode_mask 0x0003
-#define _10_bit_resolution 0x0000
-#define _9_bit_resolution 0x0004
-#define _8_bit_resolution 0x0008
-#define _7_bit_resolution 0x000C
-#define resolution_mask	0x000C
-#define DO_PIN PIN_C5
-#define DI_PIN PIN_C4
-#define CLK_PIN PIN_C3
+#define mode_mask			0x0003
+#define _10_bit_resolution	0x0000
+#define _9_bit_resolution	0x0004
+#define _8_bit_resolution	0x0008
+#define _7_bit_resolution	0x000C
+#define resolution_mask		0x000C
+#define DO_PIN				PIN_C5
+#define DI_PIN				PIN_C4
+#define CLK_PIN				PIN_C3
 #ifndef SLAVE_SELECT
-#define SLAVE_SELECT PIN_A5
+#define SLAVE_SELECT		PIN_A5
 #endif
 
 static long setup;
