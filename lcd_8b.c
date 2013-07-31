@@ -41,28 +41,22 @@ void lcd_pos_xy(byte x, byte y) {
 
 void lcd (char c) {
 	
-  switch(c) {
-		
+  switch(c) {		
     case '\f' :
 			lcd_envia_byte(0, 1);
 			delay_ms(2);
-			break;
-		
-    case '\n' :
-		
+			break;		
+    case '\n' :		
     case '\r' :
 			lcd_pos_xy(1, 2);
-			break;
-		
+			break;		
     case '\b' :
 			lcd_envia_byte(0, 0x10);
-			break;
-		
+			break;		
     default :
 			lcd_envia_byte(1, c);
       break;
-	}
-  
+	}  
 }  
 
 void lcd_init() {
