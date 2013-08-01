@@ -19,18 +19,22 @@
 #define bto_desce	PIN_D1
 
 static long aux, cont, cont2;
-static short ctrl, trigSobe, trigDesce;
+static short ctrl, sentido;
+
+#INT_TIMER0
+void timer0_isr(void) {
+	clear_interrupt(INT_TIMER0);
+	sentido = input_state(canalB);
+}
 
 void main(void) {
 	set_timer0(0);
-	setup_timer_0(T0_EXT_H_TO_L);
+	setup_timer_0(T0_EXT_L_TO_H);
+	enable_interrupts(INT_TIMER0);
+	enable_interrupts(GLOBAL);
 	while (TRUE) {
 		if (!input(bto_sobe) && input(bto_desce)) {
-			if (trigSobe) {
-				trigSobe = FALSE;
-				set_timer0(cont);
-			}
-			cont = get_timer0();
+			cont = cont2 + get_timer0();
 		}
 		if (!input(bto_desce) && input(bto_sobe)) {
 			cont = cont2 - get_timer0();
@@ -38,13 +42,11 @@ void main(void) {
 		if (input(bto_sobe) && input(bto_desce) && ctrl) {
 			set_timer0(0);
 			cont2 = cont;
-			trigSobe = TRUE;
-			trigDesce = TRUE;
 		} else
 			ctrl = TRUE;
 		if (cont != aux) {
 			aux = cont;
-			printf("\f%Lu %Lu", cont, cont2);
+			printf("\f%Lu %Lu %d", cont, cont2, sentido);
 		}
 	}
 }
