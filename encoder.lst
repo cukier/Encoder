@@ -1,0 +1,48 @@
+CCS PCH C Compiler, Version 4.140, 21898               01-ago-13 10:31
+
+               Filename:   D:\Eletronica\Projetos\Encoder\encoder.lst
+
+               ROM used:   40 bytes (0%)
+                           Largest free fragment is 32728
+               RAM used:   4 (0%) at main() level
+                           4 (0%) worst case
+               Stack:     0 locations
+
+*
+0000:  GOTO   0004
+.................... #include<18F45K20.h> 
+.................... //////// Standard Header file for the PIC18F45K20 device //////////////// 
+.................... #device PIC18F45K20 
+.................... #list 
+....................  
+....................  
+.................... int main(void) { 
+0004:  CLRF   FF8
+0006:  BCF    FD0.7
+0008:  CLRF   FEA
+000A:  CLRF   FE9
+000C:  MOVLW  00
+000E:  MOVWF  F7E
+0010:  BCF    FC1.4
+0012:  BCF    FC1.5
+0014:  MOVF   F7F,W
+0016:  ANDLW  E0
+0018:  MOVWF  F7F
+001A:  BCF    F79.5
+001C:  BCF    F79.4
+001E:  CLRF   F7A
+0020:  CLRF   F7B
+.................... 	return 0; 
+0022:  MOVLW  00
+0024:  MOVWF  01
+.................... } 
+0026:  SLEEP 
+
+Configuration Fuses:
+   Word  1: CF00   FCMEN IESO
+   Word  2: 1E1E   PUT BROWNOUT BORV18 NOWDT WDT32768
+   Word  3: 8F00   CCP2C1 PBADEN LPT1OSC HFOFST MCLR
+   Word  4: 0081   STVREN NOLVP NOXINST NODEBUG
+   Word  5: C00F   NOPROTECT NOCPB NOCPD
+   Word  6: E00F   NOWRT NOWRTC NOWRTB NOWRTD
+   Word  7: 400F   NOEBTR NOEBTRB
