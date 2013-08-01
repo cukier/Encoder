@@ -1,6 +1,6 @@
-CCS PCH C Compiler, Version 4.140, 21898               31-jul-13 11:27
+CCS PCH C Compiler, Version 4.140, 21898               01-ago-13 10:59
 
-               Filename:   E:\Eletronica\Projetos\Encoder\encoder.lst
+               Filename:   D:\Eletronica\Projetos\Encoder\encoder.lst
 
                ROM used:   782 bytes (2%)
                            Largest free fragment is 31986
@@ -39,45 +39,7 @@ CCS PCH C Compiler, Version 4.140, 21898               31-jul-13 11:27
 024A:  BRA    0230
 024C:  GOTO   0306 (RETURN)
 .................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
-.................... #use spi(MASTER, DI=PIN_C4, DO=PIN_C5, CLK=PIN_C3, MODE=0,  BAUD=1000000, BITS=16, DATA_HOLD=1) 
-*
-0010:  MOVF   0C,W
-0012:  SUBLW  10
-0014:  BZ    0020
-0016:  MOVWF  0D
-0018:  RLCF   0A,F
-001A:  RLCF   0B,F
-001C:  DECFSZ 0D,F
-001E:  BRA    0018
-0020:  BSF    F94.4
-0022:  BCF    F94.5
-0024:  BCF    F94.3
-0026:  BCF    F8B.3
-0028:  MOVFF  0C,0D
-002C:  BTFSS  0B.7
-002E:  BCF    F8B.5
-0030:  BTFSC  0B.7
-0032:  BSF    F8B.5
-0034:  RLCF   0A,F
-0036:  RLCF   0B,F
-0038:  MOVLW  05
-003A:  MOVWF  0E
-003C:  DECFSZ 0E,F
-003E:  BRA    003C
-0040:  BSF    F8B.3
-0042:  NOP   
-0044:  RLCF   01,F
-0046:  RLCF   02,F
-0048:  BTFSS  F82.4
-004A:  BCF    01.0
-004C:  BTFSC  F82.4
-004E:  BSF    01.0
-0050:  BCF    F8B.3
-0052:  DECFSZ 0D,F
-0054:  BRA    002C
-0056:  GOTO   0068 (RETURN)
 ....................  
-.................... #define SLAVE_SELECT PIN_A5 
 .................... #include "as5040.h" 
 .................... /* 
 ....................  * as5040.h 
@@ -105,12 +67,48 @@ CCS PCH C Compiler, Version 4.140, 21898               31-jul-13 11:27
 .................... #define _8_bit_resolution	0x0008 
 .................... #define _7_bit_resolution	0x000C 
 .................... #define resolution_mask		0x000C 
-.................... #define DO_PIN				PIN_C5 
-.................... #define DI_PIN				PIN_C4 
-.................... #define CLK_PIN				PIN_C3 
-.................... #ifndef SLAVE_SELECT 
-.................... #define SLAVE_SELECT		PIN_A5 
-.................... #endif 
+.................... #define DO_PIN				PIN_C0 
+.................... #define DI_PIN				PIN_A4 
+.................... #define CLK_PIN				PIN_B4 
+.................... #define SLAVE_SELECT		PIN_B5 
+....................  
+.................... #use spi(MASTER, DI=DI_PIN, DO=DO_PIN, CLK=CLK_PIN, MODE=0,  BAUD=1000000, BITS=16, DATA_HOLD=1) 
+*
+0010:  MOVF   0C,W
+0012:  SUBLW  10
+0014:  BZ    0020
+0016:  MOVWF  0D
+0018:  RLCF   0A,F
+001A:  RLCF   0B,F
+001C:  DECFSZ 0D,F
+001E:  BRA    0018
+0020:  BSF    F92.4
+0022:  BCF    F94.0
+0024:  BCF    F93.4
+0026:  BCF    F8A.4
+0028:  MOVFF  0C,0D
+002C:  BTFSS  0B.7
+002E:  BCF    F8B.0
+0030:  BTFSC  0B.7
+0032:  BSF    F8B.0
+0034:  RLCF   0A,F
+0036:  RLCF   0B,F
+0038:  MOVLW  05
+003A:  MOVWF  0E
+003C:  DECFSZ 0E,F
+003E:  BRA    003C
+0040:  BSF    F8A.4
+0042:  NOP   
+0044:  RLCF   01,F
+0046:  RLCF   02,F
+0048:  BTFSS  F80.4
+004A:  BCF    01.0
+004C:  BTFSC  F80.4
+004E:  BSF    01.0
+0050:  BCF    F8A.4
+0052:  DECFSZ 0D,F
+0054:  BRA    002C
+0056:  GOTO   0068 (RETURN)
 ....................  
 .................... static long setup; 
 ....................  
@@ -202,8 +200,8 @@ CCS PCH C Compiler, Version 4.140, 21898               31-jul-13 11:27
 .................... 	long saida; 
 ....................  
 .................... 	output_low(SLAVE_SELECT); 
-005A:  BCF    F92.5
-005C:  BCF    F89.5
+005A:  BCF    F93.5
+005C:  BCF    F8A.5
 .................... 	saida = spi_xfer(0); 
 005E:  CLRF   0B
 0060:  CLRF   0A
@@ -214,8 +212,8 @@ CCS PCH C Compiler, Version 4.140, 21898               31-jul-13 11:27
 006A:  MOVFF  02,09
 006E:  MOVFF  01,08
 .................... 	output_high(SLAVE_SELECT); 
-0072:  BCF    F92.5
-0074:  BSF    F89.5
+0072:  BCF    F93.5
+0074:  BSF    F8A.5
 ....................  
 .................... 	return saida; 
 0076:  MOVFF  08,01
@@ -238,10 +236,10 @@ CCS PCH C Compiler, Version 4.140, 21898               31-jul-13 11:27
 0264:  MOVWF  FAC
 0266:  MOVLW  90
 0268:  MOVWF  FAB
-026A:  BSF    F94.4
-026C:  BCF    F94.5
-026E:  BCF    F94.3
-0270:  BCF    F8B.3
+026A:  BSF    F92.4
+026C:  BCF    F94.0
+026E:  BCF    F93.4
+0270:  BCF    F8A.4
 0272:  MOVLW  00
 0274:  MOVWF  F7E
 0276:  BCF    FC1.4
@@ -258,8 +256,8 @@ CCS PCH C Compiler, Version 4.140, 21898               31-jul-13 11:27
 028C:  CLRF   06
 028E:  CLRF   07
 .................... 	output_high(SLAVE_SELECT); 
-0290:  BCF    F92.5
-0292:  BSF    F89.5
+0290:  BCF    F93.5
+0292:  BSF    F8A.5
 .................... 	while (TRUE) { 
 .................... 		leitura = readDevice(); 
 0294:  BRA    005A

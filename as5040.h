@@ -24,12 +24,12 @@
 #define _8_bit_resolution	0x0008
 #define _7_bit_resolution	0x000C
 #define resolution_mask		0x000C
-#define DO_PIN				PIN_C5
-#define DI_PIN				PIN_C4
-#define CLK_PIN				PIN_C3
-#ifndef SLAVE_SELECT
-#define SLAVE_SELECT		PIN_A5
-#endif
+#define DO_PIN				PIN_C0
+#define DI_PIN				PIN_A4
+#define CLK_PIN				PIN_B4
+#define SLAVE_SELECT		PIN_B5
+
+#use spi(MASTER, DI=DI_PIN, DO=DO_PIN, CLK=CLK_PIN, MODE=0,  BAUD=1000000, BITS=16, DATA_HOLD=1)
 
 static long setup;
 
