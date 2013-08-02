@@ -6,6 +6,11 @@
  * 	VD - VDD
  */
 
+/*Quando encoder não programado:
+ * nr maximo de pulsos...
+ * no pino T0CLK : 128
+ * no pino EXT:	255
+ */
 #include <18F45k20.h>
 
 #fuses H4
@@ -19,8 +24,8 @@
 #define bto_sobe	PIN_D0
 #define bto_desce	PIN_D1
 
-static signed long cont, cont2, aux, pulsosRecebido;
-static long sentido, sentido1;
+static signed long cont, cont1, aux, pulsosRecebido;
+static long sentido, sentido1, max, contTmr, contTmrMax;
 static short ctrl;
 static int estado, lido, primeiraLeitura, segundaLeitura, cmd;
 
@@ -58,28 +63,46 @@ void ext_isr(void) {
 		sentido1++;
 }
 
+#INT_EXT1
+void ext1_isr(void) {
+	clear_interrupt(INT_EXT1);
+	sentido = sentido1 = contTmr = 0;
+	cont = cont1 = 0;
+	set_timer0(0);
+}
+
 void main(void) {
 	set_timer0(0);
 	setup_timer_0(T0_EXT_L_TO_H);
 	port_b_pullups(TRUE);
 	clear_interrupt(INT_EXT);
-	enable_interrupts(INT_EXT_L2H);
+	clear_interrupt(INT_EXT1);
+	enable_interrupts(INT_EXT_H2L);
+	enable_interrupts(INT_EXT1_H2L);
 	enable_interrupts(GLOBAL);
 	while (TRUE) {
-		if (!input(bto_sobe) && input(bto_desce)) {
-			cont = cont2 + get_timer0();
-		}
-		if (!input(bto_desce) && input(bto_sobe)) {
-			cont = cont2 - get_timer0();
-		}
-		if (input(bto_sobe) && input(bto_desce) && ctrl) {
-			set_timer0(0);
-			cont2 = cont;
-		} else
-			ctrl = TRUE;
-		if (aux != cont) {
-			aux = cont;
-			printf("\f%Lu %Lu\n%Ld %Ld", cont, cont2, sentido, sentido1);
+		contTmr = get_timer0();
+		/*if (!input(bto_sobe) && input(bto_desce)) {
+		 cont = cont1 + get_timer0();
+		 }
+		 if (!input(bto_desce) && input(bto_sobe)) {
+		 cont = cont1 - get_timer0();
+		 }
+		 if (input(bto_sobe) && input(bto_desce) && ctrl) {
+		 set_timer0(0);
+		 cont1 = cont;
+		 } else
+		 ctrl = TRUE;*/
+		if (aux != contTmr + sentido + sentido1) {
+			aux = contTmr + sentido + sentido1;
+			if (contTmrMax < contTmr)
+				contTmrMax = contTmr;
+			if (max < sentido)
+				max = sentido;
+			else if (max < sentido1)
+				max = sentido1;
+			printf("\f%Lu %Lu\n%Ld %Ld %Ld", contTmr, contTmrMax, sentido,
+					sentido1, max);
 		}
 	}
 }
