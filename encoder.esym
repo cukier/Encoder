@@ -1,7 +1,7 @@
 D G "__PCH__" 0 0 ""4.140""
 D G "__DEVICE__" 0 0 ""
 D G "__DATE__" 0 0 ""01-ago-13""
-D G "__TIME__" 0 0 ""15:00:40"" "Ligacao do Encoder"
+D G "__TIME__" 0 0 ""16:15:06"" "Ligacao do Encoder"
 C G "" 0 1 1 "*"
 C G "" 0 1 1 "*"
 C G "" 0 1 1 "*"
@@ -323,18 +323,19 @@ d G "INT_RB4" 1 485 "0x110F208"
 d G "INT_RB5" 1 486 "0x120F208"
 d G "INT_RB6" 1 487 "0x140F208"
 d G "INT_RB7" 1 488 "0x180F208"
-D G "canalA" 0 15 "PIN_A4"
-D G "canalB" 0 16 "PIN_B4"
-D G "canalZ" 0 17 "PIN_B5"
-D G "bto_sobe" 0 18 "PIN_D0"
-D G "bto_desce" 0 19 "PIN_D1"
-V G "aux" 0 21 "int16"
-V G "cont" 0 21 "int16"
-V G "cont2" 0 21 "int16"
-V G "ctrl" 0 22 "int1"
-V G "sentido" 0 22 "int1"
-F G "timer0_isr" 0 25 "void()"
-F G "MAIN" 0 30 "void()"
+D G "canalA" 0 16 "PIN_A4"
+D G "canalB" 0 17 "PIN_B4"
+D G "canalZ" 0 18 "PIN_B5"
+D G "bto_sobe" 0 19 "PIN_D0"
+D G "bto_desce" 0 20 "PIN_D1"
+V G "cont" 0 22 "sint16"
+V G "cont2" 0 22 "sint16"
+V G "cont3" 0 22 "sint16"
+V G "aux" 0 22 "sint16"
+V G "ctrl" 0 23 "int1"
+V G "sentido" 0 23 "int1"
+V G "estado" 0 24 "int8"
+V G "lido" 0 24 "int8"
 F B "reset_cpu" 0 0
 F B "abs" 1 0
 F B "sleep" 0 1
@@ -479,3 +480,11 @@ F B "gets" 1 3
 F B "kbhit" 0 1
 F B "set_uart_speed" 1 3
 F B "setup_uart" 1 3
+F B "i2c_read" 0 2
+F B "i2c_write" 1 2
+F B "i2c_start" 0 2
+F B "i2c_stop" 0 1
+F B "i2c_isr_state" 0 1
+F B "i2c_slaveaddr" 1 2
+F B "i2c_poll" 0 1
+F B "i2c_init" 1 2
