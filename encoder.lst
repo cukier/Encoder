@@ -1,9 +1,9 @@
-CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:21
+CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:47
 
                Filename:   D:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used:   1114 bytes (3%)
-                           Largest free fragment is 31650
+               ROM used:   1102 bytes (3%)
+                           Largest free fragment is 31662
                RAM used:   52 (3%) at main() level
                            61 (4%) worst case
                Stack:     3 worst case (1 in main + 2 for interrupts)
@@ -260,7 +260,7 @@ CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:21
 0348:  MOVF   FD6,W
 034A:  MOVWF  27
 034C:  MOVFF  FD7,28
-.................... 		/*		if (!input(bto_sobe) && input(bto_desce)) { 
+.................... 		/*if (!input(bto_sobe) && input(bto_desce)) { 
 .................... 		 cont = cont1 + get_timer0(); 
 .................... 		 } 
 .................... 		 if (!input(bto_desce) && input(bto_sobe)) { 
@@ -290,7 +290,7 @@ CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:21
 036E:  MOVF   03,W
 0370:  SUBWF  1E,W
 0372:  BTFSC  FD8.2
-0374:  BRA    045A
+0374:  BRA    044E
 .................... 			aux = contTmr + sentido + sentido1; 
 0376:  MOVF   21,W
 0378:  ADDWF  27,W
@@ -305,7 +305,7 @@ CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:21
 038A:  ADDWFC 33,W
 038C:  MOVFF  01,1D
 0390:  MOVWF  1E
-.................... 			contTmrMax = (contTmrMax < contTmr) ? contTmr : contTmrMax; 
+.................... 			if (contTmrMax < contTmr) 
 0392:  MOVF   2A,W
 0394:  SUBWF  28,W
 0396:  BNC   03A8
@@ -313,90 +313,87 @@ CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:21
 039A:  MOVF   27,W
 039C:  SUBWF  29,W
 039E:  BC    03A8
-03A0:  MOVFF  28,03
-03A4:  MOVF   27,W
-03A6:  BRA    03AE
-03A8:  MOVFF  2A,03
-03AC:  MOVF   29,W
-03AE:  MOVWF  29
-03B0:  MOVFF  03,2A
+.................... 				contTmrMax = contTmr; 
+03A0:  MOVFF  28,2A
+03A4:  MOVFF  27,29
 .................... 			max = (max < sentido) ? sentido : (max < sentido1) ? sentido1 : max; 
-03B4:  MOVF   26,W
-03B6:  SUBWF  22,W
-03B8:  BNC   03CA
-03BA:  BNZ   03C2
-03BC:  MOVF   21,W
-03BE:  SUBWF  25,W
-03C0:  BC    03CA
-03C2:  MOVFF  22,03
-03C6:  MOVF   21,W
-03C8:  BRA    03E6
-03CA:  MOVF   26,W
-03CC:  SUBWF  24,W
-03CE:  BNC   03E0
-03D0:  BNZ   03D8
-03D2:  MOVF   23,W
-03D4:  SUBWF  25,W
-03D6:  BC    03E0
-03D8:  MOVFF  24,03
-03DC:  MOVF   23,W
-03DE:  BRA    03E6
-03E0:  MOVFF  26,03
-03E4:  MOVF   25,W
-03E6:  MOVWF  25
-03E8:  MOVFF  03,26
+03A8:  MOVF   26,W
+03AA:  SUBWF  22,W
+03AC:  BNC   03BE
+03AE:  BNZ   03B6
+03B0:  MOVF   21,W
+03B2:  SUBWF  25,W
+03B4:  BC    03BE
+03B6:  MOVFF  22,03
+03BA:  MOVF   21,W
+03BC:  BRA    03DA
+03BE:  MOVF   26,W
+03C0:  SUBWF  24,W
+03C2:  BNC   03D4
+03C4:  BNZ   03CC
+03C6:  MOVF   23,W
+03C8:  SUBWF  25,W
+03CA:  BC    03D4
+03CC:  MOVFF  24,03
+03D0:  MOVF   23,W
+03D2:  BRA    03DA
+03D4:  MOVFF  26,03
+03D8:  MOVF   25,W
+03DA:  MOVWF  25
+03DC:  MOVFF  03,26
+....................  
 .................... 			printf("\f%Lu %Lu\n%Ld %Ld %Ld", contTmr, contTmrMax, sentido, 
 .................... 					sentido1, max); 
-03EC:  MOVLW  0C
-03EE:  BTFSS  F9E.4
-03F0:  BRA    03EE
-03F2:  MOVWF  FAD
-03F4:  MOVLW  10
-03F6:  MOVWF  FE9
-03F8:  MOVFF  28,33
-03FC:  MOVFF  27,32
-0400:  RCALL  0140
-0402:  MOVLW  20
-0404:  BTFSS  F9E.4
-0406:  BRA    0404
-0408:  MOVWF  FAD
-040A:  MOVLW  10
-040C:  MOVWF  FE9
-040E:  MOVFF  2A,33
-0412:  MOVFF  29,32
-0416:  RCALL  0140
-0418:  MOVLW  0A
-041A:  BTFSS  F9E.4
-041C:  BRA    041A
-041E:  MOVWF  FAD
-0420:  MOVLW  10
-0422:  MOVWF  FE9
-0424:  MOVFF  22,33
-0428:  MOVFF  21,32
-042C:  RCALL  01E4
-042E:  MOVLW  20
-0430:  BTFSS  F9E.4
-0432:  BRA    0430
-0434:  MOVWF  FAD
-0436:  MOVLW  10
-0438:  MOVWF  FE9
-043A:  MOVFF  24,33
-043E:  MOVFF  23,32
-0442:  RCALL  01E4
-0444:  MOVLW  20
-0446:  BTFSS  F9E.4
-0448:  BRA    0446
-044A:  MOVWF  FAD
-044C:  MOVLW  10
-044E:  MOVWF  FE9
-0450:  MOVFF  26,33
-0454:  MOVFF  25,32
-0458:  RCALL  01E4
+03E0:  MOVLW  0C
+03E2:  BTFSS  F9E.4
+03E4:  BRA    03E2
+03E6:  MOVWF  FAD
+03E8:  MOVLW  10
+03EA:  MOVWF  FE9
+03EC:  MOVFF  28,33
+03F0:  MOVFF  27,32
+03F4:  RCALL  0140
+03F6:  MOVLW  20
+03F8:  BTFSS  F9E.4
+03FA:  BRA    03F8
+03FC:  MOVWF  FAD
+03FE:  MOVLW  10
+0400:  MOVWF  FE9
+0402:  MOVFF  2A,33
+0406:  MOVFF  29,32
+040A:  RCALL  0140
+040C:  MOVLW  0A
+040E:  BTFSS  F9E.4
+0410:  BRA    040E
+0412:  MOVWF  FAD
+0414:  MOVLW  10
+0416:  MOVWF  FE9
+0418:  MOVFF  22,33
+041C:  MOVFF  21,32
+0420:  RCALL  01E4
+0422:  MOVLW  20
+0424:  BTFSS  F9E.4
+0426:  BRA    0424
+0428:  MOVWF  FAD
+042A:  MOVLW  10
+042C:  MOVWF  FE9
+042E:  MOVFF  24,33
+0432:  MOVFF  23,32
+0436:  RCALL  01E4
+0438:  MOVLW  20
+043A:  BTFSS  F9E.4
+043C:  BRA    043A
+043E:  MOVWF  FAD
+0440:  MOVLW  10
+0442:  MOVWF  FE9
+0444:  MOVFF  26,33
+0448:  MOVFF  25,32
+044C:  RCALL  01E4
 .................... 		} 
 .................... 	} 
-045A:  BRA    0348
+044E:  BRA    0348
 .................... } 
-045C:  SLEEP 
+0450:  SLEEP 
 
 Configuration Fuses:
    Word  1: C600   H4 FCMEN IESO
