@@ -11,6 +11,7 @@
  * no pino T0CLK : 128
  * no pino EXT:	255
  */
+
 #include <18F45k20.h>
 
 #fuses H4
@@ -54,30 +55,10 @@ void ssp_interrupt() {
 	}
 }
 
-#INT_EXT
-void ext_isr(void) {
-	clear_interrupt(INT_EXT);
-	if (input_state(canalB))
-		sentido++;
-	else
-		sentido1++;
-}
-
-#INT_EXT1
-void ext1_isr(void) {
-	clear_interrupt(INT_EXT1);
-	sentido = sentido1 = contTmr = 0;
-	cont = cont1 = 0;
-	set_timer0(0);
-}
-
 void main(void) {
 	set_timer0(0);
-	setup_timer_0(T0_EXT_L_TO_H);
+	setup_timer_1(T1_EXTERNAL);
 	port_b_pullups(TRUE);
-	clear_interrupt(INT_EXT);
-	clear_interrupt(INT_EXT1);
-	enable_interrupts(INT_EXT_H2L);
 	enable_interrupts(INT_EXT1_H2L);
 	enable_interrupts(GLOBAL);
 	while (TRUE) {
