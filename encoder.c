@@ -78,7 +78,10 @@ void main(void) {
 			aux = contTmr + sentido + sentido1;
 			if (contTmrMax < contTmr)
 				contTmrMax = contTmr;
-			max = (max < sentido) ? sentido : (max < sentido1) ? sentido1 : max;
+			if (max < sentido)
+				max = sentido;
+			else if (max < sentido1)
+				max = sentido1;
 
 			printf("\f%Lu %Lu\n%Ld %Ld %Ld", contTmr, contTmrMax, sentido,
 					sentido1, max);

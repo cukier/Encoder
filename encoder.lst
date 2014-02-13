@@ -1,9 +1,9 @@
-CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:47
+CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:52
 
                Filename:   D:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used:   1102 bytes (3%)
-                           Largest free fragment is 31662
+               ROM used:   1092 bytes (3%)
+                           Largest free fragment is 31672
                RAM used:   52 (3%) at main() level
                            61 (4%) worst case
                Stack:     3 worst case (1 in main + 2 for interrupts)
@@ -290,7 +290,7 @@ CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:47
 036E:  MOVF   03,W
 0370:  SUBWF  1E,W
 0372:  BTFSC  FD8.2
-0374:  BRA    044E
+0374:  BRA    0444
 .................... 			aux = contTmr + sentido + sentido1; 
 0376:  MOVF   21,W
 0378:  ADDWF  27,W
@@ -316,84 +316,82 @@ CCS PCH C Compiler, Version 4.140, 31805               13-fev-14 09:47
 .................... 				contTmrMax = contTmr; 
 03A0:  MOVFF  28,2A
 03A4:  MOVFF  27,29
-.................... 			max = (max < sentido) ? sentido : (max < sentido1) ? sentido1 : max; 
+.................... 			if (max < sentido) 
 03A8:  MOVF   26,W
 03AA:  SUBWF  22,W
-03AC:  BNC   03BE
+03AC:  BNC   03C0
 03AE:  BNZ   03B6
 03B0:  MOVF   21,W
 03B2:  SUBWF  25,W
-03B4:  BC    03BE
-03B6:  MOVFF  22,03
-03BA:  MOVF   21,W
-03BC:  BRA    03DA
-03BE:  MOVF   26,W
-03C0:  SUBWF  24,W
-03C2:  BNC   03D4
-03C4:  BNZ   03CC
-03C6:  MOVF   23,W
-03C8:  SUBWF  25,W
-03CA:  BC    03D4
-03CC:  MOVFF  24,03
-03D0:  MOVF   23,W
-03D2:  BRA    03DA
-03D4:  MOVFF  26,03
-03D8:  MOVF   25,W
-03DA:  MOVWF  25
-03DC:  MOVFF  03,26
+03B4:  BC    03C0
+.................... 				max = sentido; 
+03B6:  MOVFF  22,26
+03BA:  MOVFF  21,25
+.................... 			else if (max < sentido1) 
+03BE:  BRA    03D6
+03C0:  MOVF   26,W
+03C2:  SUBWF  24,W
+03C4:  BNC   03D6
+03C6:  BNZ   03CE
+03C8:  MOVF   23,W
+03CA:  SUBWF  25,W
+03CC:  BC    03D6
+.................... 				max = sentido1; 
+03CE:  MOVFF  24,26
+03D2:  MOVFF  23,25
 ....................  
 .................... 			printf("\f%Lu %Lu\n%Ld %Ld %Ld", contTmr, contTmrMax, sentido, 
 .................... 					sentido1, max); 
-03E0:  MOVLW  0C
-03E2:  BTFSS  F9E.4
-03E4:  BRA    03E2
-03E6:  MOVWF  FAD
-03E8:  MOVLW  10
-03EA:  MOVWF  FE9
-03EC:  MOVFF  28,33
-03F0:  MOVFF  27,32
-03F4:  RCALL  0140
-03F6:  MOVLW  20
-03F8:  BTFSS  F9E.4
-03FA:  BRA    03F8
-03FC:  MOVWF  FAD
-03FE:  MOVLW  10
-0400:  MOVWF  FE9
-0402:  MOVFF  2A,33
-0406:  MOVFF  29,32
-040A:  RCALL  0140
-040C:  MOVLW  0A
-040E:  BTFSS  F9E.4
-0410:  BRA    040E
-0412:  MOVWF  FAD
-0414:  MOVLW  10
-0416:  MOVWF  FE9
-0418:  MOVFF  22,33
-041C:  MOVFF  21,32
-0420:  RCALL  01E4
-0422:  MOVLW  20
-0424:  BTFSS  F9E.4
-0426:  BRA    0424
-0428:  MOVWF  FAD
-042A:  MOVLW  10
-042C:  MOVWF  FE9
-042E:  MOVFF  24,33
-0432:  MOVFF  23,32
-0436:  RCALL  01E4
-0438:  MOVLW  20
-043A:  BTFSS  F9E.4
-043C:  BRA    043A
-043E:  MOVWF  FAD
-0440:  MOVLW  10
-0442:  MOVWF  FE9
-0444:  MOVFF  26,33
-0448:  MOVFF  25,32
-044C:  RCALL  01E4
+03D6:  MOVLW  0C
+03D8:  BTFSS  F9E.4
+03DA:  BRA    03D8
+03DC:  MOVWF  FAD
+03DE:  MOVLW  10
+03E0:  MOVWF  FE9
+03E2:  MOVFF  28,33
+03E6:  MOVFF  27,32
+03EA:  RCALL  0140
+03EC:  MOVLW  20
+03EE:  BTFSS  F9E.4
+03F0:  BRA    03EE
+03F2:  MOVWF  FAD
+03F4:  MOVLW  10
+03F6:  MOVWF  FE9
+03F8:  MOVFF  2A,33
+03FC:  MOVFF  29,32
+0400:  RCALL  0140
+0402:  MOVLW  0A
+0404:  BTFSS  F9E.4
+0406:  BRA    0404
+0408:  MOVWF  FAD
+040A:  MOVLW  10
+040C:  MOVWF  FE9
+040E:  MOVFF  22,33
+0412:  MOVFF  21,32
+0416:  RCALL  01E4
+0418:  MOVLW  20
+041A:  BTFSS  F9E.4
+041C:  BRA    041A
+041E:  MOVWF  FAD
+0420:  MOVLW  10
+0422:  MOVWF  FE9
+0424:  MOVFF  24,33
+0428:  MOVFF  23,32
+042C:  RCALL  01E4
+042E:  MOVLW  20
+0430:  BTFSS  F9E.4
+0432:  BRA    0430
+0434:  MOVWF  FAD
+0436:  MOVLW  10
+0438:  MOVWF  FE9
+043A:  MOVFF  26,33
+043E:  MOVFF  25,32
+0442:  RCALL  01E4
 .................... 		} 
 .................... 	} 
-044E:  BRA    0348
+0444:  BRA    0348
 .................... } 
-0450:  SLEEP 
+0446:  SLEEP 
 
 Configuration Fuses:
    Word  1: C600   H4 FCMEN IESO
