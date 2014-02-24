@@ -25,10 +25,13 @@
 #define bto_sobe	PIN_D0
 #define bto_desce	PIN_D1
 #define bto_maual	PIN_A4
-
+#define cmd_sobe	1
+#define cmd_desce	2
+#define cmd_manual	3
+#define cmd_parar	4
 #define debounce	100
 
-short ctrl, a, b, c;
+short ctrl;
 int cont = 0;
 char str[32];
 
@@ -40,29 +43,47 @@ short check_bto(int bto) {
 	return FALSE;
 }
 
+int controle_btos(void) {
+	short a, b, c;
+	int ret = 0;
+
+	a = check_bto(bto_sobe);
+	b = check_bto(bto_desce);
+	c = check_bto(bto_maual);
+
+	if (a && ctrl) {
+		ctrl = FALSE;
+		strcpy(str, "Pressionado Bto\nSobe");
+		ret = cmd_sobe;
+	} else if (b && ctrl) {
+		ctrl = FALSE;
+		strcpy(str, "Pressionado Bto\nDesce");
+		ret = cmd_desce;
+	} else if (c && ctrl) {
+		ctrl = FALSE;
+		strcpy(str, "Pressionado Bto\nManual");
+		ret = cmd_manual;
+	} else if (!(a || b || c) && !ctrl) {
+		ctrl = TRUE;
+		strcpy(str, "Botoes Soltos\n");
+		ret = cmd_parar;
+	}
+
+	return ret;
+}
+
 int main(void) {
+
+	int cmd = 0;
 
 	delay_ms(300);
 
 	while (TRUE) {
-		a = check_bto(bto_sobe);
-		b = check_bto(bto_desce);
-		c = check_bto(bto_maual);
-		if (a && ctrl) {
-			ctrl = FALSE;
-			strcpy(str, "Pressionado Bto\nSobe");
-		} else if (b && ctrl) {
-			ctrl = FALSE;
-			strcpy(str, "Pressionado Bto\nDesce");
-		} else if (c && ctrl) {
-			ctrl = FALSE;
-			strcpy(str, "Pressionado Bto\nManual");
-		} else if (!(a || b || c) && !ctrl) {
-			ctrl = TRUE;
-			strcpy(str, "Botoes Soltos\n");
+		cmd = controle_btos();
+		if (cmd) {
+			printf("\f%s %u %d", str, cont++, cmd);
+			delay_ms(500);
 		}
-		printf("\f%s %u", str, cont++);
-		delay_ms(500);
 	}
 
 	return 0;

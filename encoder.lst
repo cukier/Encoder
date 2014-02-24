@@ -1,15 +1,15 @@
-CCS PCH C Compiler, Version 4.140, 31805               17-fev-14 12:07
+CCS PCH C Compiler, Version 4.140, 31805               17-fev-14 14:54
 
                Filename:   D:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used:   896 bytes (3%)
-                           Largest free fragment is 31872
+               ROM used:   1132 bytes (3%)
+                           Largest free fragment is 31636
                RAM used:   40 (3%) at main() level
-                           44 (3%) worst case
-               Stack:     2 locations
+                           49 (3%) worst case
+               Stack:     3 locations
 
 *
-0000:  GOTO   0244
+0000:  GOTO   03C4
 .................... /*Ligacao do Encoder 
 ....................  * 	MR - A 
 ....................  * 	VM - B 
@@ -34,7 +34,7 @@ CCS PCH C Compiler, Version 4.140, 31805               17-fev-14 12:07
 .................... #use delay(crystal=16MHz, clock=64MHz) 
 *
 0098:  CLRF   FEA
-009A:  MOVLW  27
+009A:  MOVLW  2A
 009C:  MOVWF  FE9
 009E:  MOVF   FEF,W
 00A0:  BZ    00BE
@@ -62,50 +62,53 @@ CCS PCH C Compiler, Version 4.140, 31805               17-fev-14 12:07
 .................... #define bto_sobe	PIN_D0 
 .................... #define bto_desce	PIN_D1 
 .................... #define bto_maual	PIN_A4 
-....................  
+.................... #define cmd_sobe	1 
+.................... #define cmd_desce	2 
+.................... #define cmd_manual	3 
+.................... #define cmd_parar	4 
 .................... #define debounce	100 
 ....................  
-.................... short ctrl, a, b, c; 
+.................... short ctrl; 
 .................... int cont = 0; 
 .................... char str[32]; 
 ....................  
 .................... short check_bto(int bto) { 
 .................... 	if (!input(bto)) { 
 *
-012C:  MOVFF  26,27
+012C:  MOVFF  29,2A
 0130:  MOVLW  01
-0132:  MOVWF  28
+0132:  MOVWF  2B
 0134:  MOVLW  0F
-0136:  MOVWF  2A
+0136:  MOVWF  2D
 0138:  MOVLW  92
-013A:  MOVWF  29
+013A:  MOVWF  2C
 013C:  RCALL  00C0
-013E:  MOVFF  26,27
+013E:  MOVFF  29,2A
 0142:  MOVLW  0F
-0144:  MOVWF  29
+0144:  MOVWF  2C
 0146:  MOVLW  80
-0148:  MOVWF  28
+0148:  MOVWF  2B
 014A:  RCALL  00FE
 014C:  BTFSC  01.0
 014E:  BRA    0180
 .................... 		delay_ms(debounce); 
 0150:  MOVLW  64
-0152:  MOVWF  27
+0152:  MOVWF  2A
 0154:  RCALL  0098
 .................... 		return !input(bto); 
-0156:  MOVFF  26,27
+0156:  MOVFF  29,2A
 015A:  MOVLW  01
-015C:  MOVWF  28
+015C:  MOVWF  2B
 015E:  MOVLW  0F
-0160:  MOVWF  2A
+0160:  MOVWF  2D
 0162:  MOVLW  92
-0164:  MOVWF  29
+0164:  MOVWF  2C
 0166:  RCALL  00C0
-0168:  MOVFF  26,27
+0168:  MOVFF  29,2A
 016C:  MOVLW  0F
-016E:  MOVWF  29
+016E:  MOVWF  2C
 0170:  MOVLW  80
-0172:  MOVWF  28
+0172:  MOVWF  2B
 0174:  RCALL  00FE
 0176:  MOVLW  00
 0178:  BTFSS  01.0
@@ -119,191 +122,233 @@ CCS PCH C Compiler, Version 4.140, 31805               17-fev-14 12:07
 .................... } 
 0184:  RETURN 0
 ....................  
+.................... int controle_btos(void) { 
+0186:  CLRF   28
+.................... 	short a, b, c; 
+.................... 	int ret = 0; 
+....................  
+.................... 	a = check_bto(bto_sobe); 
+0188:  MOVLW  18
+018A:  MOVWF  29
+018C:  RCALL  012C
+018E:  BCF    27.0
+0190:  BTFSC  01.0
+0192:  BSF    27.0
+.................... 	b = check_bto(bto_desce); 
+0194:  MOVLW  19
+0196:  MOVWF  29
+0198:  RCALL  012C
+019A:  BCF    27.1
+019C:  BTFSC  01.0
+019E:  BSF    27.1
+.................... 	c = check_bto(bto_maual); 
+01A0:  MOVLW  04
+01A2:  MOVWF  29
+01A4:  RCALL  012C
+01A6:  BCF    27.2
+01A8:  BTFSC  01.0
+01AA:  BSF    27.2
+....................  
+.................... 	if (a && ctrl) { 
+01AC:  BTFSS  27.0
+01AE:  BRA    01D2
+01B0:  BTFSS  04.0
+01B2:  BRA    01D2
+.................... 		ctrl = FALSE; 
+01B4:  BCF    04.0
+.................... 		strcpy(str, "Pressionado Bto\nSobe"); 
+01B6:  CLRF   FEA
+01B8:  MOVLW  06
+01BA:  MOVWF  FE9
+01BC:  MOVLW  00
+01BE:  RCALL  0004
+01C0:  TBLRD*-
+01C2:  TBLRD*+
+01C4:  MOVF   FF5,W
+01C6:  MOVWF  FEE
+01C8:  IORLW  00
+01CA:  BNZ   01C2
+.................... 		ret = cmd_sobe; 
+01CC:  MOVLW  01
+01CE:  MOVWF  28
+.................... 	} else if (b && ctrl) { 
+01D0:  BRA    024A
+01D2:  BTFSS  27.1
+01D4:  BRA    01F8
+01D6:  BTFSS  04.0
+01D8:  BRA    01F8
+.................... 		ctrl = FALSE; 
+01DA:  BCF    04.0
+.................... 		strcpy(str, "Pressionado Bto\nDesce"); 
+01DC:  CLRF   FEA
+01DE:  MOVLW  06
+01E0:  MOVWF  FE9
+01E2:  MOVLW  00
+01E4:  RCALL  002A
+01E6:  TBLRD*-
+01E8:  TBLRD*+
+01EA:  MOVF   FF5,W
+01EC:  MOVWF  FEE
+01EE:  IORLW  00
+01F0:  BNZ   01E8
+.................... 		ret = cmd_desce; 
+01F2:  MOVLW  02
+01F4:  MOVWF  28
+.................... 	} else if (c && ctrl) { 
+01F6:  BRA    024A
+01F8:  BTFSS  27.2
+01FA:  BRA    021E
+01FC:  BTFSS  04.0
+01FE:  BRA    021E
+.................... 		ctrl = FALSE; 
+0200:  BCF    04.0
+.................... 		strcpy(str, "Pressionado Bto\nManual"); 
+0202:  CLRF   FEA
+0204:  MOVLW  06
+0206:  MOVWF  FE9
+0208:  MOVLW  00
+020A:  RCALL  0050
+020C:  TBLRD*-
+020E:  TBLRD*+
+0210:  MOVF   FF5,W
+0212:  MOVWF  FEE
+0214:  IORLW  00
+0216:  BNZ   020E
+.................... 		ret = cmd_manual; 
+0218:  MOVLW  03
+021A:  MOVWF  28
+.................... 	} else if (!(a || b || c) && !ctrl) { 
+021C:  BRA    024A
+021E:  BTFSC  27.0
+0220:  BRA    024A
+0222:  BTFSC  27.1
+0224:  BRA    024A
+0226:  BTFSC  27.2
+0228:  BRA    024A
+022A:  BTFSC  04.0
+022C:  BRA    024A
+.................... 		ctrl = TRUE; 
+022E:  BSF    04.0
+.................... 		strcpy(str, "Botoes Soltos\n"); 
+0230:  CLRF   FEA
+0232:  MOVLW  06
+0234:  MOVWF  FE9
+0236:  MOVLW  00
+0238:  RCALL  0078
+023A:  TBLRD*-
+023C:  TBLRD*+
+023E:  MOVF   FF5,W
+0240:  MOVWF  FEE
+0242:  IORLW  00
+0244:  BNZ   023C
+.................... 		ret = cmd_parar; 
+0246:  MOVLW  04
+0248:  MOVWF  28
+.................... 	} 
+....................  
+.................... 	return ret; 
+024A:  MOVFF  28,01
+.................... } 
+024E:  GOTO   0414 (RETURN)
+....................  
 .................... int main(void) { 
 *
-0244:  CLRF   FF8
-0246:  BCF    FD0.7
-0248:  CLRF   FEA
-024A:  CLRF   FE9
-024C:  BSF    FB8.3
-024E:  MOVLW  82
-0250:  MOVWF  FAF
-0252:  MOVLW  06
-0254:  MOVWF  FB0
-0256:  MOVLW  A6
-0258:  MOVWF  FAC
-025A:  MOVLW  90
-025C:  MOVWF  FAB
-025E:  BSF    F94.3
-0260:  BSF    F94.4
-0262:  CLRF   FC8
-0264:  MOVLW  36
-0266:  MOVWF  FC6
-0268:  BSF    FC5.0
-026A:  CLRF   05
-026C:  MOVLW  00
-026E:  MOVWF  F7E
-0270:  BCF    FC1.4
-0272:  BCF    FC1.5
-0274:  MOVF   F7F,W
-0276:  ANDLW  E0
-0278:  MOVWF  F7F
-027A:  BCF    F79.5
-027C:  BCF    F79.4
-027E:  CLRF   F7A
-0280:  CLRF   F7B
+03C4:  CLRF   FF8
+03C6:  BCF    FD0.7
+03C8:  CLRF   FEA
+03CA:  CLRF   FE9
+03CC:  BSF    FB8.3
+03CE:  MOVLW  82
+03D0:  MOVWF  FAF
+03D2:  MOVLW  06
+03D4:  MOVWF  FB0
+03D6:  MOVLW  A6
+03D8:  MOVWF  FAC
+03DA:  MOVLW  90
+03DC:  MOVWF  FAB
+03DE:  BSF    F94.3
+03E0:  BSF    F94.4
+03E2:  CLRF   FC8
+03E4:  MOVLW  36
+03E6:  MOVWF  FC6
+03E8:  BSF    FC5.0
+03EA:  CLRF   05
+03EC:  MOVLW  00
+03EE:  MOVWF  F7E
+03F0:  BCF    FC1.4
+03F2:  BCF    FC1.5
+03F4:  MOVF   F7F,W
+03F6:  ANDLW  E0
+03F8:  MOVWF  F7F
+03FA:  BCF    F79.5
+03FC:  BCF    F79.4
+03FE:  CLRF   F7A
+0400:  CLRF   F7B
+0402:  CLRF   26
+....................  
+.................... 	int cmd = 0; 
 ....................  
 .................... 	delay_ms(300); 
-0282:  MOVLW  02
-0284:  MOVWF  26
-0286:  MOVLW  96
-0288:  MOVWF  27
-028A:  RCALL  0098
-028C:  DECFSZ 26,F
-028E:  BRA    0286
+0404:  MOVLW  02
+0406:  MOVWF  27
+0408:  MOVLW  96
+040A:  MOVWF  2A
+040C:  RCALL  0098
+040E:  DECFSZ 27,F
+0410:  BRA    0408
 ....................  
 .................... 	while (TRUE) { 
-.................... 		a = check_bto(bto_sobe); 
-0290:  MOVLW  18
-0292:  MOVWF  26
-0294:  RCALL  012C
-0296:  BCF    04.1
-0298:  BTFSC  01.0
-029A:  BSF    04.1
-.................... 		b = check_bto(bto_desce); 
-029C:  MOVLW  19
-029E:  MOVWF  26
-02A0:  RCALL  012C
-02A2:  BCF    04.2
-02A4:  BTFSC  01.0
-02A6:  BSF    04.2
-.................... 		c = check_bto(bto_maual); 
-02A8:  MOVLW  04
-02AA:  MOVWF  26
-02AC:  RCALL  012C
-02AE:  BCF    04.3
-02B0:  BTFSC  01.0
-02B2:  BSF    04.3
-.................... 		if (a && ctrl) { 
-02B4:  BTFSS  04.1
-02B6:  BRA    02D6
-02B8:  BTFSS  04.0
-02BA:  BRA    02D6
-.................... 			ctrl = FALSE; 
-02BC:  BCF    04.0
-.................... 			strcpy(str, "Pressionado Bto\nSobe"); 
-02BE:  CLRF   FEA
-02C0:  MOVLW  06
-02C2:  MOVWF  FE9
-02C4:  MOVLW  00
-02C6:  RCALL  0004
-02C8:  TBLRD*-
-02CA:  TBLRD*+
-02CC:  MOVF   FF5,W
-02CE:  MOVWF  FEE
-02D0:  IORLW  00
-02D2:  BNZ   02CA
-.................... 		} else if (b && ctrl) { 
-02D4:  BRA    0342
-02D6:  BTFSS  04.2
-02D8:  BRA    02F8
-02DA:  BTFSS  04.0
-02DC:  BRA    02F8
-.................... 			ctrl = FALSE; 
-02DE:  BCF    04.0
-.................... 			strcpy(str, "Pressionado Bto\nDesce"); 
-02E0:  CLRF   FEA
-02E2:  MOVLW  06
-02E4:  MOVWF  FE9
-02E6:  MOVLW  00
-02E8:  RCALL  002A
-02EA:  TBLRD*-
-02EC:  TBLRD*+
-02EE:  MOVF   FF5,W
-02F0:  MOVWF  FEE
-02F2:  IORLW  00
-02F4:  BNZ   02EC
-.................... 		} else if (c && ctrl) { 
-02F6:  BRA    0342
-02F8:  BTFSS  04.3
-02FA:  BRA    031A
-02FC:  BTFSS  04.0
-02FE:  BRA    031A
-.................... 			ctrl = FALSE; 
-0300:  BCF    04.0
-.................... 			strcpy(str, "Pressionado Bto\nManual"); 
-0302:  CLRF   FEA
-0304:  MOVLW  06
-0306:  MOVWF  FE9
-0308:  MOVLW  00
-030A:  RCALL  0050
-030C:  TBLRD*-
-030E:  TBLRD*+
-0310:  MOVF   FF5,W
-0312:  MOVWF  FEE
-0314:  IORLW  00
-0316:  BNZ   030E
-.................... 		} else if (!(a || b || c) && !ctrl) { 
-0318:  BRA    0342
-031A:  BTFSC  04.1
-031C:  BRA    0342
-031E:  BTFSC  04.2
-0320:  BRA    0342
-0322:  BTFSC  04.3
-0324:  BRA    0342
-0326:  BTFSC  04.0
-0328:  BRA    0342
-.................... 			ctrl = TRUE; 
-032A:  BSF    04.0
-.................... 			strcpy(str, "Botoes Soltos\n"); 
-032C:  CLRF   FEA
-032E:  MOVLW  06
-0330:  MOVWF  FE9
-0332:  MOVLW  00
-0334:  RCALL  0078
-0336:  TBLRD*-
-0338:  TBLRD*+
-033A:  MOVF   FF5,W
-033C:  MOVWF  FEE
-033E:  IORLW  00
-0340:  BNZ   0338
+.................... 		cmd = controle_btos(); 
+0412:  BRA    0186
+0414:  MOVFF  01,26
+.................... 		if (cmd) { 
+0418:  MOVF   26,F
+041A:  BZ    0464
+.................... 			printf("\f%s %u %d", str, cont++, cmd); 
+041C:  MOVF   05,W
+041E:  INCF   05,F
+0420:  MOVWF  27
+0422:  MOVLW  0C
+0424:  BTFSS  F9E.4
+0426:  BRA    0424
+0428:  MOVWF  FAD
+042A:  CLRF   FEA
+042C:  MOVLW  06
+042E:  MOVWF  FE9
+0430:  BRA    0252
+0432:  MOVLW  20
+0434:  BTFSS  F9E.4
+0436:  BRA    0434
+0438:  MOVWF  FAD
+043A:  MOVFF  27,28
+043E:  MOVLW  1B
+0440:  MOVWF  29
+0442:  BRA    02A2
+0444:  MOVLW  20
+0446:  BTFSS  F9E.4
+0448:  BRA    0446
+044A:  MOVWF  FAD
+044C:  MOVFF  26,28
+0450:  MOVLW  18
+0452:  MOVWF  29
+0454:  BRA    0310
+.................... 			delay_ms(500); 
+0456:  MOVLW  02
+0458:  MOVWF  27
+045A:  MOVLW  FA
+045C:  MOVWF  2A
+045E:  RCALL  0098
+0460:  DECFSZ 27,F
+0462:  BRA    045A
 .................... 		} 
-.................... 		printf("\f%s %u", str, cont++); 
-0342:  MOVF   05,W
-0344:  INCF   05,F
-0346:  MOVWF  26
-0348:  MOVLW  0C
-034A:  BTFSS  F9E.4
-034C:  BRA    034A
-034E:  MOVWF  FAD
-0350:  CLRF   FEA
-0352:  MOVLW  06
-0354:  MOVWF  FE9
-0356:  BRA    0186
-0358:  MOVLW  20
-035A:  BTFSS  F9E.4
-035C:  BRA    035A
-035E:  MOVWF  FAD
-0360:  MOVFF  26,27
-0364:  MOVLW  1B
-0366:  MOVWF  28
-0368:  BRA    01D6
-.................... 		delay_ms(500); 
-036A:  MOVLW  02
-036C:  MOVWF  26
-036E:  MOVLW  FA
-0370:  MOVWF  27
-0372:  RCALL  0098
-0374:  DECFSZ 26,F
-0376:  BRA    036E
 .................... 	} 
-0378:  BRA    0290
+0464:  BRA    0412
 ....................  
 .................... 	return 0; 
-037A:  MOVLW  00
-037C:  MOVWF  01
+0466:  MOVLW  00
+0468:  MOVWF  01
 .................... } 
-037E:  SLEEP 
+046A:  SLEEP 
 
 Configuration Fuses:
    Word  1: C600   H4 FCMEN IESO
