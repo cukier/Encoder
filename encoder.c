@@ -32,6 +32,7 @@
 #define debounce	100
 
 short ctrl;
+short trigger = FALSE;
 int cont = 0;
 char str[32];
 
@@ -72,17 +73,30 @@ int controle_btos(void) {
 	return ret;
 }
 
+short f_trig(int pino) {
+
+}
+
 int main(void) {
 
 	int cmd = 0;
+	long cont_timer1, aux;
 
+	set_timer1(0);
+	setup_timer_1(T1_INTERNAL | T1_DIV_BY_1);
 	delay_ms(300);
 
 	while (TRUE) {
-		cmd = controle_btos();
-		if (cmd) {
-			printf("\f%s %u %d", str, cont++, cmd);
-			delay_ms(500);
+		cont_timer1 = get_timer1();
+		if (!input(canalZ)) {
+			set_timer1(0);
+			cont_timer1 = 0;
+		}
+		if (aux != cont_timer1) {
+			aux = cont_timer1;
+			printf("Timer 1: %lu\r\nAngulo: %.2f\n\r", cont_timer1,
+					(float) cont_timer1 / 1024 * 360);
+			delay_ms(1000);
 		}
 	}
 

@@ -1,7 +1,7 @@
 D G "__PCH__" 0 0 ""4.140""
 D G "__DEVICE__" 0 0 ""
-D G "__DATE__" 0 0 ""17-fev-14""
-D G "__TIME__" 0 0 ""14:54:14"" "Ligacao do Encoder"
+D G "__DATE__" 0 0 ""25-fev-14""
+D G "__TIME__" 0 0 ""08:07:23"" "Ligacao do Encoder"
 C G "" 0 1 1 "*"
 C G "" 0 1 1 "*"
 C G "" 0 1 1 "*"
@@ -349,6 +349,9 @@ V L "c" 0 47 "int1"
 V L "ret" 0 48 "int8"
 F G "MAIN" 0 75 "int8()"
 V L "cmd" 0 77 "int8"
+V L "cont_timer1" 0 78 "int16"
+V L "aux" 0 78 "int16"
+C L "MAIN" 0 86 3 "FUNCTION"
 F B "reset_cpu" 0 0
 F B "abs" 1 0
 F B "sleep" 0 1
