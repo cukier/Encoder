@@ -73,14 +73,14 @@ int controle_btos(void) {
 	return ret;
 }
 
-short f_trig(int pino) {
-
-}
+//short f_trig(int pino) {
+//
+//}
 
 int main(void) {
 
 	int cmd = 0;
-	long cont_timer1, aux;
+	long cont_timer1;
 
 	set_timer1(0);
 	setup_timer_1(T1_INTERNAL | T1_DIV_BY_1);
@@ -92,12 +92,9 @@ int main(void) {
 			set_timer1(0);
 			cont_timer1 = 0;
 		}
-		if (aux != cont_timer1) {
-			aux = cont_timer1;
-			printf("Timer 1: %lu\r\nAngulo: %.2f\n\r", cont_timer1,
-					(float) cont_timer1 / 1024 * 360);
-			delay_ms(1000);
-		}
+		printf("Timer 1: %lu\r\nAngulo: %.2f\n\r", cont_timer1,
+				(float) cont_timer1 / 1024 * 360);
+		delay_ms(1000);
 	}
 
 	return 0;

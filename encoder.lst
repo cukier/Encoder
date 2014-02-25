@@ -1,11 +1,11 @@
-CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 08:07
+CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 10:19
 
                Filename:   D:\Eletronica\Projetos\Encoder\encoder.lst
 
-               ROM used:   1846 bytes (6%)
-                           Largest free fragment is 30922
-               RAM used:   47 (3%) at main() level
-                           73 (5%) worst case
+               ROM used:   1842 bytes (6%)
+                           Largest free fragment is 30926
+               RAM used:   45 (3%) at main() level
+                           71 (5%) worst case
                Stack:     2 locations
 
 *
@@ -34,7 +34,7 @@ CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 08:07
 .................... #use delay(crystal=16MHz, clock=64MHz) 
 *
 0022:  CLRF   FEA
-0024:  MOVLW  2C
+0024:  MOVLW  2A
 0026:  MOVWF  FE9
 0028:  MOVF   FEF,W
 002A:  BZ    0048
@@ -69,6 +69,7 @@ CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 08:07
 .................... #define debounce	100 
 ....................  
 .................... short ctrl; 
+.................... short trigger = FALSE; 
 .................... int cont = 0; 
 .................... char str[32]; 
 ....................  
@@ -109,6 +110,10 @@ CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 08:07
 .................... 	return ret; 
 .................... } 
 ....................  
+.................... //short f_trig(int pino) { 
+.................... // 
+.................... //} 
+....................  
 .................... int main(void) { 
 *
 05E6:  CLRF   FF8
@@ -130,148 +135,145 @@ CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 08:07
 0606:  MOVLW  36
 0608:  MOVWF  FC6
 060A:  BSF    FC5.0
-060C:  CLRF   05
-060E:  MOVLW  00
-0610:  MOVWF  F7E
-0612:  BCF    FC1.4
-0614:  BCF    FC1.5
-0616:  MOVF   F7F,W
-0618:  ANDLW  E0
-061A:  MOVWF  F7F
-061C:  BCF    F79.5
-061E:  BCF    F79.4
-0620:  CLRF   F7A
-0622:  CLRF   F7B
-0624:  CLRF   26
+060C:  BCF    04.1
+060E:  CLRF   05
+0610:  MOVLW  00
+0612:  MOVWF  F7E
+0614:  BCF    FC1.4
+0616:  BCF    FC1.5
+0618:  MOVF   F7F,W
+061A:  ANDLW  E0
+061C:  MOVWF  F7F
+061E:  BCF    F79.5
+0620:  BCF    F79.4
+0622:  CLRF   F7A
+0624:  CLRF   F7B
+0626:  CLRF   26
 ....................  
 .................... 	int cmd = 0; 
-.................... 	long cont_timer1, aux; 
+.................... 	long cont_timer1; 
 ....................  
 .................... 	set_timer1(0); 
-0626:  CLRF   FCF
-0628:  CLRF   FCE
+0628:  CLRF   FCF
+062A:  CLRF   FCE
 .................... 	setup_timer_1(T1_INTERNAL | T1_DIV_BY_1); 
-062A:  MOVLW  85
-062C:  MOVWF  FCD
+062C:  MOVLW  85
+062E:  MOVWF  FCD
 .................... 	delay_ms(300); 
-062E:  MOVLW  02
-0630:  MOVWF  2B
-0632:  MOVLW  96
-0634:  MOVWF  2C
-0636:  RCALL  0022
-0638:  DECFSZ 2B,F
-063A:  BRA    0632
+0630:  MOVLW  02
+0632:  MOVWF  29
+0634:  MOVLW  96
+0636:  MOVWF  2A
+0638:  RCALL  0022
+063A:  DECFSZ 29,F
+063C:  BRA    0634
 ....................  
 .................... 	while (TRUE) { 
 .................... 		cont_timer1 = get_timer1(); 
-063C:  MOVF   FCE,W
-063E:  MOVWF  27
-0640:  MOVFF  FCF,28
-.................... //		if (cont_timer1 > 1024) { 
-.................... //			set_timer1(0); 
-.................... //			cont_timer1 = 0; 
-.................... //		} 
-.................... 		if (aux != cont_timer1) { 
-0644:  MOVF   27,W
-0646:  SUBWF  29,W
-0648:  BNZ   0650
-064A:  MOVF   28,W
-064C:  SUBWF  2A,W
-064E:  BZ    072E
-.................... 			aux = cont_timer1; 
-0650:  MOVFF  28,2A
-0654:  MOVFF  27,29
-.................... 			printf("Timer 1: %lu\r\nAngulo: %.2f\n\r", cont_timer1, 
-.................... 					(float) cont_timer1 / 1024 * 360); 
-0658:  MOVFF  28,2C
-065C:  MOVFF  27,2B
-0660:  BRA    004A
-0662:  MOVFF  00,2B
-0666:  MOVFF  01,2C
-066A:  MOVFF  02,2D
-066E:  MOVFF  03,2E
-0672:  MOVFF  03,32
-0676:  MOVFF  02,31
-067A:  MOVFF  01,30
-067E:  MOVFF  00,2F
-0682:  CLRF   36
-0684:  CLRF   35
-0686:  CLRF   34
-0688:  MOVLW  89
-068A:  MOVWF  33
-068C:  BRA    0082
-068E:  MOVFF  00,2B
-0692:  MOVFF  01,2C
-0696:  MOVFF  02,2D
-069A:  MOVFF  03,2E
-069E:  MOVFF  03,3F
-06A2:  MOVFF  02,3E
-06A6:  MOVFF  01,3D
-06AA:  MOVFF  00,3C
-06AE:  CLRF   43
-06B0:  CLRF   42
-06B2:  MOVLW  34
-06B4:  MOVWF  41
-06B6:  MOVLW  87
-06B8:  MOVWF  40
-06BA:  RCALL  01DE
-06BC:  MOVFF  00,2B
-06C0:  MOVFF  01,2C
-06C4:  MOVFF  02,2D
-06C8:  MOVFF  03,2E
-06CC:  MOVLW  04
-06CE:  MOVWF  FF6
-06D0:  MOVLW  00
-06D2:  MOVWF  FF7
-06D4:  MOVLW  09
-06D6:  MOVWF  2F
-06D8:  RCALL  02D0
-06DA:  MOVLW  10
-06DC:  MOVWF  FE9
-06DE:  MOVFF  28,30
-06E2:  MOVFF  27,2F
-06E6:  BRA    02F0
-06E8:  MOVLW  10
-06EA:  MOVWF  FF6
-06EC:  MOVLW  00
-06EE:  MOVWF  FF7
-06F0:  MOVLW  0A
-06F2:  MOVWF  2F
-06F4:  RCALL  02D0
-06F6:  MOVLW  89
-06F8:  MOVWF  FE9
-06FA:  MOVFF  2E,32
-06FE:  MOVFF  2D,31
-0702:  MOVFF  2C,30
-0706:  MOVFF  2B,2F
-070A:  MOVLW  02
-070C:  MOVWF  33
-070E:  BRA    0464
-0710:  MOVLW  0A
-0712:  BTFSS  F9E.4
-0714:  BRA    0712
-0716:  MOVWF  FAD
-0718:  MOVLW  0D
-071A:  BTFSS  F9E.4
-071C:  BRA    071A
-071E:  MOVWF  FAD
-.................... 			delay_ms(1000); 
-0720:  MOVLW  04
-0722:  MOVWF  2B
-0724:  MOVLW  FA
-0726:  MOVWF  2C
-0728:  RCALL  0022
-072A:  DECFSZ 2B,F
-072C:  BRA    0724
+063E:  MOVF   FCE,W
+0640:  MOVWF  27
+0642:  MOVFF  FCF,28
+.................... 		if (!input(canalZ)) { 
+0646:  BSF    F93.5
+0648:  BTFSC  F81.5
+064A:  BRA    0654
+.................... 			set_timer1(0); 
+064C:  CLRF   FCF
+064E:  CLRF   FCE
+.................... 			cont_timer1 = 0; 
+0650:  CLRF   28
+0652:  CLRF   27
 .................... 		} 
+.................... 		printf("Timer 1: %lu\r\nAngulo: %.2f\n\r", cont_timer1, 
+.................... 				(float) cont_timer1 / 1024 * 360); 
+0654:  MOVFF  28,2A
+0658:  MOVFF  27,29
+065C:  BRA    004A
+065E:  MOVFF  00,29
+0662:  MOVFF  01,2A
+0666:  MOVFF  02,2B
+066A:  MOVFF  03,2C
+066E:  MOVFF  03,30
+0672:  MOVFF  02,2F
+0676:  MOVFF  01,2E
+067A:  MOVFF  00,2D
+067E:  CLRF   34
+0680:  CLRF   33
+0682:  CLRF   32
+0684:  MOVLW  89
+0686:  MOVWF  31
+0688:  BRA    0082
+068A:  MOVFF  00,29
+068E:  MOVFF  01,2A
+0692:  MOVFF  02,2B
+0696:  MOVFF  03,2C
+069A:  MOVFF  03,3D
+069E:  MOVFF  02,3C
+06A2:  MOVFF  01,3B
+06A6:  MOVFF  00,3A
+06AA:  CLRF   41
+06AC:  CLRF   40
+06AE:  MOVLW  34
+06B0:  MOVWF  3F
+06B2:  MOVLW  87
+06B4:  MOVWF  3E
+06B6:  RCALL  01DE
+06B8:  MOVFF  00,29
+06BC:  MOVFF  01,2A
+06C0:  MOVFF  02,2B
+06C4:  MOVFF  03,2C
+06C8:  MOVLW  04
+06CA:  MOVWF  FF6
+06CC:  MOVLW  00
+06CE:  MOVWF  FF7
+06D0:  MOVLW  09
+06D2:  MOVWF  2D
+06D4:  RCALL  02D0
+06D6:  MOVLW  10
+06D8:  MOVWF  FE9
+06DA:  MOVFF  28,2E
+06DE:  MOVFF  27,2D
+06E2:  BRA    02F0
+06E4:  MOVLW  10
+06E6:  MOVWF  FF6
+06E8:  MOVLW  00
+06EA:  MOVWF  FF7
+06EC:  MOVLW  0A
+06EE:  MOVWF  2D
+06F0:  RCALL  02D0
+06F2:  MOVLW  89
+06F4:  MOVWF  FE9
+06F6:  MOVFF  2C,30
+06FA:  MOVFF  2B,2F
+06FE:  MOVFF  2A,2E
+0702:  MOVFF  29,2D
+0706:  MOVLW  02
+0708:  MOVWF  31
+070A:  BRA    0464
+070C:  MOVLW  0A
+070E:  BTFSS  F9E.4
+0710:  BRA    070E
+0712:  MOVWF  FAD
+0714:  MOVLW  0D
+0716:  BTFSS  F9E.4
+0718:  BRA    0716
+071A:  MOVWF  FAD
+.................... 		delay_ms(1000); 
+071C:  MOVLW  04
+071E:  MOVWF  29
+0720:  MOVLW  FA
+0722:  MOVWF  2A
+0724:  RCALL  0022
+0726:  DECFSZ 29,F
+0728:  BRA    0720
 .................... 	} 
-072E:  BRA    063C
+072A:  BRA    063E
 ....................  
 .................... 	return 0; 
-0730:  MOVLW  00
-0732:  MOVWF  01
+072C:  MOVLW  00
+072E:  MOVWF  01
 .................... } 
-0734:  SLEEP 
+0730:  SLEEP 
 
 Configuration Fuses:
    Word  1: C600   H4 FCMEN IESO
