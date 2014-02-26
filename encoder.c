@@ -17,84 +17,70 @@
 #FUSES H4
 #use delay(crystal=16MHz, clock=64MHz)
 #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)
-#use i2c (slave,scl=PIN_C3,sda=PIN_C4,FORCE_HW,FAST=100000)
+//#use i2c (slave,scl=PIN_C3,sda=PIN_C4,FORCE_HW,FAST=100000)
 
 #define canalA		PIN_B0
 #define canalB		PIN_B4
 #define canalZ		PIN_B5
-#define bto_sobe	PIN_D0
-#define bto_desce	PIN_D1
-#define bto_maual	PIN_A4
-#define cmd_sobe	1
-#define cmd_desce	2
-#define cmd_manual	3
-#define cmd_parar	4
-#define debounce	100
+#define tempo0		18660
 
-short ctrl;
-short trigger = FALSE;
-int cont = 0;
-char str[32];
+#include "botoes.c"
 
-short check_bto(int bto) {
-	if (!input(bto)) {
-		delay_ms(debounce);
-		return !input(bto);
-	}
+short print;
+long resolucao = 255;
+
+#INT_TIMER0
+void isr_timer0() {
+	clear_interrupt(INT_TIMER0);
+	set_timer0(tempo0);
+	print = TRUE;
+}
+
+short r_trig(short clk, int *ctrl) {
+	if (clk && !*ctrl) {
+		*ctrl = TRUE;
+		return TRUE;
+	} else if (!clk)
+		*ctrl = FALSE;
 	return FALSE;
 }
 
-int controle_btos(void) {
-	short a, b, c;
-	int ret = 0;
-
-	a = check_bto(bto_sobe);
-	b = check_bto(bto_desce);
-	c = check_bto(bto_maual);
-
-	if (a && ctrl) {
-		ctrl = FALSE;
-		strcpy(str, "Pressionado Bto\nSobe");
-		ret = cmd_sobe;
-	} else if (b && ctrl) {
-		ctrl = FALSE;
-		strcpy(str, "Pressionado Bto\nDesce");
-		ret = cmd_desce;
-	} else if (c && ctrl) {
-		ctrl = FALSE;
-		strcpy(str, "Pressionado Bto\nManual");
-		ret = cmd_manual;
-	} else if (!(a || b || c) && !ctrl) {
-		ctrl = TRUE;
-		strcpy(str, "Botoes Soltos\n");
-		ret = cmd_parar;
-	}
-
-	return ret;
-}
-
-//short f_trig(int pino) {
-//
-//}
-
 int main(void) {
 
-	int cmd = 0;
-	long cont_timer1;
+	int cmd = 0, ctrl1, aux = 0, ctrl2;
+	long cont_timer1, max;
 
 	set_timer1(0);
-	setup_timer_1(T1_INTERNAL | T1_DIV_BY_1);
+	setup_timer_1(T1_EXTERNAL | T1_DIV_BY_1);
+	set_timer0(tempo0);
+	setup_timer_0(T0_INTERNAL | T0_DIV_256);
+	clear_interrupt(INT_TIMER0);
+	enable_interrupts(INT_TIMER0 | GLOBAL);
 	delay_ms(300);
 
 	while (TRUE) {
+
 		cont_timer1 = get_timer1();
-		if (!input(canalZ)) {
+		cmd = controle_btos();
+
+		if (r_trig((cmd == cmd_sobe), &ctrl2)) {
+			output_toggle(PIN_A5);
+			printf("\fSobre");
+			set_timer0(tempo0);
+		}
+
+		if (r_trig(!input(canalZ), &ctrl1)) {
+			max = cont_timer1;
 			set_timer1(0);
 			cont_timer1 = 0;
+			aux++;
 		}
-		printf("Timer 1: %lu\r\nAngulo: %.2f\n\r", cont_timer1,
-				(float) cont_timer1 / 1024 * 360);
-		delay_ms(1000);
+
+		if (print) {
+			print = FALSE;
+			printf("\fTimer 1: %lu %d\nAngulo: %.2f", cont_timer1, aux,
+					(float) cont_timer1 / resolucao * 360);
+		}
 	}
 
 	return 0;
