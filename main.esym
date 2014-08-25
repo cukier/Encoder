@@ -1,7 +1,7 @@
 D G "__PCH__" 0 0 ""4.140""
 D G "__DEVICE__" 0 0 ""
 D G "__DATE__" 0 0 ""25-ago-14""
-D G "__TIME__" 0 0 ""16:22:35"" "* main.c"
+D G "__TIME__" 0 0 ""16:27:32"" "* main.c"
 C G "" 0 1 1 "*"
 C G "" 0 1 1 "*"
 d G "PIN_A0" 1 25 "31744"
@@ -344,8 +344,8 @@ V L "cmd" 0 68 "int8"
 F G "trata_cmd" 0 68 "int8(int8 cmd)"
 V L "ret" 0 70 "int8"
 F G "MAIN" 0 93 "int8()"
-V L "t0" 0 111 "int16"
-V L "t1" 0 112 "int16"
+V L "t0" 0 109 "int16"
+V L "t1" 0 110 "int16"
 F B "reset_cpu" 0 0
 F B "abs" 1 0
 F B "sleep" 0 1

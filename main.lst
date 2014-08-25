@@ -1,9 +1,9 @@
-CCS PCH C Compiler, Version 4.140, 22098               25-ago-14 16:22
+CCS PCH C Compiler, Version 4.140, 22098               25-ago-14 16:27
 
                Filename:   D:\Projetos\Encoder\main.lst
 
-               ROM used:   994 bytes (3%)
-                           Largest free fragment is 31774
+               ROM used:   998 bytes (3%)
+                           Largest free fragment is 31770
                RAM used:   7 (0%) at main() level
                            20 (1%) worst case
                Stack:     3 locations
@@ -171,12 +171,12 @@ CCS PCH C Compiler, Version 4.140, 22098               25-ago-14 16:22
 ....................  
 .................... int trata_cmd(int cmd) { 
 *
-00E8:  MOVFF  0A,0B
+00E8:  MOVFF  0B,0C
 ....................  
 .................... 	int ret = cmd; 
 ....................  
 .................... 	switch (cmd) { 
-00EC:  MOVF   0A,W
+00EC:  MOVF   0B,W
 00EE:  XORLW  01
 00F0:  BZ    00FC
 00F2:  XORLW  03
@@ -189,7 +189,7 @@ CCS PCH C Compiler, Version 4.140, 22098               25-ago-14 16:22
 00FC:  BRA    00B8
 .................... 		ret = cmd_subir; 
 00FE:  MOVLW  01
-0100:  MOVWF  0B
+0100:  MOVWF  0C
 .................... 		break; 
 0102:  BRA    011A
 .................... 	case cmd_descer: 
@@ -197,7 +197,7 @@ CCS PCH C Compiler, Version 4.140, 22098               25-ago-14 16:22
 0104:  BRA    00CA
 .................... 		ret = cmd_descer; 
 0106:  MOVLW  02
-0108:  MOVWF  0B
+0108:  MOVWF  0C
 .................... 		break; 
 010A:  BRA    011A
 .................... 	case cmd_parar: 
@@ -211,13 +211,13 @@ CCS PCH C Compiler, Version 4.140, 22098               25-ago-14 16:22
 0114:  CLRF   FCE
 .................... 		ret = cmd_parar; 
 0116:  MOVLW  03
-0118:  MOVWF  0B
+0118:  MOVWF  0C
 .................... 		break; 
 .................... 	default: 
 .................... 	} 
 ....................  
 .................... 	return ret; 
-011A:  MOVFF  0B,01
+011A:  MOVFF  0C,01
 .................... } 
 011E:  GOTO   0316 (RETURN)
 ....................  
@@ -268,127 +268,126 @@ CCS PCH C Compiler, Version 4.140, 22098               25-ago-14 16:22
 ....................  
 .................... 	while (TRUE) { 
 ....................  
-.................... 		m_cmd = trata_bto(m_cmd); 
+.................... 		m_cmd = trata_cmd(trata_bto(m_cmd)); 
 0306:  MOVFF  05,0A
 030A:  BRA    005C
-030C:  MOVFF  01,05
-....................  
-.................... 		trata_cmd(m_cmd); 
-0310:  MOVFF  05,0A
+030C:  MOVFF  01,0A
+0310:  MOVFF  01,0B
 0314:  BRA    00E8
+0316:  MOVFF  01,05
 ....................  
 .................... 		if (m_cmd == cmd_subir || m_cmd == cmd_descer) { 
-0316:  DECFSZ 05,W
-0318:  BRA    031C
-031A:  BRA    0322
-031C:  MOVF   05,W
-031E:  SUBLW  02
-0320:  BNZ   03CC
+031A:  DECFSZ 05,W
+031C:  BRA    0320
+031E:  BRA    0326
+0320:  MOVF   05,W
+0322:  SUBLW  02
+0324:  BNZ   03D0
 ....................  
 .................... 			long t0 = get_timer0(); 
 .................... 			long t1 = get_timer1(); 
-0322:  MOVF   FD6,W
-0324:  MOVWF  06
-0326:  MOVFF  FD7,07
-032A:  MOVF   FCE,W
-032C:  MOVWF  08
-032E:  MOVFF  FCF,09
+0326:  MOVF   FD6,W
+0328:  MOVWF  06
+032A:  MOVFF  FD7,07
+032E:  MOVF   FCE,W
+0330:  MOVWF  08
+0332:  MOVFF  FCF,09
 ....................  
 .................... 			direction = (t0 > t1); 
-0332:  BCF    04.1
-0334:  MOVF   09,W
-0336:  SUBWF  07,W
-0338:  BNC   0344
-033A:  BNZ   0342
-033C:  MOVF   06,W
-033E:  SUBWF  08,W
-0340:  BC    0344
-0342:  BSF    04.1
+0336:  BCF    04.1
+0338:  MOVF   09,W
+033A:  SUBWF  07,W
+033C:  BNC   0348
+033E:  BNZ   0346
+0340:  MOVF   06,W
+0342:  SUBWF  08,W
+0344:  BC    0348
+0346:  BSF    04.1
 ....................  
 .................... 			printf("Timer 0: %lu\n\r", t0); 
-0344:  MOVLW  04
-0346:  MOVWF  FF6
-0348:  MOVLW  00
-034A:  MOVWF  FF7
-034C:  MOVLW  09
-034E:  MOVWF  0B
-0350:  RCALL  0122
-0352:  MOVLW  10
-0354:  MOVWF  FE9
-0356:  MOVFF  07,0B
-035A:  MOVFF  06,0A
-035E:  RCALL  0142
-0360:  MOVLW  0A
-0362:  BTFSS  F9E.4
-0364:  BRA    0362
-0366:  MOVWF  FAD
-0368:  MOVLW  0D
-036A:  BTFSS  F9E.4
-036C:  BRA    036A
-036E:  MOVWF  FAD
+0348:  MOVLW  04
+034A:  MOVWF  FF6
+034C:  MOVLW  00
+034E:  MOVWF  FF7
+0350:  MOVLW  09
+0352:  MOVWF  0B
+0354:  RCALL  0122
+0356:  MOVLW  10
+0358:  MOVWF  FE9
+035A:  MOVFF  07,0B
+035E:  MOVFF  06,0A
+0362:  RCALL  0142
+0364:  MOVLW  0A
+0366:  BTFSS  F9E.4
+0368:  BRA    0366
+036A:  MOVWF  FAD
+036C:  MOVLW  0D
+036E:  BTFSS  F9E.4
+0370:  BRA    036E
+0372:  MOVWF  FAD
 .................... 			printf("Timer 1: %lu\n\r", t1); 
-0370:  MOVLW  14
-0372:  MOVWF  FF6
-0374:  MOVLW  00
-0376:  MOVWF  FF7
-0378:  MOVLW  09
-037A:  MOVWF  0B
-037C:  RCALL  0122
-037E:  MOVLW  10
-0380:  MOVWF  FE9
-0382:  MOVFF  09,0B
-0386:  MOVFF  08,0A
-038A:  RCALL  0142
-038C:  MOVLW  0A
-038E:  BTFSS  F9E.4
-0390:  BRA    038E
-0392:  MOVWF  FAD
-0394:  MOVLW  0D
-0396:  BTFSS  F9E.4
-0398:  BRA    0396
-039A:  MOVWF  FAD
+0374:  MOVLW  14
+0376:  MOVWF  FF6
+0378:  MOVLW  00
+037A:  MOVWF  FF7
+037C:  MOVLW  09
+037E:  MOVWF  0B
+0380:  RCALL  0122
+0382:  MOVLW  10
+0384:  MOVWF  FE9
+0386:  MOVFF  09,0B
+038A:  MOVFF  08,0A
+038E:  RCALL  0142
+0390:  MOVLW  0A
+0392:  BTFSS  F9E.4
+0394:  BRA    0392
+0396:  MOVWF  FAD
+0398:  MOVLW  0D
+039A:  BTFSS  F9E.4
+039C:  BRA    039A
+039E:  MOVWF  FAD
 .................... 			printf("Direction: %d\n\r", direction); 
-039C:  MOVLW  00
-039E:  BTFSC  04.1
-03A0:  MOVLW  01
-03A2:  MOVWF  0A
-03A4:  MOVLW  24
-03A6:  MOVWF  FF6
-03A8:  MOVLW  00
-03AA:  MOVWF  FF7
-03AC:  MOVLW  0B
-03AE:  MOVWF  0B
-03B0:  RCALL  0122
-03B2:  MOVFF  0A,0B
-03B6:  MOVLW  18
-03B8:  MOVWF  0C
-03BA:  BRA    020E
-03BC:  MOVLW  0A
-03BE:  BTFSS  F9E.4
-03C0:  BRA    03BE
-03C2:  MOVWF  FAD
-03C4:  MOVLW  0D
-03C6:  BTFSS  F9E.4
-03C8:  BRA    03C6
-03CA:  MOVWF  FAD
+03A0:  MOVLW  00
+03A2:  BTFSC  04.1
+03A4:  MOVLW  01
+03A6:  MOVWF  0A
+03A8:  MOVLW  24
+03AA:  MOVWF  FF6
+03AC:  MOVLW  00
+03AE:  MOVWF  FF7
+03B0:  MOVLW  0B
+03B2:  MOVWF  0B
+03B4:  RCALL  0122
+03B6:  MOVFF  0A,0B
+03BA:  MOVLW  18
+03BC:  MOVWF  0C
+03BE:  BRA    020E
+03C0:  MOVLW  0A
+03C2:  BTFSS  F9E.4
+03C4:  BRA    03C2
+03C6:  MOVWF  FAD
+03C8:  MOVLW  0D
+03CA:  BTFSS  F9E.4
+03CC:  BRA    03CA
+03CE:  MOVWF  FAD
 .................... 		} 
 ....................  
 .................... 		delay_ms(latencia); 
-03CC:  MOVLW  04
-03CE:  MOVWF  0A
-03D0:  MOVLW  FA
-03D2:  MOVWF  0D
-03D4:  RCALL  0034
-03D6:  DECFSZ 0A,F
-03D8:  BRA    03D0
+03D0:  MOVLW  04
+03D2:  MOVWF  0A
+03D4:  MOVLW  FA
+03D6:  MOVWF  0D
+03D8:  RCALL  0034
+03DA:  DECFSZ 0A,F
+03DC:  BRA    03D4
 .................... 	} 
-03DA:  BRA    0306
+03DE:  BRA    0306
 ....................  
 .................... 	return 0; 
-03DC:  MOVLW  00
-03DE:  MOVWF  01
+03E0:  MOVLW  00
+03E2:  MOVWF  01
 .................... } 
-03E0:  SLEEP 
+03E4:  SLEEP 
 
 Configuration Fuses:
    Word  1: C600   H4 FCMEN IESO

@@ -102,9 +102,7 @@ int main(void) {
 
 	while (TRUE) {
 
-		m_cmd = trata_bto(m_cmd);
-
-		trata_cmd(m_cmd);
+		m_cmd = trata_cmd(trata_bto(m_cmd));
 
 		if (m_cmd == cmd_subir || m_cmd == cmd_descer) {
 
