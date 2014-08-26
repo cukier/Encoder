@@ -5,14 +5,21 @@
  *      Author: cuki
  */
 
-#define bto_sobe	PIN_D0
-#define bto_desce	PIN_D1
-#define bto_maual	PIN_A4
 #define cmd_sobe	1
 #define cmd_desce	2
 #define cmd_manual	3
 #define cmd_parar	4
 #define debounce	100
+
+int bto_sobe = PIN_D0;
+int bto_desce = PIN_D1;
+int bto_maual = PIN_A4;
+
+void set_config(int ibto_sobe, int ibto_desce, int ibto_manual) {
+	bto_sobe = ibto_sobe;
+	bto_desce = ibto_desce;
+	bto_maual = ibto_manual;
+}
 
 short check_bto(int bto) {
 	if (!input(bto)) {
