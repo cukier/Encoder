@@ -1,0 +1,440 @@
+CCS PCH C Compiler, Version 4.140, 22098               26-ago-14 08:31
+
+               Filename:   D:\Projetos\Encoder\main.lst
+
+               ROM used:   832 bytes (3%)
+                           Largest free fragment is 31932
+               RAM used:   30 (2%) at main() level
+                           38 (2%) worst case
+               Stack:     4 worst case (3 in main + 1 for interrupts)
+
+*
+0000:  GOTO   02AE
+*
+0008:  MOVWF  04
+000A:  MOVFF  FD8,05
+000E:  MOVFF  FE0,06
+0012:  MOVLB  0
+0014:  MOVFF  FE9,0C
+0018:  MOVFF  FEA,07
+001C:  MOVFF  FE1,08
+0020:  MOVFF  FE2,09
+0024:  MOVFF  FD9,0A
+0028:  MOVFF  FDA,0B
+002C:  MOVFF  FF3,12
+0030:  MOVFF  FF4,13
+0034:  MOVFF  FFA,14
+0038:  MOVFF  FF5,15
+003C:  MOVFF  FF6,16
+0040:  MOVFF  FF7,17
+0044:  MOVFF  00,0E
+0048:  MOVFF  01,0F
+004C:  MOVFF  02,10
+0050:  MOVFF  03,11
+0054:  BTFSS  FF2.4
+0056:  GOTO   0060
+005A:  BTFSC  FF2.1
+005C:  GOTO   00BA
+0060:  BTFSS  FF0.3
+0062:  GOTO   006C
+0066:  BTFSC  FF0.0
+0068:  GOTO   00C8
+006C:  MOVFF  0E,00
+0070:  MOVFF  0F,01
+0074:  MOVFF  10,02
+0078:  MOVFF  11,03
+007C:  MOVFF  0C,FE9
+0080:  MOVFF  07,FEA
+0084:  BSF    07.7
+0086:  MOVFF  08,FE1
+008A:  MOVFF  09,FE2
+008E:  MOVFF  0A,FD9
+0092:  MOVFF  0B,FDA
+0096:  MOVFF  12,FF3
+009A:  MOVFF  13,FF4
+009E:  MOVFF  14,FFA
+00A2:  MOVFF  15,FF5
+00A6:  MOVFF  16,FF6
+00AA:  MOVFF  17,FF7
+00AE:  MOVF   04,W
+00B0:  MOVFF  06,FE0
+00B4:  MOVFF  05,FD8
+00B8:  RETFIE 0
+.................... /* 
+....................  * main.c 
+....................  * 
+....................  *  Created on: 05/03/2014 
+....................  *      Author: cuki 
+....................  */ 
+....................  
+.................... #include <18F45k20.h> 
+.................... //////// Standard Header file for the PIC18F45K20 device //////////////// 
+.................... #device PIC18F45K20 
+.................... #list 
+....................  
+....................  
+.................... #FUSES HS 
+.................... #use delay(crystal=16MHz, clock=64MHz) 
+*
+00F6:  CLRF   FEA
+00F8:  MOVLW  20
+00FA:  MOVWF  FE9
+00FC:  MOVF   FEF,W
+00FE:  BZ    011C
+0100:  MOVLW  14
+0102:  MOVWF  01
+0104:  CLRF   00
+0106:  DECFSZ 00,F
+0108:  BRA    0106
+010A:  DECFSZ 01,F
+010C:  BRA    0104
+010E:  MOVLW  BF
+0110:  MOVWF  00
+0112:  DECFSZ 00,F
+0114:  BRA    0112
+0116:  BRA    0118
+0118:  DECFSZ FEF,F
+011A:  BRA    0100
+011C:  RETURN 0
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7) 
+....................  
+.................... #include "variaveis.h" 
+.................... /* 
+....................  * variaveis.h 
+....................  * 
+....................  *  Created on: 26/08/2014 
+....................  *      Author: cuki 
+....................  */ 
+....................  
+.................... #define cmd_subir	1 
+.................... #define cmd_descer	2 
+.................... #define cmd_parar	3 
+.................... #define pin_subir	PIN_D0 
+.................... #define pin_descer	PIN_D1 
+.................... #define bto_subir	PIN_D2 
+.................... #define bto_descer	PIN_D3 
+.................... #define debounce	100 
+.................... #define	latencia	1000 
+....................  
+.................... short ctrl_bto; 
+....................  
+.................... int m_cmd; 
+....................  
+.................... long pos; 
+....................  
+.................... #include "interrupcoes.h" 
+.................... /* 
+....................  * interrupcoes.h 
+....................  * 
+....................  *  Created on: 26/08/2014 
+....................  *      Author: cuki 
+....................  */ 
+....................  
+.................... #ifndef INTERRUPCOES_H_ 
+.................... #define INTERRUPCOES_H_ 
+....................  
+.................... #INT_EXT 
+.................... void ext_isr() { 
+.................... 	clear_interrupt(INT_EXT); 
+*
+00BA:  BCF    FF2.1
+.................... 	pos++; 
+00BC:  INCF   1B,F
+00BE:  BTFSC  FD8.2
+00C0:  INCF   1C,F
+.................... } 
+....................  
+00C2:  BCF    FF2.1
+00C4:  GOTO   006C
+.................... #INT_EXT1 
+.................... void ext1_isr() { 
+.................... 	clear_interrupt(INT_EXT1); 
+00C8:  BCF    FF0.0
+.................... 	pos++; 
+00CA:  INCF   1B,F
+00CC:  BTFSC  FD8.2
+00CE:  INCF   1C,F
+.................... } 
+....................  
+.................... #endif /* INTERRUPCOES_H_ */ 
+....................  
+.................... #include "funcoes.h" 
+00D0:  BCF    FF0.0
+00D2:  GOTO   006C
+.................... void parar() { 
+.................... 	output_low(pin_subir); 
+*
+01A0:  BCF    F95.0
+01A2:  BCF    F8C.0
+.................... 	output_low(pin_descer); 
+01A4:  BCF    F95.1
+01A6:  BCF    F8C.1
+.................... } 
+01A8:  GOTO   01D2 (RETURN)
+....................  
+.................... void subir() { 
+.................... 	output_low(pin_descer); 
+*
+017C:  BCF    F95.1
+017E:  BCF    F8C.1
+.................... 	delay_ms(10); 
+0180:  MOVLW  0A
+0182:  MOVWF  20
+0184:  RCALL  00F6
+.................... 	output_high(pin_subir); 
+0186:  BCF    F95.0
+0188:  BSF    F8C.0
+.................... } 
+018A:  GOTO   01C2 (RETURN)
+....................  
+.................... void descer() { 
+.................... 	output_low(pin_subir); 
+018E:  BCF    F95.0
+0190:  BCF    F8C.0
+.................... 	delay_ms(10); 
+0192:  MOVLW  0A
+0194:  MOVWF  20
+0196:  RCALL  00F6
+.................... 	output_high(pin_descer); 
+0198:  BCF    F95.1
+019A:  BSF    F8C.1
+.................... } 
+019C:  GOTO   01CA (RETURN)
+....................  
+.................... int trata_bto(int cmd) { 
+*
+011E:  BSF    F95.2
+0120:  BCF    1E.0
+0122:  BTFSS  F83.2
+0124:  BSF    1E.0
+0126:  BSF    F95.3
+0128:  BCF    1E.1
+012A:  BTFSS  F83.3
+012C:  BSF    1E.1
+012E:  MOVFF  1D,1F
+....................  
+.................... 	short a = !input(bto_subir); 
+.................... 	short b = !input(bto_descer); 
+.................... 	int ret = cmd; 
+....................  
+.................... 	if (a ^ b) { 
+0132:  MOVLW  00
+0134:  BTFSC  1E.0
+0136:  MOVLW  01
+0138:  MOVWF  21
+013A:  MOVLW  00
+013C:  BTFSC  1E.1
+013E:  MOVLW  01
+0140:  XORWF  21,W
+0142:  BZ    016A
+.................... 		delay_ms(debounce); 
+0144:  MOVLW  64
+0146:  MOVWF  20
+0148:  RCALL  00F6
+.................... 		if (a && ctrl_bto) { 
+014A:  BTFSS  1E.0
+014C:  BRA    015A
+014E:  BTFSS  19.0
+0150:  BRA    015A
+.................... 			ret = cmd_subir; 
+0152:  MOVLW  01
+0154:  MOVWF  1F
+.................... 			ctrl_bto = FALSE; 
+0156:  BCF    19.0
+.................... 		} else if (b && ctrl_bto) { 
+0158:  BRA    0168
+015A:  BTFSS  1E.1
+015C:  BRA    0168
+015E:  BTFSS  19.0
+0160:  BRA    0168
+.................... 			ret = cmd_descer; 
+0162:  MOVLW  02
+0164:  MOVWF  1F
+.................... 			ctrl_bto = FALSE; 
+0166:  BCF    19.0
+.................... 		} 
+.................... 	} else if (!ctrl_bto) { 
+0168:  BRA    0174
+016A:  BTFSC  19.0
+016C:  BRA    0174
+.................... 		ctrl_bto = TRUE; 
+016E:  BSF    19.0
+.................... 		ret = cmd_parar; 
+0170:  MOVLW  03
+0172:  MOVWF  1F
+.................... 	} 
+....................  
+.................... 	return ret; 
+0174:  MOVFF  1F,01
+.................... } 
+0178:  GOTO   02E8 (RETURN)
+....................  
+.................... int trata_cmd(int cmd) { 
+*
+01AC:  MOVFF  1E,1F
+....................  
+.................... 	int ret = cmd; 
+....................  
+.................... 	switch (cmd) { 
+01B0:  MOVF   1E,W
+01B2:  XORLW  01
+01B4:  BZ    01C0
+01B6:  XORLW  03
+01B8:  BZ    01C8
+01BA:  XORLW  01
+01BC:  BZ    01D0
+01BE:  BRA    01DE
+.................... 	case cmd_subir: 
+.................... 		subir(); 
+01C0:  BRA    017C
+.................... 		ret = cmd_subir; 
+01C2:  MOVLW  01
+01C4:  MOVWF  1F
+.................... 		break; 
+01C6:  BRA    01DE
+.................... 	case cmd_descer: 
+.................... 		descer(); 
+01C8:  BRA    018E
+.................... 		ret = cmd_descer; 
+01CA:  MOVLW  02
+01CC:  MOVWF  1F
+.................... 		break; 
+01CE:  BRA    01DE
+.................... 	case cmd_parar: 
+.................... 		parar(); 
+01D0:  BRA    01A0
+.................... 		set_timer0(0); 
+01D2:  CLRF   FD7
+01D4:  CLRF   FD6
+.................... 		set_timer1(0); 
+01D6:  CLRF   FCF
+01D8:  CLRF   FCE
+.................... 		ret = cmd_parar; 
+01DA:  MOVLW  03
+01DC:  MOVWF  1F
+.................... 		break; 
+.................... 	default: 
+.................... 	} 
+....................  
+.................... 	return ret; 
+01DE:  MOVFF  1F,01
+.................... } 
+01E2:  GOTO   02F2 (RETURN)
+....................  
+.................... void init_mcu() { 
+.................... 	clear_interrupt(INT_EXT); 
+*
+00E2:  BCF    FF2.1
+.................... 	clear_interrupt(INT_EXT1); 
+00E4:  BCF    FF0.0
+.................... 	enable_interrupts(INT_EXT); 
+00E6:  BSF    FF2.4
+.................... 	enable_interrupts(INT_EXT1); 
+00E8:  BSF    FF0.3
+.................... 	enable_interrupts(GLOBAL); 
+00EA:  MOVLW  C0
+00EC:  IORWF  FF2,F
+....................  
+.................... 	m_cmd = cmd_parar; 
+00EE:  MOVLW  03
+00F0:  MOVWF  1A
+.................... } 
+00F2:  GOTO   02E2 (RETURN)
+....................  
+....................  
+.................... int main(void) { 
+*
+02AE:  CLRF   FF8
+02B0:  BCF    FD0.7
+02B2:  BSF    07.7
+02B4:  CLRF   FEA
+02B6:  CLRF   FE9
+02B8:  BSF    FB8.3
+02BA:  MOVLW  82
+02BC:  MOVWF  FAF
+02BE:  MOVLW  06
+02C0:  MOVWF  FB0
+02C2:  MOVLW  A6
+02C4:  MOVWF  FAC
+02C6:  MOVLW  90
+02C8:  MOVWF  FAB
+02CA:  MOVLW  00
+02CC:  MOVWF  F7E
+02CE:  BCF    FC1.4
+02D0:  BCF    FC1.5
+02D2:  MOVF   F7F,W
+02D4:  ANDLW  E0
+02D6:  MOVWF  F7F
+02D8:  BCF    F79.5
+02DA:  BCF    F79.4
+02DC:  CLRF   F7A
+02DE:  CLRF   F7B
+....................  
+.................... 	init_mcu(); 
+02E0:  BRA    00E2
+....................  
+.................... 	while (TRUE) { 
+....................  
+.................... 		m_cmd = trata_cmd(trata_bto(m_cmd)); 
+02E2:  MOVFF  1A,1D
+02E6:  BRA    011E
+02E8:  MOVFF  01,1D
+02EC:  MOVFF  01,1E
+02F0:  BRA    01AC
+02F2:  MOVFF  01,1A
+....................  
+.................... 		if (m_cmd == cmd_subir || m_cmd == cmd_descer) { 
+02F6:  DECFSZ 1A,W
+02F8:  BRA    02FC
+02FA:  BRA    0302
+02FC:  MOVF   1A,W
+02FE:  SUBLW  02
+0300:  BNZ   033C
+.................... 			printf("Pos: %lu\n\r", pos); 
+0302:  MOVLW  D6
+0304:  MOVWF  FF6
+0306:  MOVLW  00
+0308:  MOVWF  FF7
+030A:  MOVLW  05
+030C:  MOVWF  1D
+030E:  BRA    01E6
+0310:  MOVLW  10
+0312:  MOVWF  FE9
+0314:  MOVFF  1C,1E
+0318:  MOVFF  1B,1D
+031C:  BRA    0208
+031E:  MOVLW  0A
+0320:  BTFSS  F9E.4
+0322:  BRA    0320
+0324:  MOVWF  FAD
+0326:  MOVLW  0D
+0328:  BTFSS  F9E.4
+032A:  BRA    0328
+032C:  MOVWF  FAD
+.................... 			delay_ms(latencia); 
+032E:  MOVLW  04
+0330:  MOVWF  1D
+0332:  MOVLW  FA
+0334:  MOVWF  20
+0336:  RCALL  00F6
+0338:  DECFSZ 1D,F
+033A:  BRA    0332
+.................... 		} 
+....................  
+.................... 	} 
+033C:  BRA    02E2
+....................  
+.................... 	return 0; 
+033E:  MOVLW  00
+0340:  MOVWF  01
+.................... } 
+0342:  SLEEP 
+
+Configuration Fuses:
+   Word  1: C600   H4 FCMEN IESO
+   Word  2: 1E1E   PUT BROWNOUT BORV18 NOWDT WDT32768
+   Word  3: 8F00   CCP2C1 PBADEN LPT1OSC HFOFST MCLR
+   Word  4: 0081   STVREN NOLVP NOXINST NODEBUG
+   Word  5: C00F   NOPROTECT NOCPB NOCPD
+   Word  6: E00F   NOWRT NOWRTC NOWRTB NOWRTD
+   Word  7: 400F   NOEBTR NOEBTRB
