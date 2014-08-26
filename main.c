@@ -14,10 +14,10 @@
 #define cmd_subir	1
 #define cmd_descer	2
 #define cmd_parar	3
-#define bto_subir	PIN_B0
-#define bto_descer	PIN_B1
 #define pin_subir	PIN_D0
 #define pin_descer	PIN_D1
+#define bto_subir	PIN_D2
+#define bto_descer	PIN_D3
 #define debounce	100
 #define	latencia	1000
 
@@ -53,10 +53,11 @@ int trata_bto(int cmd) {
 		delay_ms(debounce);
 		if (a && ctrl_bto) {
 			ret = cmd_subir;
+			ctrl_bto = FALSE;
 		} else if (b && ctrl_bto) {
 			ret = cmd_descer;
+			ctrl_bto = FALSE;
 		}
-		ctrl_bto = FALSE;
 	} else if (!ctrl_bto) {
 		ctrl_bto = TRUE;
 		ret = cmd_parar;
@@ -105,6 +106,8 @@ int main(void) {
 		m_cmd = trata_cmd(trata_bto(m_cmd));
 
 		if (m_cmd == cmd_subir || m_cmd == cmd_descer) {
+
+			delay_cycles(debounce);
 
 			long t0 = get_timer0();
 			long t1 = get_timer1();
