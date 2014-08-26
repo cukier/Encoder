@@ -1,9 +1,9 @@
-CCS PCH C Compiler, Version 4.140, 22098               26-ago-14 11:39
+CCS PCH C Compiler, Version 4.140, 22098               26-ago-14 11:42
 
                Filename:   D:\Projetos\Encoder\main.lst
 
-               ROM used:   1104 bytes (3%)
-                           Largest free fragment is 31660
+               ROM used:   1090 bytes (3%)
+                           Largest free fragment is 31674
                RAM used:   33 (2%) at main() level
                            43 (3%) worst case
                Stack:     4 worst case (3 in main + 1 for interrupts)
@@ -434,7 +434,7 @@ CCS PCH C Compiler, Version 4.140, 22098               26-ago-14 11:39
 03D2:  BNZ   03DA
 03D4:  MOVF   1D,W
 03D6:  SUBWF  1F,W
-03D8:  BZ    044C
+03D8:  BZ    043E
 .................... 			posAux = pos; 
 03DA:  MOVFF  1D,1F
 03DE:  MOVFF  1C,1E
@@ -483,24 +483,16 @@ CCS PCH C Compiler, Version 4.140, 22098               26-ago-14 11:39
 0438:  BTFSS  F9E.4
 043A:  BRA    0438
 043C:  MOVWF  FAD
-.................... 			delay_ms(latencia); 
-043E:  MOVLW  04
-0440:  MOVWF  20
-0442:  MOVLW  FA
-0444:  MOVWF  23
-0446:  RCALL  013A
-0448:  DECFSZ 20,F
-044A:  BRA    0442
 .................... 		} 
 ....................  
 .................... 	} 
-044C:  BRA    03BA
+043E:  BRA    03BA
 ....................  
 .................... 	return 0; 
-044E:  MOVLW  00
-0450:  MOVWF  01
+0440:  MOVLW  00
+0442:  MOVWF  01
 .................... } 
-0452:  SLEEP 
+0444:  SLEEP 
 
 Configuration Fuses:
    Word  1: C600   H4 FCMEN IESO

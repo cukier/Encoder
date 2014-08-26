@@ -27,7 +27,6 @@ int main(void) {
 			posAux = pos;
 			printf("Pos: %lu\n\r", pos);
 			printf("Dir: %u\n\r", (int) direction);
-			delay_ms(latencia);
 		}
 
 	}
