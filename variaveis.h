@@ -15,8 +15,15 @@
 #define debounce	100
 #define	latencia	1000
 
+#byte port_b=0xF81
+
 short ctrl_bto;
+short direction;
+short a_ok;
+short b_ok;
 
 int m_cmd;
+int last_b;
 
 long pos;
+long posAux;

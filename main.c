@@ -23,8 +23,10 @@ int main(void) {
 
 		m_cmd = trata_cmd(trata_bto(m_cmd));
 
-		if (m_cmd == cmd_subir || m_cmd == cmd_descer) {
+		if (posAux != pos) {
+			posAux = pos;
 			printf("Pos: %lu\n\r", pos);
+			printf("Dir: %u\n\r", (int) direction);
 			delay_ms(latencia);
 		}
 

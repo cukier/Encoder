@@ -64,10 +64,8 @@ int trata_cmd(int cmd) {
 }
 
 void init_mcu() {
-	clear_interrupt(INT_EXT);
-	clear_interrupt(INT_EXT1);
-	enable_interrupts(INT_EXT);
-	enable_interrupts(INT_EXT1);
+	clear_interrupt(INT_RB);
+	enable_interrupts(INT_RB);
 	enable_interrupts(GLOBAL);
 
 	m_cmd = cmd_parar;

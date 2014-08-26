@@ -8,16 +8,24 @@
 #ifndef INTERRUPCOES_H_
 #define INTERRUPCOES_H_
 
-#INT_EXT
-void ext_isr() {
-	clear_interrupt(INT_EXT);
-	pos++;
-}
+#INT_RB
+void isr_rb() {
+	clear_interrupt(INT_RB);
+	short a = (port_b & 0x10) == 0x10;
+	short b = (port_b & 0x20) == 0x20;
 
-#INT_EXT1
-void ext1_isr() {
-	clear_interrupt(INT_EXT1);
-	pos++;
-}
+	if (a && !a_ok && !b) {
+		a_ok = TRUE;
+		direction = TRUE;
+	} else if (a && !a_ok && b) {
+		a_ok = TRUE;
+		direction = FALSE;
+	} else if (!a && !b) {
+		a_ok = FALSE;
+	}
 
-#endif /* INTERRUPCOES_H_ */
+	if (direction)
+		pos++;
+	else
+		pos--;
+}
