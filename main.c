@@ -28,7 +28,6 @@ int main(void) {
 			printf("Pos: %lu\n\r", pos);
 			printf("Dir: %u\n\r", (int) direction);
 		}
-
 	}
 
 	return 0;
