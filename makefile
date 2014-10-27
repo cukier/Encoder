@@ -1,10 +1,22 @@
 CC=ccsc
-CFLAGS=+FH +LN -T -A -M -Z +DF +Y=9 +STDOUT
+PK2=pk2cmd
 
-all: main
+DEVICE=PIC18F25K22
+UNIT1=Encoder
+UNIT1_FILE=main
 
-main: main.c
-	$(CC) $(CFLAGS) main.c
+HFLAGS=+FH +LN -T -A -M -Z +DF +Y=9 +STDOUT +EA
+BFLAGS=+FB +LN -T -A -M -Z +DF +Y=9 +STDOUT +EA
+MFLAGS=+FM +LN -T -A -M -Z +DF +Y=9 +STDOUT +EA
+PK2FLAGS=-E -P$(DEVICE) -M -R -J -F
+
+all: $(UNIT1)
+
+$(UNIT1): $(UNIT1_FILE).c
+	$(CC) $(HFLAGS) $(UNIT1_FILE).c
+	
+Burn:
+	$(PK2) $(PK2FLAGS) $(UNIT1_FILE).hex
 
 clean:
-	rm *.cof *.err *.esym *.hex *.lst
+	rm *.cof *.err *.esym *.hex *.lst *.pjt *.STA *.sym *.tre *.MCP *.PWI *.DBK
