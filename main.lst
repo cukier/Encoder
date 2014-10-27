@@ -1,9 +1,9 @@
-CCS PCH C Compiler, Version 4.140, 22098               27-out-14 15:29
+CCS PCH C Compiler, Version 4.140, 22098               27-out-14 16:03
 
                Filename:   D:\Projetos\Encoder\main.lst
 
-               ROM used:   2310 bytes (7%)
-                           Largest free fragment is 30454
+               ROM used:   2306 bytes (7%)
+                           Largest free fragment is 30458
                RAM used:   42 (3%) at main() level
                            69 (4%) worst case
                Stack:     3 worst case (2 in main + 1 for interrupts)
@@ -2136,152 +2136,148 @@ CCS PCH C Compiler, Version 4.140, 22098               27-out-14 15:29
 07DC:  CLRF   F78
 07DE:  CLRF   F79
 ....................  
-.................... 	setup_timer_0(T0_INTERNAL | T0_DIV_64); 
-07E0:  MOVLW  85
-07E2:  MOVWF  FD5
+.................... 	last_b = input_b(); 
+07E0:  SETF   F93
+07E2:  MOVFF  F81,21
 ....................  
 .................... 	clear_interrupt(INT_RB); 
-07E4:  BCF    FF2.0
+07E6:  BCF    FF2.0
 .................... 	enable_interrupts(INT_RB); 
-07E6:  BSF    FF2.3
-07E8:  MOVLW  FF
-07EA:  IORWF  F62,F
+07E8:  BSF    FF2.3
+07EA:  MOVLW  FF
+07EC:  IORWF  F62,F
 ....................  
 .................... 	clear_interrupt(INT_EXT2); 
-07EC:  BCF    FF0.1
+07EE:  BCF    FF0.1
 .................... 	enable_interrupts(INT_EXT2_H2L); 
-07EE:  BSF    FF0.4
-07F0:  BCF    FF1.4
+07F0:  BSF    FF0.4
+07F2:  BCF    FF1.4
 ....................  
 .................... 	enable_interrupts(GLOBAL); 
-07F2:  MOVLW  C0
-07F4:  IORWF  FF2,F
-....................  
-.................... 	last_b = input_b(); 
-07F6:  SETF   F93
-07F8:  MOVFF  F81,21
+07F4:  MOVLW  C0
+07F6:  IORWF  FF2,F
 ....................  
 .................... 	printf("Teste Encoder\n\r"); 
-07FC:  MOVLW  38
-07FE:  MOVWF  FF6
-0800:  MOVLW  01
-0802:  MOVWF  FF7
-0804:  MOVLB  0
-0806:  BRA    0162
+07F8:  MOVLW  38
+07FA:  MOVWF  FF6
+07FC:  MOVLW  01
+07FE:  MOVWF  FF7
+0800:  MOVLB  0
+0802:  BRA    0162
 .................... 	delay_ms(1000); 
-0808:  MOVLW  04
-080A:  MOVWF  26
-080C:  MOVLW  FA
-080E:  MOVWF  27
-0810:  RCALL  0186
-0812:  DECFSZ 26,F
-0814:  BRA    080C
+0804:  MOVLW  04
+0806:  MOVWF  26
+0808:  MOVLW  FA
+080A:  MOVWF  27
+080C:  RCALL  0186
+080E:  DECFSZ 26,F
+0810:  BRA    0808
 ....................  
 .................... 	while (TRUE) { 
 ....................  
 .................... 		if (m_pos != a_pos) { 
-0816:  MOVF   24,W
-0818:  SUBWF  22,W
-081A:  BNZ   0822
-081C:  MOVF   25,W
-081E:  SUBWF  23,W
-0820:  BZ    0902
+0812:  MOVF   24,W
+0814:  SUBWF  22,W
+0816:  BNZ   081E
+0818:  MOVF   25,W
+081A:  SUBWF  23,W
+081C:  BZ    08FE
 .................... 			a_pos = m_pos; 
-0822:  MOVFF  23,25
-0826:  MOVFF  22,24
+081E:  MOVFF  23,25
+0822:  MOVFF  22,24
 .................... 			printf("Pos: %4ld - Ang: %3.2f\n\r", m_pos, 
 .................... 					(float) m_pos * 360 / 4092); 
-082A:  MOVFF  23,27
-082E:  MOVFF  22,26
-0832:  BRA    01AE
-0834:  MOVFF  00,26
-0838:  MOVFF  01,27
-083C:  MOVFF  02,28
-0840:  MOVFF  03,29
-0844:  MOVFF  03,3A
-0848:  MOVFF  02,39
-084C:  MOVFF  01,38
-0850:  MOVFF  00,37
-0854:  CLRF   3E
-0856:  CLRF   3D
-0858:  MOVLW  34
-085A:  MOVWF  3C
-085C:  MOVLW  87
-085E:  MOVWF  3B
-0860:  RCALL  01F8
-0862:  MOVFF  00,26
-0866:  MOVFF  01,27
-086A:  MOVFF  02,28
-086E:  MOVFF  03,29
-0872:  MOVFF  03,2D
-0876:  MOVFF  02,2C
-087A:  MOVFF  01,2B
-087E:  MOVFF  00,2A
-0882:  CLRF   31
-0884:  MOVLW  C0
-0886:  MOVWF  30
-0888:  MOVLW  7F
-088A:  MOVWF  2F
-088C:  MOVLW  8A
-088E:  MOVWF  2E
-0890:  BRA    02EA
-0892:  MOVFF  00,26
-0896:  MOVFF  01,27
-089A:  MOVFF  02,28
-089E:  MOVFF  03,29
-08A2:  MOVLW  48
-08A4:  MOVWF  FF6
-08A6:  MOVLW  01
-08A8:  MOVWF  FF7
-08AA:  MOVLW  05
-08AC:  MOVWF  2A
-08AE:  RCALL  0446
-08B0:  MOVLW  02
-08B2:  MOVWF  FE9
-08B4:  MOVFF  23,2B
-08B8:  MOVFF  22,2A
-08BC:  BRA    0466
-08BE:  MOVLW  51
-08C0:  MOVWF  FF6
-08C2:  MOVLW  01
-08C4:  MOVWF  FF7
-08C6:  MOVLW  08
-08C8:  MOVWF  2A
-08CA:  RCALL  0446
-08CC:  MOVLW  02
-08CE:  MOVWF  FE9
-08D0:  MOVFF  29,2D
-08D4:  MOVFF  28,2C
-08D8:  MOVFF  27,2B
-08DC:  MOVFF  26,2A
-08E0:  MOVWF  2E
-08E2:  BRA    0612
-08E4:  MOVLW  0A
-08E6:  BTFSS  F9E.4
-08E8:  BRA    08E6
-08EA:  MOVWF  FAD
-08EC:  MOVLW  0D
-08EE:  BTFSS  F9E.4
-08F0:  BRA    08EE
-08F2:  MOVWF  FAD
+0826:  MOVFF  23,27
+082A:  MOVFF  22,26
+082E:  BRA    01AE
+0830:  MOVFF  00,26
+0834:  MOVFF  01,27
+0838:  MOVFF  02,28
+083C:  MOVFF  03,29
+0840:  MOVFF  03,3A
+0844:  MOVFF  02,39
+0848:  MOVFF  01,38
+084C:  MOVFF  00,37
+0850:  CLRF   3E
+0852:  CLRF   3D
+0854:  MOVLW  34
+0856:  MOVWF  3C
+0858:  MOVLW  87
+085A:  MOVWF  3B
+085C:  RCALL  01F8
+085E:  MOVFF  00,26
+0862:  MOVFF  01,27
+0866:  MOVFF  02,28
+086A:  MOVFF  03,29
+086E:  MOVFF  03,2D
+0872:  MOVFF  02,2C
+0876:  MOVFF  01,2B
+087A:  MOVFF  00,2A
+087E:  CLRF   31
+0880:  MOVLW  C0
+0882:  MOVWF  30
+0884:  MOVLW  7F
+0886:  MOVWF  2F
+0888:  MOVLW  8A
+088A:  MOVWF  2E
+088C:  BRA    02EA
+088E:  MOVFF  00,26
+0892:  MOVFF  01,27
+0896:  MOVFF  02,28
+089A:  MOVFF  03,29
+089E:  MOVLW  48
+08A0:  MOVWF  FF6
+08A2:  MOVLW  01
+08A4:  MOVWF  FF7
+08A6:  MOVLW  05
+08A8:  MOVWF  2A
+08AA:  RCALL  0446
+08AC:  MOVLW  02
+08AE:  MOVWF  FE9
+08B0:  MOVFF  23,2B
+08B4:  MOVFF  22,2A
+08B8:  BRA    0466
+08BA:  MOVLW  51
+08BC:  MOVWF  FF6
+08BE:  MOVLW  01
+08C0:  MOVWF  FF7
+08C2:  MOVLW  08
+08C4:  MOVWF  2A
+08C6:  RCALL  0446
+08C8:  MOVLW  02
+08CA:  MOVWF  FE9
+08CC:  MOVFF  29,2D
+08D0:  MOVFF  28,2C
+08D4:  MOVFF  27,2B
+08D8:  MOVFF  26,2A
+08DC:  MOVWF  2E
+08DE:  BRA    0612
+08E0:  MOVLW  0A
+08E2:  BTFSS  F9E.4
+08E4:  BRA    08E2
+08E6:  MOVWF  FAD
+08E8:  MOVLW  0D
+08EA:  BTFSS  F9E.4
+08EC:  BRA    08EA
+08EE:  MOVWF  FAD
 .................... 			delay_ms(300); 
-08F4:  MOVLW  02
-08F6:  MOVWF  26
-08F8:  MOVLW  96
-08FA:  MOVWF  27
-08FC:  RCALL  0186
-08FE:  DECFSZ 26,F
-0900:  BRA    08F8
+08F0:  MOVLW  02
+08F2:  MOVWF  26
+08F4:  MOVLW  96
+08F6:  MOVWF  27
+08F8:  RCALL  0186
+08FA:  DECFSZ 26,F
+08FC:  BRA    08F4
 .................... 		} 
 ....................  
 .................... 	} 
-0902:  BRA    0816
+08FE:  BRA    0812
 .................... 	return 0; 
-0904:  MOVLW  00
-0906:  MOVWF  01
+0900:  MOVLW  00
+0902:  MOVWF  01
 .................... } 
 ....................  
-0908:  SLEEP 
+0904:  SLEEP 
 
 Configuration Fuses:
    Word  1: F300   HSM PLLEN PRIMARY FCMEN IESO

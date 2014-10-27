@@ -51,7 +51,7 @@ void isr_rb() {
 
 int main(void) {
 
-	setup_timer_0(T0_INTERNAL | T0_DIV_64);
+	last_b = input_b();
 
 	clear_interrupt(INT_RB);
 	enable_interrupts(INT_RB);
@@ -60,8 +60,6 @@ int main(void) {
 	enable_interrupts(INT_EXT2_H2L);
 
 	enable_interrupts(GLOBAL);
-
-	last_b = input_b();
 
 	printf("Teste Encoder\n\r");
 	delay_ms(1000);
