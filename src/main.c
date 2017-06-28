@@ -5,10 +5,10 @@
  *      Author: cuki
  */
 
-#include<18F252.h>
+#include <18F252.h>
 #zero_ram
 
-#include<stdlib.h>
+#include <stdlib.h>
 
 #fuses H4
 #use delay(clock=32MHz, crystal=8MHz)
