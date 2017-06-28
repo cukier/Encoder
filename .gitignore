@@ -41,7 +41,7 @@ Project\ Outputs*/
 *.pch
 
 # Libraries
-*.lib
+#*.lib
 *.a
 *.la
 *.lo
