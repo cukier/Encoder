@@ -1,22 +1,83 @@
-CC=ccsc
-PK2=pk2cmd
+CC = ccsc
+PK2 = pk2cmd
 
-DEVICE=PIC18F252
-UNIT1=Encoder
-UNIT1_FILE=main
+DEVICE = PIC18F252
 
-HFLAGS=+FH +LN -T -A -M -Z +DF +Y=9 +STDOUT +EA
-BFLAGS=+FB +LN -T -A -M -Z +DF +Y=9 +STDOUT +EA
-MFLAGS=+FM +LN -T -A -M -Z +DF +Y=9 +STDOUT +EA
-PK2FLAGS=-E -P$(DEVICE) -M -R -J -F
+SRC = src
+OUT = Debug
+REL = Release
 
-all: $(UNIT1)
+UNIT = Encoder
+UINT_FILE = main
 
-$(UNIT1): $(UNIT1_FILE).c
-	$(CC) $(HFLAGS) $(UNIT1_FILE).c
+OBJS += *.ccspjt *.cof *.err *.esym *.hex *.lst *.xsym
+MOBJ = $(OBJS:%=$(SRC)/%)
+
+ifeq ($(DEVICE), PIC24FJ256GB206)
+CFLAGS += +FD
+DFLAGS += +GM_UC=""
+endif
+ifeq ($(DEVICE), PIC24FJ1024GB606)
+CFLAGS += +FD
+DFLAGS += +GM_UC="M_PIC24FJ1024GB606"
+endif
+ifeq ($(DEVICE), PIC24FJ64GB002)
+CFLAGS += +FD
+DFLAGS += +GM_UC=""
+endif
+ifeq ($(DEVICE), PIC18F46K22)
+CFLAGS += +FH
+DFLAGS += +GM_UC="M_PIC18F46K22"
+endif
+ifeq ($(DEVICE), PIC18F25K22)
+CFLAGS += +FH
+DFLAGS += +GM_UC="M_PIC18F25K22"
+endif
+ifeq ($(DEVICE), PIC18F252)
+CFLAGS += +FH
+DFLAGS += +GM_UC=""
+endif
+
+#DFLAGS += +GFAST=""
+CFLAGS += +LN -T -A -M -Z +DF +Y=9 +STDOUT +EA
+TFLAGS += +FB +LN -T -A -M -Z +DF +Y=9 +STDOUT +EA
+PK2DELFLAGS += -E -P$(DEVICE)
+PK2FLAGS +=$(PK2DELFLAGS) -M -R -J -F
+
+all: $(UNIT)
+
+$(UNIT): $(SRC)/$(UINT_FILE).c
+	$(CC) $(CFLAGS) $(DFLAGS) $<
+	[[ -d $(OUT) ]] || mkdir $(OUT)
+	mv $(MOBJ) $(OUT)
 	
-Burn:
-	$(PK2) $(PK2FLAGS) $(UNIT1_FILE).hex
-
+Release: $(SRC)/$(UINT_FILE).c
+	$(CC) $(CFLAGS) $(RDFLAGS) $<
+	[[ -d $(REL) ]] || mkdir $(REL)
+	mv $(MOBJ) $(REL)
+	
+teste: $(SRC)/teste.c
+	$(CC) $(CFLAGS) $(DFLAGS) $<
+	mv $(MOBJ) $(OUT)
+	
+timer: $(SRC)/timer.c
+	$(CC) $(TFLAGS) $<
+	mv $(MOBJ) $(OUT)
+	
+burn_release: $(REL)/$(UINT_FILE).hex
+	$(PK2) $(PK2FLAGS) $<
+	
+burn_teste: $(OUT)/teste.hex
+	$(PK2) $(PK2FLAGS) $<
+	
+burn: $(OUT)/$(UINT_FILE).hex
+	$(PK2) $(PK2FLAGS) $<
+	
+erase:
+	$(PK2) $(PK2DELFLAGS)
+	
 clean:
-	rm *.cof *.err *.esym *.hex *.lst *.pjt *.STA *.sym *.tre *.MCP *.PWI *.DBK
+	rm -Rvf $(OUT)/*
+	
+clean_release:
+	rm -Rvf $(REL)
