@@ -1,4 +1,7 @@
 #include "modbus.h"
+#include "uart.h"
+
+#include <util/delay.h>
 
 static const uint16_t wCRCTable[] = {
 	0X0000, 0XC0C1, 0XC181, 0X0140, 0XC301, 0X03C0, 0X0280, 0XC241,
@@ -33,6 +36,26 @@ static const uint16_t wCRCTable[] = {
 	0X4E00, 0X8EC1, 0X8F81, 0X4F40, 0X8D01, 0X4DC0, 0X4C80, 0X8C41,
 	0X4400, 0X84C1, 0X8581, 0X4540, 0X8701, 0X47C0, 0X4680, 0X8641,
 0X8201, 0X42C0, 0X4380, 0X8341, 0X4100, 0X81C1, 0X8081, 0X4040 };
+
+static volatile uint16_t slv_addr;
+
+void MODUBS_set_address(uint16_t addr)
+{
+	slv_addr = addr;
+	
+	return;
+}
+
+uint16_t make_16(uint8_t var_h, uint8_t var_l)
+{
+	uint16_t ret;
+	
+	ret = 0;
+	ret = var_h << 8;
+	ret |= var_l;
+	
+	return ret;
+}
 
 uint8_t l_byte(uint16_t m_word)
 {
@@ -79,7 +102,7 @@ void make_read_request(uint8_t addr, uint16_t s_addr, uint16_t nb, uint8_t *requ
 {
 	uint16_t crc;
 	
-	crc = 0;	
+	crc = 0;
 	
 	request[0] = addr;
 	request[1] = 0x03;
@@ -93,7 +116,7 @@ void make_read_request(uint8_t addr, uint16_t s_addr, uint16_t nb, uint8_t *requ
 	request[6] = l_byte(crc);
 	request[7] = h_byte(crc);
 	
-	return;	
+	return;
 }
 
 void make_write_request(uint8_t addr, uint16_t s_addr, uint16_t value, uint8_t *request)
@@ -113,6 +136,32 @@ void make_write_request(uint8_t addr, uint16_t s_addr, uint16_t value, uint8_t *
 	
 	request[6] = l_byte(crc);
 	request[7] = h_byte(crc);
+	
+	return;
+}
+
+uint16_t MODBUS_get_register(uint16_t register_address)
+{
+	uint16_t ret = 0;
+	uint8_t request[8];
+	uint8_t response[8];
+	
+	make_read_request(slv_addr, register_address, 1, request);
+	uart_send(request, 8);
+	_delay_ms(DELAY_REQUEST);
+	uart_get(response, 8);
+	ret = make_16(response[3], response[4]);
+	
+	return ret;
+}
+
+void MODBUS_set_register(uint16_t register_address, uint16_t value)
+{
+	uint8_t request[8];
+	
+	make_write_request(slv_addr, register_address, value, request);
+	uart_send(request, 8);
+	_delay_ms(DELAY_REQUEST);
 	
 	return;
 }

@@ -6,7 +6,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-void make_read_request(uint8_t addr, uint16_t s_addr, uint16_t nb, uint8_t *request);
-void make_write_request(uint8_t addr, uint16_t s_addr, uint16_t nb, uint8_t *request);
+#ifndef DELAY_REQUEST
+#define DELAY_REQUEST	300
+#endif
+
+void MODUBS_set_address(uint16_t addr);
+uint16_t MODBUS_get_register(uint16_t register_address);
+void MODBUS_set_register(uint16_t register_address, uint16_t value);
+
 
 #endif
