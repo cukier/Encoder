@@ -7,8 +7,9 @@
 
 #include "sys.h"
 #include "lcd.h"
-#include "uart.h"
-#include "modbus.h"
+//#include "sick.h"
+//#include "uart.h"
+//#include "modbus.h"
 
 #define SLV_ADDR		0x01
 
@@ -20,9 +21,8 @@
 int main(void) {
 	
 	DDRB |= _BV(DDB0);
-	lcd_init();
-	uart_init(UART_BAUD_SELECT(UART_BAUD_RATE, F_CPU));
-	MODUBS_set_address(SLV_ADDR);
+	lcd_init();	
+	
 	sei();
 	_delay_ms(100);
 
