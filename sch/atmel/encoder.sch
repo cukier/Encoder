@@ -138,7 +138,7 @@ P 3450 1500
 F 0 "U3" H 3250 1700 50  0000 C CNN
 F 1 "L7805CD2T" H 3450 1700 50  0000 L CNN
 F 2 "w_smd_trans:d2-pak" H 3450 1600 50  0001 C CIN
-F 3 "https://www.sparkfun.com/datasheets/Components/LM7805.pdf" H 3450 1500 50  0001 C CNN
+F 3 "http://www.farnell.com/datasheets/2307057.pdf?_ga=2.257182158.436367794.1499186680-1980578707.1499186680" H 3450 1500 50  0001 C CNN
 F 4 "L7805CD2T" H 3450 1500 60  0001 C CNN "MNP"
 F 5 "12060" H 3450 1500 60  0001 C CNN "Equitronic"
 	1    3450 1500
@@ -1275,8 +1275,6 @@ F 3 "" H 650 4400 50  0001 C CNN
 	1    650  4400
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	650  4100 650  4000
 $Comp
 L +5V #PWR039
 U 1 1 5954CB1F
@@ -1288,8 +1286,6 @@ F 3 "" H 650 3900 50  0001 C CNN
 	1    650  3900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	650  3600 650  3700
 $Comp
 L MCP2515-I/P U7
 U 1 1 5954F2C1
@@ -2258,9 +2254,9 @@ F 3 "" H 4400 3350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3600 3700 4400 3700
+	4400 3700 3600 3700
 Wire Wire Line
-	4400 3400 4400 3350
+	4400 3350 4400 3700
 Wire Wire Line
 	3600 2550 4250 2550
 Text Label 4250 2650 2    60   ~ 0
@@ -2430,4 +2426,8 @@ F 3 "" H 5700 3700 50  0001 C CNN
 	1    5700 3700
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	650  4000 650  3900
+Wire Wire Line
+	650  4300 650  4400
 $EndSCHEMATC
