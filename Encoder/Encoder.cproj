@@ -131,6 +131,14 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\src\heart_beat.c">
+      <SubType>compile</SubType>
+      <Link>heart_beat.c</Link>
+    </Compile>
+    <Compile Include="..\src\heart_beat.h">
+      <SubType>compile</SubType>
+      <Link>heart_beat.h</Link>
+    </Compile>
     <Compile Include="..\src\lcd.c">
       <SubType>compile</SubType>
       <Link>lcd.c</Link>

@@ -7,11 +7,10 @@
 
 #include "sys.h"
 #include "lcd.h"
+#include "heart_beat.h"
 //#include "sick.h"
 //#include "uart.h"
 //#include "modbus.h"
-
-#define SLV_ADDR		0x01
 
 #include <stdlib.h>
 #include <avr/io.h>
@@ -20,15 +19,15 @@
 
 int main(void) {
 	
-	DDRB |= _BV(DDB0);
+	HB_init();
 	lcd_init();	
 	
 	sei();
 	_delay_ms(100);
 
 	while (1) {
-		lcd_printf("\fAngulo\n%u", MODBUS_get_register(41));		
-		PORTB ^= _BV(PB0);
+		lcd_printf("\fAngulo");		
+		HB_beat();
 		_delay_ms(500);
 	}
 

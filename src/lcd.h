@@ -23,12 +23,12 @@
 #define D5			PORTD5
 #define D6			PORTD6
 #define D7			PORTD7
-#define RS_DDR		DDRB
-#define RS_PORT		PORTB
-#define RS			PORTB2
-#define EN_DDR		DDRB
-#define EN_PORT		PORTB
-#define EN			PORTB1
+#define RS_DDR		DDRC
+#define RS_PORT		PORTC
+#define RS			PORTC1
+#define EN_DDR		DDRC
+#define EN_PORT		PORTC
+#define EN			PORTC2
 
 void output_bit(uint8_t bit, bool value);
 void lcd_putc(char c);
