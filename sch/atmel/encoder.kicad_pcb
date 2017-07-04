@@ -3,7 +3,7 @@
   (general
     (links 154)
     (no_connects 0)
-    (area 19.924999 19.924999 120.075001 120.075001)
+    (area 18.583 19.924999 120.075001 120.075001)
     (thickness 1.6)
     (drawings 4)
     (tracks 759)
@@ -83,11 +83,11 @@
       (plotinvisibletext false)
       (padsonsilk false)
       (subtractmaskfromsilk false)
-      (outputformat 4)
+      (outputformat 1)
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory pdf))
+      (outputdirectory gerber))
   )
 
   (net 0 "")
