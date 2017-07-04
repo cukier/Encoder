@@ -11,40 +11,21 @@
 #include <stdlib.h>
 #include <util/delay.h>
 
-uint8_t *buffer;
-uint16_t buffer_index;
-
 #define output_high(x)
 #define output_low(x)
 
 void DSF60_send_request(uint8_t *req, uint16_t size)
 {
-	uint16_t cont;
-
-	for (cont = 0; cont < size; ++cont)
-	{
-		//#ifdef USE_UART1
-		//fputc(req[cont], sl1);
-		//#endif
-		//#ifdef USE_UART2
-		//fputc(req[cont], sl2);
-		//#endif
-	}
-
-	return;
-}
-
-void DSF60_flush_buffer(void)
-{
-	free(buffer);
-	buffer_index = 0;
+	uart_send(req, size);
 
 	return;
 }
 
 void DSF60_init_encoder(void)
 {
-	DSF60_flush_buffer();
+	DDRC |= _BV(DDC0);
+	PORTC &= ~_BV(PORTC0);
+	
 	dsf60 = (dsf60_t *) malloc(sizeof(dsf60_t));
 	
 	uart_init(UART_BAUD_SELECT(UART_BAUD_RATE, F_CPU));
@@ -230,21 +211,20 @@ void DSF60_read_electrical_interface(void)
 
 void DSF60_disable_encoder(void)
 {
-	output_high(ENCODER_EN);
+	PORTC &= ~_BV(PORTC0);
 
 	return;
 }
 
 void DSF60_enable_encoder(void)
 {
-	output_low(ENCODER_EN);
+	PORTC |= _BV(PORTC0);
 
 	return;
 }
 
 bool DSF60_check(void)
 {
-	DSF60_flush_buffer();
 	DSF60_disable_encoder();
 	_delay_ms(2000);
 	DSF60_enable_encoder();
@@ -252,12 +232,11 @@ bool DSF60_check(void)
 	DSF60_read_encoder_type();
 	_delay_ms(50);
 
-	if (buffer_index != 0) {
-		DSF60_flush_buffer();
-		return true;
-	}
+	//if (buffer_index != 0) {
+		//DSF60_flush_buffer();
+		//return true;
+	//}
 
-	DSF60_flush_buffer();
 	return false;
 }
 
@@ -289,8 +268,10 @@ bool DSF60_make_transaction(DSF60_command_t command, uint32_t arg)
 {
 	//uint8_t retries;
 	uint16_t pulse_width_resp, n, cont;
+	uint8_t *buffer;
 
 	//retries = 200;
+	buffer = NULL;
 	n = 0;
 	pulse_width_resp = 0;
 
@@ -303,8 +284,6 @@ bool DSF60_make_transaction(DSF60_command_t command, uint32_t arg)
 	//			return false;
 	//
 	//	} while (resp == EXIT_ERROR && --retries);
-
-	DSF60_flush_buffer();
 
 	switch (command)
 	{
@@ -368,11 +347,9 @@ bool DSF60_make_transaction(DSF60_command_t command, uint32_t arg)
 	}
 
 	_delay_ms(100);
-
-	if (buffer_index != n)
-	{
-		return false;
-	}
+	buffer = (uint8_t *) malloc(n * sizeof(uint8_t));
+	uart_get(buffer, n);
+	//checar contagem de bits recebidos
 
 	switch (command)
 	{

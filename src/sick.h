@@ -12,6 +12,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <avr/io.h>
 
 #define EXIT_SUCESS		0
 #define EXIT_ERROR		0xFF
@@ -67,5 +68,9 @@ typedef enum dsf60_command_e
 } DSF60_command_t;
 
 dsf60_t *dsf60;
+
+void DSF60_init_encoder(void);
+bool DSF60_check(void);
+bool DSF60_make_transaction(DSF60_command_t command, uint32_t arg);
 
 #endif /* SICK_H_ */

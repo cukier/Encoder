@@ -8,9 +8,7 @@
 #include "sys.h"
 #include "lcd.h"
 #include "heart_beat.h"
-//#include "sick.h"
-//#include "uart.h"
-//#include "modbus.h"
+#include "sick.h"
 
 #include <stdlib.h>
 #include <avr/io.h>
@@ -20,13 +18,15 @@
 int main(void) {
 	
 	HB_init();
-	lcd_init();	
-	
+	lcd_init();
+	DSF60_init_encoder();
 	sei();
 	_delay_ms(100);
+	DSF60_check();
 
 	while (1) {
-		lcd_printf("\fAngulo");		
+		DSF60_make_transaction(DSF60_COMMAND_READ_POSITION, 0);
+		lcd_printf("\fAngulo %f", dsf60->position);		
 		HB_beat();
 		_delay_ms(500);
 	}
