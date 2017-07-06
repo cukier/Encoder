@@ -28,7 +28,7 @@ void DSF60_init_encoder(void)
 	
 	dsf60 = (dsf60_t *) malloc(sizeof(dsf60_t));
 	
-	uart_init(115200);
+	uart_init();
 
 	return;
 }

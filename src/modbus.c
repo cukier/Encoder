@@ -39,7 +39,7 @@ static const uint16_t wCRCTable[] = {
 
 static volatile uint16_t slv_addr;
 
-void MODUBS_set_address(uint16_t addr)
+void MODBUS_set_address(uint16_t addr)
 {
 	slv_addr = addr;
 	
@@ -144,12 +144,12 @@ uint16_t MODBUS_get_register(uint16_t register_address)
 {
 	uint16_t ret = 0;
 	uint8_t request[8];
-	uint8_t response[8];
+	uint8_t response[7];
 	
 	make_read_request(slv_addr, register_address, 1, request);
 	uart_send(request, 8);
 	_delay_ms(DELAY_REQUEST);
-	uart_get(response, 8);
+	uart_get(response, 7);
 	ret = make_16(response[3], response[4]);
 	
 	return ret;

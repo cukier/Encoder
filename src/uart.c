@@ -49,7 +49,7 @@ ISR (USART_UDRE_vect)
 	}
 }
 
-void uart_init(uint32_t baudrate)
+void uart_init(void)
 {
 	UART_TxHead = 0;
 	UART_TxTail = 0;

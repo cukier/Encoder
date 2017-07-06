@@ -9,6 +9,7 @@
 #define SRC_SYS_H_
 
 #define F_CPU				16000000ULL
-#define BAUD				9600
+#define BAUD				19200
+#define USE_2X
 
 #endif /* SRC_SYS_H_ */
