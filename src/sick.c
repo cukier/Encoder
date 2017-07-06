@@ -28,7 +28,7 @@ void DSF60_init_encoder(void)
 	
 	dsf60 = (dsf60_t *) malloc(sizeof(dsf60_t));
 	
-	uart_init(UART_BAUD_SELECT(UART_BAUD_RATE, F_CPU));
+	uart_init(UART_BAUD_RATE);
 
 	return;
 }
