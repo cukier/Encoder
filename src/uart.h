@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
+#include <avr/io.h>
 
 #ifndef UART_TX_BUFFER_SIZE
 #define UART_TX_BUFFER_SIZE		32
@@ -15,7 +16,7 @@
 #define UART_RX_BUFFER_SIZE		32
 #endif
 
-void uart_init(uint32_t baudrate);
+void uart_init(void);
 uint16_t uart_get_rx_size(void);
 uint16_t uart_get_tx_size(void);
 void uart_send(uint8_t *data, uint16_t size);

@@ -9,6 +9,6 @@
 #define SRC_SYS_H_
 
 #define F_CPU				16000000ULL
-#define UART_BAUD_RATE		115200
+#define BAUD				9600
 
 #endif /* SRC_SYS_H_ */

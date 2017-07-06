@@ -6,9 +6,6 @@
 */
 
 #include "sys.h"
-#include "lcd.h"
-#include "heart_beat.h"
-#include "sick.h"
 #include "uart.h"
 
 #include <stdlib.h>
@@ -20,7 +17,7 @@ int main(void) {
 	uint16_t cont;
 	
 	cont = 0;
-	uart_init(9600);
+	uart_init();
 	sei();
 	_delay_ms(100);
 

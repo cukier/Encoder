@@ -1,7 +1,7 @@
 #include "uart.h"
 
-#include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/setbaud.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -12,7 +12,7 @@ static volatile uint16_t UART_TxTail;
 static volatile uint16_t UART_RxHead;
 static volatile uint16_t UART_RxTail;
 
-ISR (USART0_RX_vect)
+ISR (USART_RX_vect)
 {
 	UART_RxBuf[UART_RxTail++] = UDR0;
 	
@@ -25,7 +25,7 @@ ISR (USART0_RX_vect)
 }
 
 
-ISR (USART0_TX_vect)
+ISR (USART_UDRE_vect)
 {
 	if (UART_TxHead != UART_TxTail)
 	{
@@ -41,27 +41,28 @@ ISR (USART0_TX_vect)
 	}
 }
 
-void uart_init(uint32_t baudrate)
+void uart_init(void)
 {
 	UART_TxHead = 0;
 	UART_TxTail = 0;
 	UART_RxHead = 0;
 	UART_RxTail = 0;
-
-	if (baudrate & 0x8000)
-	{
-		UCSR0A = _BV(U2X0);
-		baudrate &= ~0x8000;
-	}
 	
-	UBRR0H = (uint8_t) (baudrate >> 8);
-	UBRR0L= (uint8_t) baudrate;
+	#if USE_2X
+	UCSR0A |= _BV(U2X0);
+	#else
+	UCSR0A &= ~(_BV(U2X0));
+	#endif
+	
+	UBRR0H = UBRRH_VALUE;
+	UBRR0L = UBRRL_VALUE;
+	
 	UCSR0B = _BV(RXCIE0);
 	UCSR0B = _BV(RXEN0);
+	UCSR0B = _BV(TXCIE0);
 	UCSR0B = _BV(TXEN0);
 	
-	UCSR0C = _BV(UCSZ01);
-	UCSR0C = _BV(UCSZ00);
+	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
 	
 	return;
 }
@@ -105,8 +106,9 @@ void uart_send(uint8_t *data, uint16_t size)
 
 void uart_putc(char c)
 {
-	uint8_t d = (uint8_t) c;
+	uint8_t d;
 	
+	d = (uint8_t) c;
 	uart_send(&d, 1);
 	
 	return;
