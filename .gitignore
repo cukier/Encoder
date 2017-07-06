@@ -257,6 +257,7 @@ _autosave-*
 ### Proteus ###
 *.DBK
 *.PWI
+*.SDF
 
 ### Vim ###
 # swap

@@ -17,7 +17,7 @@ int main(void) {
 	uint16_t cont;
 	
 	cont = 0;
-	uart_init();
+	uart_init(9600);
 	sei();
 	_delay_ms(100);
 

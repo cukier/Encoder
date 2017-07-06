@@ -1,16 +1,24 @@
 #include "uart.h"
 
-#include <avr/interrupt.h>
 #include <util/setbaud.h>
+#include <avr/interrupt.h>
 #include <stdarg.h>
 #include <stdio.h>
 
-static volatile uint8_t UART_TxBuf[UART_TX_BUFFER_SIZE];
-static volatile uint8_t UART_RxBuf[UART_RX_BUFFER_SIZE];
-static volatile uint16_t UART_TxHead;
-static volatile uint16_t UART_TxTail;
-static volatile uint16_t UART_RxHead;
-static volatile uint16_t UART_RxTail;
+#ifndef UART_RX_BUFFER_SIZE
+#define UART_RX_BUFFER_SIZE		32
+#endif
+
+#ifndef UART_TX_BUFFER_SIZE
+#define UART_TX_BUFFER_SIZE		32
+#endif
+
+uint8_t UART_TxBuf[UART_TX_BUFFER_SIZE];
+uint8_t UART_RxBuf[UART_RX_BUFFER_SIZE];
+uint16_t UART_TxHead;
+uint16_t UART_TxTail;
+uint16_t UART_RxHead;
+uint16_t UART_RxTail;
 
 ISR (USART_RX_vect)
 {
@@ -29,11 +37,11 @@ ISR (USART_UDRE_vect)
 {
 	if (UART_TxHead != UART_TxTail)
 	{
-		while (UART_TxHead != UART_TxTail)
-		{
+		//while (UART_TxHead != UART_TxTail)
+		//{
 			UDR0 = UART_TxBuf[UART_TxHead++];
 			UART_TxHead %= UART_TX_BUFFER_SIZE;
-		}
+		//}
 	}
 	else
 	{
@@ -41,30 +49,24 @@ ISR (USART_UDRE_vect)
 	}
 }
 
-void uart_init(void)
+void uart_init(uint32_t baudrate)
 {
 	UART_TxHead = 0;
 	UART_TxTail = 0;
 	UART_RxHead = 0;
 	UART_RxTail = 0;
 	
+	UBRR0H = UBRRH_VALUE;
+	UBRR0L = UBRRL_VALUE;
+
 	#if USE_2X
 	UCSR0A |= _BV(U2X0);
 	#else
 	UCSR0A &= ~(_BV(U2X0));
 	#endif
-	
-	UBRR0H = UBRRH_VALUE;
-	UBRR0L = UBRRL_VALUE;
-	
-	UCSR0B = _BV(RXCIE0);
-	UCSR0B = _BV(RXEN0);
-	UCSR0B = _BV(TXCIE0);
-	UCSR0B = _BV(TXEN0);
-	
-	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
-	
-	return;
+
+	UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
+	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data */
 }
 
 uint16_t uart_get_rx_size(void)
@@ -88,8 +90,8 @@ void uart_send(uint8_t *data, uint16_t size)
 	
 	while(size--)
 	{
-		UART_TxBuf[UART_TxHead++] = *data;
-		UART_TxHead %= UART_TX_BUFFER_SIZE;
+		UART_TxBuf[UART_TxTail++] = *data;
+		UART_TxTail %= UART_TX_BUFFER_SIZE;
 		
 		if (UART_TxHead == UART_TxTail)
 		{
@@ -99,7 +101,7 @@ void uart_send(uint8_t *data, uint16_t size)
 		++data;
 	}
 	
-	UCSR0B = _BV(UDRIE0);
+	UCSR0B |= _BV(UDRIE0);
 	
 	return;
 }
