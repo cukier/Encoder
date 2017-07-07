@@ -1,6 +1,5 @@
 #include "modbus.h"
 #include "uart.h"
-#include "lcd.h"
 
 #include <util/delay.h>
 
@@ -78,24 +77,28 @@ uint8_t h_byte(uint16_t m_word)
 	return ret;
 }
 
-// Compute the MODBUS RTU CRC
 uint16_t ModRTU_CRC(uint8_t *buf, uint16_t len)
 {
 	uint16_t crc = 0xFFFF;
 	
-	for (int pos = 0; pos < len; pos++) {
-		crc ^= (uint16_t)buf[pos];          // XOR byte into least sig. byte of crc
+	for (int pos = 0; pos < len; pos++)
+	{
+		crc ^= (uint16_t)buf[pos];
 		
-		for (int i = 8; i != 0; i--) {    // Loop over each bit
-			if ((crc & 0x0001) != 0) {      // If the LSB is set
-				crc >>= 1;                    // Shift right and XOR 0xA001
+		for (int i = 8; i != 0; i--)
+		{
+			if ((crc & 0x0001) != 0)
+			{
+				crc >>= 1;
 				crc ^= 0xA001;
 			}
-			else                            // Else LSB is not set
-			crc >>= 1;                    // Just shift right
+			else
+			{
+				crc >>= 1;	
+			}
 		}
 	}
-	// Note, this number has low and high bytes swapped, so use it accordingly (or swap bytes)
+	
 	return crc;
 }
 
@@ -146,17 +149,26 @@ uint16_t MODBUS_get_register(uint16_t register_address)
 	uint16_t ret = 0, n = 0;
 	uint8_t request[8];
 	uint8_t response[7];
+	uint8_t tries;
 	
-	make_read_request(slv_addr, register_address, 1, request);
-	uart_send(request, 8);
-	_delay_ms(DELAY_REQUEST);
-	n = uart_get_rx_size();
-	lcd_printf("\fRec: %u", n);
+	tries = TENTATIVAS;
 	
-	if (n != 7)
+	do
 	{
-		return 0xFF;
-	}
+		make_read_request(slv_addr, register_address, 1, request);
+		uart_send(request, 8);
+		_delay_ms(DELAY_REQUEST);
+		n = uart_get_rx_size();
+		
+		if (n == 7)
+		{
+			tries = 0;
+		}
+		else
+		{
+			_delay_ms(1000);
+		}
+	} while (tries--);
 	
 	uart_get(response, 7);
 	ret = make_16(response[3], response[4]);

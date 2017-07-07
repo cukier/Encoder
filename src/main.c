@@ -28,7 +28,7 @@ int main(void) {
 	while (1) {
 		var = 0;
 		var = MODBUS_get_register(cont);
-		lcd_printf("\nEnd %u: %u", cont, var);
+		lcd_printf("\fEnd %u: %u", cont, var);
 		cont++;
 		_delay_ms(500);
 	}
