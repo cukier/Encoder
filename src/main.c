@@ -16,7 +16,9 @@
 #include <avr/interrupt.h>
 
 int main(void) {
+	uint16_t cont, var;
 	
+	cont = 0;
 	lcd_init();
 	uart_init();
 	MODBUS_set_address(1);
@@ -24,9 +26,11 @@ int main(void) {
 	_delay_ms(100);
 
 	while (1) {
-		//MODBUS_get_register(10);
-		lcd_printf("\fEndereco 10: %u", MODBUS_get_register(10));
-		_delay_ms(1000);
+		var = 0;
+		var = MODBUS_get_register(cont);
+		lcd_printf("\nEnd %u: %u", cont, var);
+		cont++;
+		_delay_ms(500);
 	}
 
 	return 0;

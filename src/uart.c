@@ -39,8 +39,8 @@ ISR (USART_UDRE_vect)
 	{
 		//while (UART_TxHead != UART_TxTail)
 		//{
-			UDR0 = UART_TxBuf[UART_TxHead++];
-			UART_TxHead %= UART_TX_BUFFER_SIZE;
+		UDR0 = UART_TxBuf[UART_TxHead++];
+		UART_TxHead %= UART_TX_BUFFER_SIZE;
 		//}
 	}
 	else
@@ -155,6 +155,9 @@ uint16_t uart_get(uint8_t *data, uint16_t size)
 		data[count++] = UART_RxBuf[UART_RxHead++];
 		UART_RxHead %= UART_RX_BUFFER_SIZE;
 	}
+	
+	UART_RxHead = 0;
+	UART_RxTail = 0;
 	
 	return count;
 }

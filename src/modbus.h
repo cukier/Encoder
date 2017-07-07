@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 #ifndef DELAY_REQUEST
-#define DELAY_REQUEST	300
+#define DELAY_REQUEST	400
 #endif
 
 void MODBUS_set_address(uint16_t addr);
