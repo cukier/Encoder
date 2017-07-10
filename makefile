@@ -4,7 +4,7 @@ PK2 = pk2cmd
 DEVICE = PIC18F25K22
 UNIT1 = Blink
 UNIT1_FILE = main
-SRC = src
+SRC = src/microchip
 OUT = Debug
 
 #OBJ += *.pjt *.STA *.sym *.tre *.MCP *.PWI *.DBK

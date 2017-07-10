@@ -315,5 +315,6 @@ $RECYCLE.BIN/
 
 #User Specific Files
 *.atsuo
+doc/SparkFun_CAN-Bus_Arduino_Library/
 
 # End of https://www.gitignore.io/api/c,vim,c++,sdcc,linux,kicad,eagle,altium,eclipse,windows,libreoffice
