@@ -6,7 +6,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
+
+#ifdef __AVR__
 #include <avr/io.h>
+#endif
 
 #ifndef UART_TX_BUFFER_SIZE
 #define UART_TX_BUFFER_SIZE		32

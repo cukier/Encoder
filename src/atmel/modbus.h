@@ -11,7 +11,7 @@
 #endif
 
 #ifndef TENTATIVAS
-#define TENTATIVAS	3
+#define TENTATIVAS		3
 #endif
 
 void MODBUS_set_address(uint16_t addr);
