@@ -16,12 +16,15 @@
 #include "uart.c"
 #include "modbus.c"
 #include "sick.c"
+#include "heart_beat.c"
 
 int main(void) {
-	bool n;
+	bool n, change_beat;
+	bool encOk, plcOk;
 
-	delay_ms(1000);
+	change_beat = true;
 	n = false;
+	HEART_BEAT_init(PIN_C2);
 	init_uart();
 	MODBUS_set_address(1);
 	enable_interrupts(GLOBAL);
@@ -31,11 +34,35 @@ int main(void) {
 
 	while (TRUE) {
 		if (n) {
+			if (change_beat) {
+				change_beat = false;
+				HEART_BEAT_set_beat(HEART_BEAT_LENTO);
+			}
+
 			n = DSF60_make_transaction(DSF60_COMMAND_READ_POSITION, 0);
-			MODBUS_set_register(0, (uint16_t) dsf60.position);
+			encOk = n;
+
+			if (n) {
+				n = MODBUS_set_register(0, (uint16_t) dsf60.position);
+				plcOk = n;
+			}
+
 			delay_ms(100);
 		} else {
-			n = DSF60_check();
+			if (!change_beat) {
+				change_beat = true;
+				HEART_BEAT_set_beat(HEART_BEAT_RAPIDO);
+			}
+
+			if (!encOk) {
+				n = DSF60_check();
+				encOk = n;
+			}
+
+			if (!plcOk) {
+				n = MODBUS_set_register(0, (uint16_t) dsf60.position);
+				plcOk = n;
+			}
 		}
 	}
 
