@@ -214,5 +214,5 @@ bool MODBUS_set_registers(uint16_t register_address, uint16_t *data,
 	uart2_flush();
 #endif
 
-	return (n == 8);
+	return (n == 6);
 }

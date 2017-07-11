@@ -79,13 +79,14 @@ void DSF60_read_position(void) {
 
 void DSF60_set_number_lines(uint32_t n_lines) {
 	uint8_t *req;
+	uint8_t cont;
 
 	req = (uint8_t *) malloc(7 * sizeof(uint8_t));
 	req[0] = DSF60_ADDRESS;
 	req[1] = DSF60_COMMAND_SET_NUMBER_OF_LINES;
-	req[2] = (uint8_t) ((n_lines & 0x0F00) >> 16);
-	req[3] = (uint8_t) ((n_lines & 0x00F0) >> 8);
-	req[4] = (uint8_t) ((n_lines & 0x000F));
+	req[2] = (uint8_t) ((n_lines & 0xFF0000) >> 16);
+	req[3] = (uint8_t) ((n_lines & 0xFF00) >> 8);
+	req[4] = (uint8_t) ((n_lines & 0xFF));
 	req[5] = 0x69; //ACCESS code
 	req[6] = DSF60_crc_sum(req, 6);
 	DSF60_send_request(req, 7);
