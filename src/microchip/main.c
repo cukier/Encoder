@@ -18,10 +18,10 @@
 #include "sick.c"
 #include "heart_beat.c"
 
-int main(void) {
-	bool n, change_beat;
-	bool encOk, plcOk;
+static volatile bool n, change_beat;
+static volatile bool encOk, plcOk;
 
+void init(void) {
 	change_beat = true;
 	n = false;
 	HEART_BEAT_init(PIN_C2);
@@ -30,7 +30,27 @@ int main(void) {
 	enable_interrupts(GLOBAL);
 	delay_ms(1000);
 	n = DSF60_check();
-	fprintf(sl1, "Check %u\n", n);
+
+	return;
+}
+
+void check_encoder(void) {
+	n = DSF60_make_transaction(DSF60_COMMAND_READ_POSITION, 0);
+	encOk = n;
+
+	return;
+}
+
+void check_plc(void) {
+	n = MODBUS_set_register(0, (uint16_t) dsf60.position);
+	plcOk = n;
+
+	return;
+}
+
+int main(void) {
+
+	init();
 
 	while (TRUE) {
 		if (n) {
@@ -39,12 +59,10 @@ int main(void) {
 				HEART_BEAT_set_beat(HEART_BEAT_LENTO);
 			}
 
-			n = DSF60_make_transaction(DSF60_COMMAND_READ_POSITION, 0);
-			encOk = n;
+			check_encoder();
 
 			if (n) {
-				n = MODBUS_set_register(0, (uint16_t) dsf60.position);
-				plcOk = n;
+				check_plc();
 			}
 
 			delay_ms(100);
@@ -60,8 +78,11 @@ int main(void) {
 			}
 
 			if (!plcOk) {
-				n = MODBUS_set_register(0, (uint16_t) dsf60.position);
-				plcOk = n;
+				check_encoder();
+
+				if (n) {
+					check_plc();
+				}
 			}
 		}
 	}
