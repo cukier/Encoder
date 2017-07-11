@@ -42,7 +42,7 @@ void check_encoder(void) {
 }
 
 void check_plc(void) {
-	n = MODBUS_set_register(0, (uint16_t) dsf60.position);
+	n = MODBUS_set_register(7, (uint16_t) dsf60.position);
 	plcOk = n;
 
 	return;
