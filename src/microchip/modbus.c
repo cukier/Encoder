@@ -153,6 +153,10 @@ uint16_t MODBUS_get_register(uint16_t register_address) {
 		}
 	} while (tries--);
 
+	if (!tries) {
+		return 0xFFFF;
+	}
+
 	uart1_get(response, 7);
 	ret = make_16(response[3], response[4]);
 
