@@ -18,6 +18,9 @@
 #include "sick.c"
 #include "heart_beat.c"
 
+#include <stdbool.h>
+#include <stdint.h>
+
 static volatile bool n, change_beat, encOk, plcOk;
 static volatile uint8_t leituras;
 static volatile uint16_t resolucao, resAux;
@@ -114,7 +117,7 @@ int main(void) {
 			if (n) {
 				leituras++;
 
-				if (leituras == 100) {
+				if (leituras == 5) {
 					leituras = 0;
 					get_enc_resolution();
 
@@ -125,6 +128,7 @@ int main(void) {
 							if (resAux != resolucao) {
 								resolucao = resAux;
 								set_enc_resolution(resolucao);
+								n = DSF60_check();
 							}
 						}
 					}
