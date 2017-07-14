@@ -44,23 +44,26 @@ void get_enc_resolution(void) {
 	n = DSF60_make_transaction(DSF60_COMMAND_READ_ENCODER_TYPE, 0);
 	encOk = n;
 
-	if (n)
+	if (n) {
 		resolucao = (uint16_t) dsf60.resolution;
-	else
+	} else {
 		resolucao = 0;
+	}
 
 	return;
 }
 
-void set_enc_resolution(void) {
+bool set_enc_resolution(void) {
 	n = DSF60_make_transaction(DSF60_COMMAND_SET_NUMBER_OF_LINES,
 			(uint32_t) resolucao);
 	encOk = n;
 
-	return;
+	return n;
 }
 
 void init(void) {
+	uint16_t m_res;
+
 	leituras = 0;
 	resolucao = 0;
 	resAux = 0;
@@ -82,21 +85,27 @@ void init(void) {
 	return;
 }
 
-void check_encoder(void) {
+uint16_t check_encoder(void) {
 	n = DSF60_make_transaction(DSF60_COMMAND_READ_POSITION, 0);
 	encOk = n;
 
-	return;
+	if (n)
+		return dsf60.position;
+	else
+		return 0xFFFF;
 }
 
-void check_plc(void) {
-	n = MODBUS_set_register(7, (uint16_t) dsf60.position);
+bool check_plc(uint16_t pos) {
+	n = MODBUS_set_register(7, pos);
 	plcOk = n;
 
-	return;
+	return n;
 }
 
 int pooling(void) {
+	uint16_t m_pos;
+
+	m_pos = 0;
 
 	while (TRUE) {
 		if (n) {
@@ -105,10 +114,10 @@ int pooling(void) {
 				HEART_BEAT_set_beat(HEART_BEAT_LENTO);
 			}
 
-			check_encoder();
+			m_pos = check_encoder();
 
 			if (n) {
-				check_plc();
+				check_plc(m_pos);
 			}
 
 			if (n) {
@@ -145,10 +154,10 @@ int pooling(void) {
 			}
 
 			if (!plcOk) {
-				check_encoder();
+				m_pos = check_encoder();
 
 				if (n) {
-					check_plc();
+					check_plc(m_pos);
 				}
 			}
 		}

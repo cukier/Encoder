@@ -5,29 +5,46 @@
  *      Author: cuki
  */
 
-#include <18F45K20.h>
+#include <18F25K22.h>
+#device ADC=10
+#fuses NOWDT, INTRC, NOPLLEN, NOFCMEN, NOIESO, PUT
+#fuses BROWNOUT, BORV29, STVREN, NOLVP, NODEBUG, NOCPB
+#fuses NOCPD, NOXINST, NOPBADEN, NOPROTECT
+#use delay(internal=16MHz)
+#use rtos(timer=1,minor_cycle=1ms)
+
+#task(rate=10ms,max=1ms)
+void The_first_rtos_task();
+#task(rate=10ms,max=1ms)
+void The_second_rtos_task();
+
 #include <stdbool.h>
 #include <stdint.h>
 
-#fuses H4
+#include "controle.c"
 
-#use delay(clock=64MHz)
-#use rtos(timer=0,minor_cycle=100ms)
-// function declarations
-#task(rate=1000ms,max=100ms)
-void The_first_rtos_task();
-#task(rate=500ms,max=100ms)
-void The_second_rtos_task();
+int8_t sem;
+uint16_t pos;
 
 void The_first_rtos_task() {
-	output_toggle(PIN_D0);
+	rtos_wait(sem);
+	check_plc(pos);
+	rtos_yield();
+	rtos_signal(sem);
 }
 
 void The_second_rtos_task() {
-	output_toggle(PIN_D1);
+	rtos_wait(sem);
+	pos = check_encoder();
+	rtos_yield();
+	rtos_signal(sem);
 }
 
 int main(void) {
+
+	pos = 0;
+	sem = 1;
+	init();
 
 	rtos_run();
 
