@@ -1,7 +1,7 @@
 CC = ccsc
 PK2 = pk2cmd
 
-DEVICE = PIC18F25K22
+DEVICE = PIC18F45K20
 UNIT1 = Blink
 UNIT1_FILE = main
 SRC = src/microchip
@@ -11,6 +11,9 @@ OUT = Debug
 OBJ += *.err *.esym *.xsym *.cof *.hex *.lst *.ccspjt
 MOBJ = $(OBJ:%=$(SRC)/%)
 
+ifeq ($(DEVICE), PIC18F45K20)
+CFLAGS += +FH
+endif
 ifeq ($(DEVICE), PIC18F25K22)
 CFLAGS += +FH
 endif
