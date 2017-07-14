@@ -53,9 +53,9 @@ void get_enc_resolution(void) {
 	return;
 }
 
-void set_enc_resolution(uint16_t resol) {
+void set_enc_resolution(void) {
 	n = DSF60_make_transaction(DSF60_COMMAND_SET_NUMBER_OF_LINES,
-			(uint32_t) resol);
+			(uint32_t) resolucao);
 	encOk = n;
 
 	return;
@@ -127,7 +127,7 @@ int main(void) {
 						if (n) {
 							if (resAux != resolucao) {
 								resolucao = resAux;
-								set_enc_resolution(resolucao);
+								set_enc_resolution();
 								n = DSF60_check();
 							}
 						}
@@ -135,7 +135,7 @@ int main(void) {
 				}
 			}
 
-			delay_ms(100);
+			delay_ms(10);
 		} else {
 			if (!change_beat) {
 				change_beat = true;

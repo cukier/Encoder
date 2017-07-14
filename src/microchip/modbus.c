@@ -123,7 +123,6 @@ void make_multile_write_request(uint16_t s_addr, uint16_t *data, uint16_t size,
 	}
 
 	crc = ModRTU_CRC(request, (uint16_t) (7 + request[6]));
-
 	request[request[6] + 7] = l_byte(crc);
 	request[request[6] + 8] = h_byte(crc);
 
