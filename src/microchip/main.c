@@ -13,9 +13,9 @@
 #use delay(internal=16MHz)
 #use rtos(timer=1,minor_cycle=1ms)
 
-#task(rate=50ms,max=1ms)
+#task(rate=400ms,max=1ms)
 void The_first_rtos_task();
-#task(rate=50ms,max=1ms)
+#task(rate=300ms,max=1ms)
 void The_second_rtos_task();
 
 #include <stdbool.h>
@@ -47,6 +47,10 @@ int main(void) {
 	init();
 
 	rtos_run();
+//	while (true) {
+//		check_plc(pos);
+//		pos = check_encoder();
+//	}
 
 	return 0;
 }
