@@ -11,11 +11,11 @@
 #fuses BROWNOUT, BORV29, STVREN, NOLVP, NODEBUG, NOCPB
 #fuses NOCPD, NOXINST, NOPBADEN, NOPROTECT
 #use delay(internal=16MHz)
-#use rtos(timer=1,minor_cycle=1ms)
+#use rtos(timer=1,minor_cycle=10ms)
 
-#task(rate=400ms,max=1ms)
+#task(rate=400ms,max=10ms)
 void The_first_rtos_task();
-#task(rate=300ms,max=1ms)
+#task(rate=300ms,max=10ms)
 void The_second_rtos_task();
 
 #include <stdbool.h>

@@ -1,7 +1,7 @@
 CC = ccsc
 PK2 = pk2cmd
 
-DEVICE = PIC18F45K20
+DEVICE = PIC18F25K22
 UNIT1 = Blink
 UNIT1_FILE = main
 SRC = src/microchip
